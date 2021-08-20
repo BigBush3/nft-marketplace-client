@@ -1,0 +1,145 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?bce5591e0fef2f429e06d3832698633c") format("truetype"),
+url("./flaticon.woff?bce5591e0fef2f429e06d3832698633c") format("woff"),
+url("./flaticon.woff2?bce5591e0fef2f429e06d3832698633c") format("woff2"),
+url("./flaticon.eot?bce5591e0fef2f429e06d3832698633c#iefix") format("embedded-opentype"),
+url("./flaticon.svg?bce5591e0fef2f429e06d3832698633c#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "wallet": "\f101",
+    "wallet-1": "\f102",
+    "wallet-2": "\f103",
+    "download": "\f104",
+    "fire": "\f105",
+    "information": "\f106",
+    "video-camera": "\f107",
+    "left-arrow": "\f108",
+    "eye": "\f109",
+    "star": "\f10a",
+    "heart": "\f10b",
+    "letter-x": "\f10c",
+    "gold-ingots": "\f10d",
+    "facebook-logo": "\f10e",
+    "vk": "\f10f",
+    "instagram": "\f110",
+    "send": "\f111",
+    "download-1": "\f112",
+    "files": "\f113",
+    "pdf": "\f114",
+    "share": "\f115",
+    "refresh": "\f116",
+    "cogwheel": "\f117",
+    "right-arrow-angle": "\f118",
+    "search": "\f119",
+    "file": "\f11a",
+    "check": "\f11b",
+    "businessman": "\f11c",
+    "star-1": "\f11d",
+    "setting": "\f11e",
+);
+
+.flaticon-wallet:before {
+    content: map-get($flaticon-map, "wallet");
+}
+.flaticon-wallet-1:before {
+    content: map-get($flaticon-map, "wallet-1");
+}
+.flaticon-wallet-2:before {
+    content: map-get($flaticon-map, "wallet-2");
+}
+.flaticon-download:before {
+    content: map-get($flaticon-map, "download");
+}
+.flaticon-fire:before {
+    content: map-get($flaticon-map, "fire");
+}
+.flaticon-information:before {
+    content: map-get($flaticon-map, "information");
+}
+.flaticon-video-camera:before {
+    content: map-get($flaticon-map, "video-camera");
+}
+.flaticon-left-arrow:before {
+    content: map-get($flaticon-map, "left-arrow");
+}
+.flaticon-eye:before {
+    content: map-get($flaticon-map, "eye");
+}
+.flaticon-star:before {
+    content: map-get($flaticon-map, "star");
+}
+.flaticon-heart:before {
+    content: map-get($flaticon-map, "heart");
+}
+.flaticon-letter-x:before {
+    content: map-get($flaticon-map, "letter-x");
+}
+.flaticon-gold-ingots:before {
+    content: map-get($flaticon-map, "gold-ingots");
+}
+.flaticon-facebook-logo:before {
+    content: map-get($flaticon-map, "facebook-logo");
+}
+.flaticon-vk:before {
+    content: map-get($flaticon-map, "vk");
+}
+.flaticon-instagram:before {
+    content: map-get($flaticon-map, "instagram");
+}
+.flaticon-send:before {
+    content: map-get($flaticon-map, "send");
+}
+.flaticon-download-1:before {
+    content: map-get($flaticon-map, "download-1");
+}
+.flaticon-files:before {
+    content: map-get($flaticon-map, "files");
+}
+.flaticon-pdf:before {
+    content: map-get($flaticon-map, "pdf");
+}
+.flaticon-share:before {
+    content: map-get($flaticon-map, "share");
+}
+.flaticon-refresh:before {
+    content: map-get($flaticon-map, "refresh");
+}
+.flaticon-cogwheel:before {
+    content: map-get($flaticon-map, "cogwheel");
+}
+.flaticon-right-arrow-angle:before {
+    content: map-get($flaticon-map, "right-arrow-angle");
+}
+.flaticon-search:before {
+    content: map-get($flaticon-map, "search");
+}
+.flaticon-file:before {
+    content: map-get($flaticon-map, "file");
+}
+.flaticon-check:before {
+    content: map-get($flaticon-map, "check");
+}
+.flaticon-businessman:before {
+    content: map-get($flaticon-map, "businessman");
+}
+.flaticon-star-1:before {
+    content: map-get($flaticon-map, "star-1");
+}
+.flaticon-setting:before {
+    content: map-get($flaticon-map, "setting");
+}

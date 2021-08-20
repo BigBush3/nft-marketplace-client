@@ -1,0 +1,9 @@
+.body {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+
+.body.active {
+  opacity: 1;
+}

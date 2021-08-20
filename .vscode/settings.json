@@ -1,0 +1,17 @@
+{
+  "telemetry.enableTelemetry": false,
+  "eslint.validate": ["javascript"],
+  "eslint.options": { "configFile": ".eslintrc.json" },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    ".env": "ini",
+    ".env.production": "ini",
+    ".env.all": "ini",
+    ".env.example": "ini",
+    ".env.production.example": "ini",
+    ".env.all.example": "ini"
+  }
+}
