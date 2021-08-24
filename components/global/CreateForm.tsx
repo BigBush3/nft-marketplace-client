@@ -17,6 +17,23 @@ import router from 'next/router';
 import connectMetaMask from './metamask'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
+import {
+	NFT_ABI, 
+	NFT_ADDRESS, 
+
+	NFTSTORE_ADDRESS, 
+	NFTSTORE_ABI,
+	
+	TIMEDAUCTION_ABI,
+	TIMEDAUCTION_ADDRESS,
+	
+	SIMPLEAUCTION_ABI,
+	SIMPLEAUCTION_ADDRESS,
+
+	RINKEBY_RPC_URL, 
+	ULR_INFURA_WEBSOCKET, 
+	EVENTS_TOPICS
+} from '../../config/default.json'
 
 
 interface CreateFormProps {
@@ -27,9 +44,14 @@ interface CreateFormProps {
 export default function CreateForm(props: CreateFormProps): React.ReactElement {
   const { app, createMany } = props;
   const { lang } = app;
-  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider("wss://rinkeby.infura.io/ws/v3/62b7d9f5f9844b8582f51e4b5c906c09"));
-  const NFT = new web3.eth.Contract([{"constant":false,"inputs":[{"internalType":"address","name":"_newAdmin","type":"address"}],"name":"addAdmin","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_newOwner","type":"address"}],"name":"addOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_owner","type":"address"},{"indexed":true,"internalType":"address","name":"_spender","type":"address"},{"indexed":true,"internalType":"uint256","name":"_id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_oldValue","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_owner","type":"address"},{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":false,"internalType":"bool","name":"_approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"uint256","name":"_currentValue","type":"uint256"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"approve","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"uint256[]","name":"_values","type":"uint256[]"}],"name":"batchTransferFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_initialSupply","type":"uint256"},{"internalType":"string","name":"_uriFile","type":"string"},{"internalType":"string","name":"_uriPdf","type":"string"}],"name":"create","outputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"address[]","name":"_to","type":"address[]"},{"internalType":"uint256[]","name":"_amounts","type":"uint256[]"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_newAdmin","type":"address"}],"name":"removeAdmin","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_newOwner","type":"address"}],"name":"removeOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_operator","type":"address"},{"internalType":"bool","name":"_approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":true,"internalType":"address","name":"_from","type":"address"},{"indexed":true,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"indexed":false,"internalType":"uint256[]","name":"_values","type":"uint256[]"}],"name":"TransferBatch","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"uint256","name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_newFund","type":"address"}],"name":"transferFund","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousFund","type":"address"},{"indexed":true,"internalType":"address","name":"newFund","type":"address"}],"name":"TransferFund","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_operator","type":"address"},{"indexed":true,"internalType":"address","name":"_from","type":"address"},{"indexed":true,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256","name":"_id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_value","type":"uint256"}],"name":"TransferSingle","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"_value","type":"string"},{"indexed":true,"internalType":"uint256","name":"_id","type":"uint256"}],"name":"URI","type":"event"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"adminList","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"admins","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"address","name":"_spender","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address[]","name":"_owners","type":"address[]"},{"internalType":"uint256[]","name":"_ids","type":"uint256[]"}],"name":"balanceOfBatch","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"creators","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"fund","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isAdmin","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_owner","type":"address"},{"internalType":"address","name":"_operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"string","name":"","type":"string"}],"name":"mapStringOfURI","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"mapUri","outputs":[{"internalType":"string","name":"file","type":"string"},{"internalType":"string","name":"pdf","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"nonce","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"owners","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"ownersList","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}], "0x4C9Fc4C2a21F7C7f0Cbd4aD35cff4CF721d6e04b")
-  const {register, handleSubmit} = useForm()
+  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  // @ts-ignore
+const NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS) // @ts-ignore
+const NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
+// @ts-ignore
+const TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)// @ts-ignore
+const SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRESS)
+const {register, handleSubmit} = useForm()
   const auctionCheckInfoRef = useRef();
   const [open, setOpen] = React.useState(false);
   const fixPayCheckInfoRef = useRef();
@@ -46,6 +68,22 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const gasFee = {
+    createAuction: 180000,
+    createOrderSell: 159000,
+    returnFreeBalance: 58000,
+  
+    createBidAuction: 216300,
+    updateBidAuction: 76600,
+    finishAuction: 144600,
+    cancelAuction: 59600,
+  
+    buyOrder :136400,
+      cancelOrderSell :63000,
+      createBidMarket : 219700,
+      realizeBid : 140400,
+      cancelBid :58400
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -91,17 +129,24 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
   }
   
   const onSubmit = async (data) => {
+
+    console.log(data.price)
+    const price = data.price * 1e18
     setOpen(true)
     setCreateLoader(true)
     const metamask = await connectMetaMask()
-    const subscription = async (topic)=>{
-      await web3.eth.subscribe('logs', {
-          address: "0x1bD9A75e6BCF3B9488f0D994C9D84B65AdDeF348",
+    const subscription = async (contractAddress, topic)=>{
+      console.log('start subscription')
+      console.log('contractAddress: ', contractAddress)
+      console.log('topic: ', topic)
+      return web3.eth.subscribe('logs', {
+          address: contractAddress,
           topics: [topic]
       }, (error, result)=>{
           console.log(error)
-            console.log(result)
-      });	
+          console.log(result)
+          console.log('end subscription')
+      })
     } 
     const walletAddress = metamask.userAddress
     const wallet = metamask.web3
@@ -110,6 +155,7 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
     console.log(NFT)
     console.log('walletAddress: ', walletAddress)
     console.log('web3: ', web3)
+
     const formData = new FormData();
     // Update the formData object
     formData.append(
@@ -127,38 +173,77 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
     const ipfsHash = response.data.result.IpfsHash
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
-    let txData = NFT.methods.create(1, ipfsHash, ipfsPdfHash).encodeABI()
+    let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
-        to: "0x4C9Fc4C2a21F7C7f0Cbd4aD35cff4CF721d6e04b",
+        to: NFT_ADDRESS,
         from: walletAddress,
         data: txData
     },
     function(error, res){
         console.log(error);
         console.log(res);
-        subscription("0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62")
+        subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
     }
 );   setCreateLoader(false)
     setApproveLoader(true)
-    txData = NFT.methods.setApprovalForAll("0x1bD9A75e6BCF3B9488f0D994C9D84B65AdDeF348", true).encodeABI()
+    txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
-      to: "0x4C9Fc4C2a21F7C7f0Cbd4aD35cff4CF721d6e04b",
+      to: NFT_ADDRESS,
       from: walletAddress,
       data: txData
   },
   function(error, res){
       console.log(error);
       console.log(res);
-      subscription("0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31")
+      subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
 ); setApproveLoader(false)
-  const something = NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
+  const something = await NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
     console.log(`tokenID of URI ${ipfsHash} - ${res}`)
   })
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url})
+  const fee = await getGasFee(gasFee.createOrderSell)
+  console.log(fee, something, data.price)
+	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, BigInt(data.price)).encodeABI()
+  let transactions
+	if(!wallet){
+		alert('you have to connect cryptowallet')
+	} else {
+		await wallet.eth.sendTransaction({
+		        to: NFTSTORE_ADDRESS,
+		        from: walletAddress,
+            // @ts-ignore
+		        value: fee,
+		        data: txData
+		    },
+		    async function(error, res){
+		        console.log(error);
+		        console.log(res);
+		        if(price>0){
+              // @ts-ignore
+		        	subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
+		        } else {
+              // @ts-ignore
+			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
+
+		        }
+		    }
+		)
+
+	}
+  
+  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something})
   console.log(res)
   router.push(`/product/${res.data.result._id}`)
   };
+  const getGasFee = async(gasLimit)=>{
+    let result = 0
+    NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{
+      console.log(`gasFee - ${res}`)
+      result = res
+    })
+    return result;
+  }
+  
   return (
     <>
     <form className="create_form" onSubmit={handleSubmit(onSubmit)}>
@@ -234,7 +319,7 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
         <div className="create_check_info" ref={fixPayCheckInfoRef}>
           <div className="create_input">
             <span>{lang.auction.setPrice}:</span>
-            <input type="number" />
+            <input type="number" step="any"  {...register("price")}/>
             <span className="icon icon-eth" />
           </div>
         </div>

@@ -353,13 +353,13 @@ function Header(props): React.ReactElement {
                             </a>
                           </Link>
                         </li>
-                        {cookie.get('verified') === true && <li className="user-toolbar__item">
+                        <li className="user-toolbar__item">
                           <Link href="/create">
                             <a role="button" onClick={unHiddenHtml}>
                               <i className="flaticon-letter-x add" /> { lang.userMenu.addNft}
                             </a>
                           </Link>
-                        </li>}
+                        </li>
 
                         <li className="user-toolbar__item">
                           <Link href="/settings">

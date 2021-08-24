@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import MarketplaceItem from './MarketplaceItem';
+
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
 
@@ -22,9 +24,9 @@ export default function MarketplaceItems(props: MarketplaceItemProps): React.Rea
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState<Types.ItemProps[]>([]);
   async function getMarketPlacePart(): Promise<void> {
-    const result = await utils.r.getMarketplace({ rounds: SLIDER_PRODUCTS_PART * 2 });
+    const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft');
     const oldState = marketplaceItems;
-    const newState = oldState.concat(result);
+    const newState = oldState.concat(result.data);
     setMarketplaceItems(newState);
     _load = true;
   }
