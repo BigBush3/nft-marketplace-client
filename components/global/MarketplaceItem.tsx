@@ -19,7 +19,7 @@ interface MarketplaceItem {
  */
 const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactElement => {
   const { app, data } = props;
-  const { owner, _id, title, /* likeMe, likes, price, views, favoriteMe, */ img, verified } = data;
+  const { owner, _id, title, likes, price, views, img, verified } = data;
   const { lang } = app;
   const [open, setOpen] = useState<boolean>(false);
   console.log(verified)
@@ -57,16 +57,16 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
         <div className="item-stats__views">
-          {/* <i className="flaticon-eye" /> <span>{views}</span> */}
+         <i className="flaticon-eye" /> <span>{views}</span>
         </div>
 {/*         <Favorite favoriteMe={favoriteMe} app={app} />
         <Likes likeMe={likeMe} likes={likes} app={app} /> */}
         <div className="item-stats__count">1/1</div>
       </div>
-{/*       <div className="products__item-price">$ {price}</div> */}
-{/*       <div className="products__item-buy">
+      <div className="products__item-price">ETH {price}</div>
+      <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{lang.buyBid}</Link>
-      </div> */}
+      </div>
     </div>
   );
 });

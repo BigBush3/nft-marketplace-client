@@ -20,6 +20,8 @@ const { WALLET_LOCAL_STORAGE_NAME } = utils.c;
  */
 function Settings({app,}): React.ReactElement {
   const { lang } = app;
+  const [header, setHeader] = useState(null)
+  const [headerCopy, setHeaderCopy] = useState(null)
   const [headerActive, setHeaderActive] = useState<boolean>(false);
   const [logoActive, setLogoActive] = useState<boolean>(false);
   const [file, setFile] = useState(null)
@@ -28,7 +30,6 @@ function Settings({app,}): React.ReactElement {
   const [email, setEmail] = useState('')
 
   useEffect(() => {
-    console.log(file)
     if(cookie.get('name')){
       setName(cookie.get('name'))
     }
@@ -36,7 +37,7 @@ function Settings({app,}): React.ReactElement {
       setEmail(cookie.get('email'))
     }
     if (cookie.get('img')){
-      setFile(cookie.get('img'))
+      setFile(cookie.get('imgUrl'))
     }
   }, [])
   const Footer = useMemo(() => {
@@ -71,12 +72,25 @@ function Settings({app,}): React.ReactElement {
 
     await fetch('https://desolate-inlet-76011.herokuapp.com/file/upload', requestOptionsFile)
   .then(response => response.text())
-  .then(data => cookie.set('imgUrl', data))
+  .then(imageUrl => cookie.set('imgUrl', imageUrl))
+    }
+    if (headerCopy){
+      const headerData = new FormData();
+      headerData.append(
+        'file', headerCopy
+      )
+      const headerOptionsFile = {
+        method: 'POST',
+        body: headerData
+      }
+      await fetch('https://desolate-inlet-76011.herokuapp.com/file/upload', headerOptionsFile)
+      .then(response => response.text())
+      .then(headerImageUrl => cookie.set('headerUrl', headerImageUrl))
     }
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl')})
+      body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl'), headerUrl: cookie.get('headerUrl')})
     }
     await fetch('https://desolate-inlet-76011.herokuapp.com/user/register', requestOptions)
     .then(response => response.json())
@@ -143,10 +157,11 @@ function Settings({app,}): React.ReactElement {
                   
                 </label>
                 <div className="form-photo__header">
-                  <img src="img/header.png" alt="img" />
+
+                  {header ? <img src={header} alt="img"/>:<img src="img/header.png" alt="img"/>}
                 </div>
                 <div className="settings__form-file button">
-                  <input type="file" />
+                  <input type="file" onChange={e => {setHeaderCopy(e.target.files[0]); setHeader(URL.createObjectURL(e.target.files[0]))}}/>
                   <div className="fill">
                     <i className="flaticon-download-1" />
                     <span>{lang.upload}</span>

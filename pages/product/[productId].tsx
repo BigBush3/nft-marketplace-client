@@ -64,26 +64,26 @@ function Product({app, data}): React.ReactElement {
               
               </div>
               <div className="product__bottom">
- {/*                <div className="product__views">
+                <div className="product__views">
                   <i className="flaticon-eye" /> <span>{item?.views}</span>
-                </div> */}
+                </div>
 {/*                 {item && (
                   <>
                     <Favorite favoriteMe={item?.favoriteMe} app={app} />
                     <Likes likeMe={item?.likeMe} likes={item?.likes} app={app} />
                   </>
                 )} */}
-{/*                 <div className="product__share">
+                <div className="product__share">
                   <a href="#">
                     <i className="flaticon-share" /> <span>{lang.share}</span>
                   </a>
-                </div> */}
+                </div>
                <div className="product__doc">
                   <a href={data.pdf} target="_blank" rel="noreferrer">
                     <i className="flaticon-file" /> <span>{lang.documents}</span>
                   </a>
                 </div>
-{/* 
+
                 <div className="product__buy button">
                   <ButtonsStyled
                     rate={true}
@@ -92,7 +92,7 @@ function Product({app, data}): React.ReactElement {
                     text2={lang.buy}
                     fill2={true}
                   />
-                </div> */}
+                </div>
               </div>
             </div>
           </main>
@@ -153,8 +153,8 @@ function Product({app, data}): React.ReactElement {
             </div> */}
           </aside>
         </div>
-        <PlaceBidModal app={app} />
-        <CheckoutModal app={app} />
+        <PlaceBidModal app={app}/>
+        <CheckoutModal app={app} data={data}/>
         <Footer {...app} />
       </div>
     </Theme>

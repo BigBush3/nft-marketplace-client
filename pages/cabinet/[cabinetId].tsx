@@ -82,14 +82,21 @@ function Cabinet(props): React.ReactElement {
         <div className="cabinet_top">
           <div className="cabinet_top_bg">
             <span className="icon icon-edit_white" />
-            <picture>
+            {data.headerUrl ?    <picture>
+              <source srcSet={data.headerUrl} />
+              <img
+                src={data.headerUrl}
+                alt="img"
+              />
+            </picture>   :      <picture>
               <source srcSet="/images/bg.webp" type="image/webp" />
               <img
                 src="/images/bg.jpg"
                 alt="img"
                 srcSet="/images/bg.jpg 1x, /images/bg@2x.jpg 2x"
               />
-            </picture>
+            </picture>}
+
           </div>
           <div className="cabinet_top_user">
             <div className="cabinet_top_user_img">

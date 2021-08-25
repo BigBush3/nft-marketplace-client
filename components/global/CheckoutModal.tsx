@@ -12,8 +12,8 @@ interface CheckoutModalProps {
  * @param props
  * @returns
  */
-export default function CheckoutModal(props: CheckoutModalProps): React.ReactElement {
-  const { app } = props;
+export default function CheckoutModal(props): React.ReactElement {
+  const { app, data } = props;
   const { lang } = app;
   useEffect(() => {
     utils.$.setStylesCheckout();
@@ -25,7 +25,7 @@ export default function CheckoutModal(props: CheckoutModalProps): React.ReactEle
       </div>
 
       <div className="popup__sub">
-        You are about to purchase <span>Moonset</span> from <span>Definftz</span>
+        You are about to purchase <span>{data.title}</span> from <span>{data.owner.name}</span>
       </div>
 
       <div className="popup__bid-form">

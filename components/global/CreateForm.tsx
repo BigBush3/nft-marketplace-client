@@ -203,7 +203,7 @@ const {register, handleSubmit} = useForm()
   })
   const fee = await getGasFee(gasFee.createOrderSell)
   console.log(fee, something, data.price)
-	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, BigInt(data.price)).encodeABI()
+	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, data.price).encodeABI()
   let transactions
 	if(!wallet){
 		alert('you have to connect cryptowallet')
