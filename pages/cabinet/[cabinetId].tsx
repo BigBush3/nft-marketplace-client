@@ -118,7 +118,11 @@ function Cabinet(props): React.ReactElement {
             <a href="#" className="btn btn_black fill">
               <span>{lang.cabinet.walletBallance}</span>
             </a>
-          </div>): null}
+          </div>): <div className="cabinet_top_btns button">
+            <a href="#" className="btn btn_black fill">
+              <span>Подписаться</span>
+            </a>
+          </div>}
         </div>
 
         <div className="cabinet_nav flex">
@@ -197,7 +201,11 @@ function Cabinet(props): React.ReactElement {
           block3
         </div>
         <div className="cabinet_block" hidden={active !== 3}>
-          block4
+        <div className="marketplace__items">
+       {data.favouriteNfts ? [data.favouriteNfts.map((item) => {
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+            })] : <div>you dont have any favourite nft-tokens</div>}
+          </div>
         </div>
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">

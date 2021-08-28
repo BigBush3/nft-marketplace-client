@@ -57,7 +57,8 @@
       "import/extensions": [2, { "extensions": [".jsx", ".tsx", ".js", ".ts"] }],
       "react/react-in-jsx-scope": 0,
       "no-use-before-define": 0,
-      "@typescript-eslint/no-use-before-define": 1
+      "@typescript-eslint/no-use-before-define": 1,
+      "object-shorthand": 0
     },
     "settings": {
       "import/resolver": {

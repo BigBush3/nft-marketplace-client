@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import axios from 'axios'
+import router from 'next/router';
 import { SettingsRemoteTwoTone } from '@material-ui/icons';
 import Theme from '../../components/Theme';
 import Header from '../../components/global/Header';
@@ -35,10 +36,8 @@ function Product({app, data}): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const info = await utils.d.getItems(1);
-      setItem(info[0]);
-    })();
+   setItem(data)
+   axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
   }, []);
   return (
     <Theme>
@@ -67,12 +66,12 @@ function Product({app, data}): React.ReactElement {
                 <div className="product__views">
                   <i className="flaticon-eye" /> <span>{item?.views}</span>
                 </div>
-{/*                 {item && (
+                {item && (
                   <>
-                    <Favorite favoriteMe={item?.favoriteMe} app={app} />
-                    <Likes likeMe={item?.likeMe} likes={item?.likes} app={app} />
+                    <Favorite favoriteMe={item?.favoriteMe} app={app} product={data._id}/>
+                    <Likes likeMe={item?.likeMe} likes={item?.likes} app={app} product={data._id}/>
                   </>
-                )} */}
+                )}
                 <div className="product__share">
                   <a href="#">
                     <i className="flaticon-share" /> <span>{lang.share}</span>

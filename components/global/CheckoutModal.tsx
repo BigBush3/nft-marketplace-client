@@ -31,18 +31,18 @@ export default function CheckoutModal(props): React.ReactElement {
       <div className="popup__bid-form">
         <div className="bid-form__header">
           <div className="bid-form__item">
-            <input type="text" value="0,5" disabled={true} />
+            <input type="text" value={data.price} disabled={true} />
             <span>ETH</span>
           </div>
         </div>
 
         <div className="bid-form__calc">
-          <div className="form__calc-item">
+{/*           <div className="form__calc-item">
             <div className="calc-item__title">Your balance</div>
             <div className="calc-item__value">0 ETH</div>
-          </div>
+          </div> */}
           <div className="form__calc-item">
-            <div className="calc-item__title">Service free</div>
+            <div className="calc-item__title">Service fee</div>
             <div className="calc-item__value">0.013 ETH</div>
           </div>
           <div className="form__calc-item">

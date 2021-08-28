@@ -4689,6 +4689,7 @@ input::-webkit-inner-spin-button {
   max-height: 340px;
   min-height: 200px;
   -o-object-fit: cover;
+  width: 1600px;
   object-fit: cover;
   -o-object-position: center;
   object-position: center;
