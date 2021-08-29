@@ -353,13 +353,6 @@ function Header(props): React.ReactElement {
                             </a>
                           </Link>
                         </li>
-                        <li className="user-toolbar__item">
-                          <Link href="/create">
-                            <a role="button" onClick={unHiddenHtml}>
-                              <i className="flaticon-letter-x add" /> { lang.userMenu.addNft}
-                            </a>
-                          </Link>
-                        </li>
 
                         <li className="user-toolbar__item">
                           <Link href="/settings">

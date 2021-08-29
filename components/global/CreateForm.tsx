@@ -129,23 +129,19 @@ const {register, handleSubmit} = useForm()
   }
   
   const onSubmit = async (data) => {
-
+    console.log(web3.utils.toWei(String(data.firstBid)))
     console.log(data.price)
     const price = data.price * 1e18
     setOpen(true)
     setCreateLoader(true)
     const metamask = await connectMetaMask()
-    const subscription = async (contractAddress, topic)=>{
+    const subscription = (contractAddress, topic)=>{
       console.log('start subscription')
       console.log('contractAddress: ', contractAddress)
       console.log('topic: ', topic)
       return web3.eth.subscribe('logs', {
           address: contractAddress,
           topics: [topic]
-      }, (error, result)=>{
-          console.log(error)
-          console.log(result)
-          console.log('end subscription')
       })
     } 
     const walletAddress = metamask.userAddress
@@ -203,33 +199,60 @@ const {register, handleSubmit} = useForm()
   })
   const fee = await getGasFee(gasFee.createOrderSell)
   console.log(fee, something, data.price)
-	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, data.price).encodeABI()
-  let transactions
+  if (auctionChecked){
+      let fee = await getGasFee(gasFee.createAuction)
+      console.log("Gas Fee - ", fee)
+      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, something, web3.utils.toWei(String(data.firstBid)), data.startDate, data.endDate).encodeABI()
+      if(!wallet){
+        alert('you have to connect cryptowallet')
+      } else {
+        wallet.eth.sendTransaction({
+                to: NFTSTORE_ADDRESS,
+                from: walletAddress,
+                value: web3.utils.toWei(String(fee/1e18)),
+                data: txData
+            },
+            async function (error, res){
+                console.log(error);
+                console.log(res);
+                let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
+              
+              subEvent.on('data', event => {
+                console.log(parseInt(event.data))
+              })
+    
+            // subEvent.on('changed', changed => console.log(changed))
+            // subEvent.on('error', err => { throw err })
+            // subEvent.on('connected', nr => console.log(nr))
+            }
+        )		
+      }
+    
+  } else {
+    	let fee = await getGasFee(gasFee.createOrderSell)
+	let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, web3.utils.toWei(String(data.price))).encodeABI()
 	if(!wallet){
 		alert('you have to connect cryptowallet')
 	} else {
-		await wallet.eth.sendTransaction({
+		wallet.eth.sendTransaction({
 		        to: NFTSTORE_ADDRESS,
 		        from: walletAddress,
-            // @ts-ignore
-		        value: fee,
+		        value: web3.utils.toWei(String(fee/1e18)),
 		        data: txData
 		    },
-		    async function(error, res){
+		    function(error, res){
 		        console.log(error);
 		        console.log(res);
 		        if(price>0){
-              // @ts-ignore
 		        	subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
 		        } else {
-              // @ts-ignore
 			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
-
 		        }
 		    }
-		)
-
+		)		
 	}
+  }
+
   
   const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something})
   console.log(res)
@@ -274,13 +297,13 @@ const {register, handleSubmit} = useForm()
         <div className="create_check_info create_inputs" ref={auctionCheckInfoRef}>
           <div className="create_input w100">
             <span>{lang.auction.firstBid}:</span>
-            <input type="number" />
+            <input type="number" step="any" {...register('firstBid')}/>
             <span className="icon icon-eth" />
           </div>
 
           <div className="create_input">
             <span>{lang.auction.startDate}:</span>
-            <input className="datepicker" />
+            <input className="datepicker" {...register('startDate')}/>
             <span className="icon icon-calendar" />
           </div>
           <div className="create_input">
@@ -297,7 +320,7 @@ const {register, handleSubmit} = useForm()
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
             <div ref={endDateCheckInfoRef}>
-              <input className="datepicker" />
+              <input className="datepicker" {...register("endDate")}/>
               <span className="icon icon-calendar" />
             </div>
           </div>

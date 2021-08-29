@@ -15,6 +15,7 @@ import Header from '../../components/global/Header';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import Theme from '../../components/Theme';
+import { getItems } from '../../utils/data';
 
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
@@ -52,7 +53,8 @@ function Cabinet(props): React.ReactElement {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
   useEffect(() => {
-    console.log(data)
+    console.log(checkAvailability(data.followers, cookie.get('id')))
+    console.log(data.followers, cookie.get('id'))
   }, [])
   useEffect(() => {
     setTimeout(() => {
@@ -75,6 +77,17 @@ function Cabinet(props): React.ReactElement {
       }, 1000);
     });
   }, [active]);
+  async function subscribeHandler(){
+    await axios.post('https://desolate-inlet-76011.herokuapp.com/user/follow', {id: cookie.get('id'), user: router.query})
+  }
+  async function unSubscribeHandler(){
+    await axios.post('https://desolate-inlet-76011.herokuapp.com/user/unfollow', {id:cookie.get('id'), user: router.query})
+  }
+  function checkAvailability(arr, val) {
+    return arr.some(function(arrVal) {
+      return val === arrVal._id;
+    });
+  }
   return (
     <Theme>
       <Header app={app}/>
@@ -118,11 +131,18 @@ function Cabinet(props): React.ReactElement {
             <a href="#" className="btn btn_black fill">
               <span>{lang.cabinet.walletBallance}</span>
             </a>
-          </div>): <div className="cabinet_top_btns button">
-            <a href="#" className="btn btn_black fill">
+            {data.verified &&             <a href="/create" className="btn btn_black fill">
+              <span>+ Create NFT</span>
+            </a>}
+          </div>): [ checkAvailability(data.followers, cookie.get('id')) ? <div className="cabinet_top_btns button">
+            <a href="#" className="btn btn_black fill" onClick={unSubscribeHandler}>
+              <span>Отписаться</span>
+            </a>
+          </div> : <div className="cabinet_top_btns button">
+            <a href="#" className="btn btn_black fill" onClick={subscribeHandler}>
               <span>Подписаться</span>
             </a>
-          </div>}
+          </div>]}
         </div>
 
         <div className="cabinet_nav flex">
@@ -195,7 +215,11 @@ function Cabinet(props): React.ReactElement {
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 1}>
-          <span>«Пусто»</span>
+        <div className="marketplace__items">
+       {data.nfts.map((item) => {
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+            })}
+          </div>
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
           block3
@@ -204,171 +228,45 @@ function Cabinet(props): React.ReactElement {
         <div className="marketplace__items">
        {data.favouriteNfts ? [data.favouriteNfts.map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
-            })] : <div>you dont have any favourite nft-tokens</div>}
+            })] : <div>you dont have any favourite nft tokens</div>}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
-            <a className="cabinet_sub" href="#">
+            {data.followers ? [data.followers.map((item) => {
+              return (
+                            <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
                 <picture>
-                  <source srcSet="/images/2.webp" type="image/webp" />
                   <img
-                    src="/images/2.jpg"
+                    src={item.imgUrl}
                     alt="img"
-                    srcSet="/images/2.jpg 1x, /images/2@2x.jpg 2x"
                   />
                 </picture>
               </div>
-              <span className="cabinet_sub_name">Lee Aaker</span>
+              <span className="cabinet_sub_name">{item.name}</span>
             </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/3.webp" type="image/webp" />
-                  <img
-                    src="/images/3.jpg"
-                    alt="img"
-                    srcSet="/images/3.jpg 1x, /images/3@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Frank J. Aard</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/4.webp" type="image/webp" />
-                  <img
-                    src="/images/4.jpg"
-                    alt="img"
-                    srcSet="/images/4.jpg 1x, /images/4@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Aash Aaron</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/2.webp" type="image/webp" />
-                  <img
-                    src="/images/2.jpg"
-                    alt="img"
-                    srcSet="/images/2.jpg 1x, /images/2@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Quinton Aaron</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/3.webp" type="image/webp" />
-                  <img
-                    src="/images/3.jpg"
-                    alt="img"
-                    srcSet="/images/3.jpg 1x, /images/3@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">William Abadie</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/4.webp" type="image/webp" />
-                  <img
-                    src="/images/4.jpg"
-                    alt="img"
-                    srcSet="/images/4.jpg 1x, /images/4@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Tony Abatemarco, Anthony Michael </span>
-            </a>
+              )
+            })] : <span>You don't have followers yet</span>}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 5}>
           <div className="cabinet_subs">
-            <a className="cabinet_sub" href="#">
+          {data.followings ? [data.followings.map((item) => {
+              return (
+                            <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
                 <picture>
-                  <source srcSet="/images/2.webp" type="image/webp" />
                   <img
-                    src="/images/2.jpg"
+                    src={item.imgUrl}
                     alt="img"
-                    srcSet="/images/2.jpg 1x, /images/2@2x.jpg 2x"
                   />
                 </picture>
               </div>
-              <span className="cabinet_sub_name">Lee Aaker</span>
+              <span className="cabinet_sub_name">{item.name}</span>
             </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/3.webp" type="image/webp" />
-                  <img
-                    src="/images/3.jpg"
-                    alt="img"
-                    srcSet="/images/3.jpg 1x, /images/3@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Frank J. Aard</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/4.webp" type="image/webp" />
-                  <img
-                    src="/images/4.jpg"
-                    alt="img"
-                    srcSet="/images/4.jpg 1x, /images/4@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Aash Aaron</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/2.webp" type="image/webp" />
-                  <img
-                    src="/images/2.jpg"
-                    alt="img"
-                    srcSet="/images/2.jpg 1x, /images/2@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Quinton Aaron</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/3.webp" type="image/webp" />
-                  <img
-                    src="/images/3.jpg"
-                    alt="img"
-                    srcSet="/images/3.jpg 1x, images/3@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">William Abadie</span>
-            </a>
-            <a className="cabinet_sub" href="#">
-              <div className="cabinet_sub_img">
-                <picture>
-                  <source srcSet="/images/4.webp" type="image/webp" />
-                  <img
-                    src="/images/4.jpg"
-                    alt="img"
-                    srcSet="/images/4.jpg 1x, images/4@2x.jpg 2x"
-                  />
-                </picture>
-              </div>
-              <span className="cabinet_sub_name">Tony Abatemarco, Anthony Michael </span>
-            </a>
+              )
+            })] : <span>You don't have followings yet</span>}
           </div>
         </div>
 
