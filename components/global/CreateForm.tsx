@@ -110,6 +110,11 @@ const {register, handleSubmit} = useForm()
       $(endDateCheckInfoRef.current).slideDown(200);
     }
   }, [auctionChecked, fixPayChecked, endDateChecked]);
+  const isOwner = async (address) => {
+    NFT.methods.admins(address).call({}, (err, res)=>{
+      console.log(`it's owners address ${address} - ${res}`)
+    })
+  }
   function handleChange(event){
     console.log('hi!!!!')
     setFileCopy(event.target.files[0])
@@ -129,7 +134,7 @@ const {register, handleSubmit} = useForm()
   }
   
   const onSubmit = async (data) => {
-    console.log(web3.utils.toWei(String(data.firstBid)))
+    console.log(web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000))
     console.log(data.price)
     const price = data.price * 1e18
     setOpen(true)
@@ -151,7 +156,8 @@ const {register, handleSubmit} = useForm()
     console.log(NFT)
     console.log('walletAddress: ', walletAddress)
     console.log('web3: ', web3)
-
+    const owner = await isOwner(walletAddress)
+    console.log(owner)
     const formData = new FormData();
     // Update the formData object
     formData.append(
@@ -197,12 +203,10 @@ const {register, handleSubmit} = useForm()
   const something = await NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
     console.log(`tokenID of URI ${ipfsHash} - ${res}`)
   })
-  const fee = await getGasFee(gasFee.createOrderSell)
-  console.log(fee, something, data.price)
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
-      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, something, web3.utils.toWei(String(data.firstBid)), data.startDate, data.endDate).encodeABI()
+      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, something, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
       } else {
@@ -217,8 +221,11 @@ const {register, handleSubmit} = useForm()
                 console.log(res);
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
-              subEvent.on('data', event => {
-                console.log(parseInt(event.data))
+              subEvent.on('data', async event => {
+                 
+  const res = await axios.post('http://localhost:8000/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
+  router.push(`/product/${res.data.result._id}`)
+
               })
     
             // subEvent.on('changed', changed => console.log(changed))
@@ -229,7 +236,7 @@ const {register, handleSubmit} = useForm()
       }
     
   } else {
-    	let fee = await getGasFee(gasFee.createOrderSell)
+  let fee = await getGasFee(gasFee.createOrderSell)
 	let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, web3.utils.toWei(String(data.price))).encodeABI()
 	if(!wallet){
 		alert('you have to connect cryptowallet')
@@ -240,11 +247,16 @@ const {register, handleSubmit} = useForm()
 		        value: web3.utils.toWei(String(fee/1e18)),
 		        data: txData
 		    },
-		    function(error, res){
+		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
 		        if(price>0){
-		        	subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
+		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
+              subevent.on("data", async event => {
+                            
+  const res = await axios.post('http://localhost:8000/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
+ router.push(`/product/${res.data.result._id}`)
+              })
 		        } else {
 			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
 		        }
@@ -252,15 +264,11 @@ const {register, handleSubmit} = useForm()
 		)		
 	}
   }
-
   
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something})
-  console.log(res)
-  router.push(`/product/${res.data.result._id}`)
   };
   const getGasFee = async(gasLimit)=>{
     let result = 0
-    NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{
+    await NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{
       console.log(`gasFee - ${res}`)
       result = res
     })
@@ -303,7 +311,7 @@ const {register, handleSubmit} = useForm()
 
           <div className="create_input">
             <span>{lang.auction.startDate}:</span>
-            <input className="datepicker" {...register('startDate')}/>
+            <input type='date' {...register('startDate')}/>
             <span className="icon icon-calendar" />
           </div>
           <div className="create_input">
@@ -320,7 +328,7 @@ const {register, handleSubmit} = useForm()
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
             <div ref={endDateCheckInfoRef}>
-              <input className="datepicker" {...register("endDate")}/>
+              <input type='date' {...register("endDate")}/>
               <span className="icon icon-calendar" />
             </div>
           </div>
