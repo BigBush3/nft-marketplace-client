@@ -229,17 +229,6 @@ export function setStylesFooter(): void {
 /**
  * Установка стилей для модального окна Купить
  */
-export function setStylesCheckout(): void {
-  // @ts-ignore
-  $('a.open_checkout').magnificPopup({
-    items: [
-      {
-        src: '.popup__checkout',
-        type: 'inline',
-      },
-    ],
-  });
-}
 
 /**
  * Установка стилей для модального окна Сделать ставку

@@ -15,6 +15,7 @@ import Header from '../../components/global/Header';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import Theme from '../../components/Theme';
+import * as clipboard from "clipboard-polyfill/text";
 import { getItems } from '../../utils/data';
 
 
@@ -119,7 +120,16 @@ function Cabinet(props): React.ReactElement {
               </picture> : <picture><source srcSet="/img/avatar_0.png" /><img src="/img/avatar_0.png" alt="avatar" /></picture>}
             </div>
             <div className="cabinet_top_user_name">{data.name}</div>
-            <div className="cabinet_top_user_link icon icon-copy">
+            <div className="cabinet_top_user_link icon icon-copy" onClick={() => {
+                clipboard.writeText(data.wallet).then(
+                  function () {
+                    alert("address of the wallet was successfully copied!");
+                  },
+                  function () {
+                    alert("error!");
+                  }
+                );
+            }}>
               {data.wallet}
             </div>
           </div>
@@ -209,20 +219,22 @@ function Cabinet(props): React.ReactElement {
         </div>
         <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
-       {data.nfts.map((item) => {
+       {data.nfts.filter((item) => item.location !== 'collection').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 1}>
         <div className="marketplace__items">
-       {data.nfts.map((item) => {
+       {data.nfts.filter((item) => item.location !== 'collection').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
-          block3
+          {data.nfts.filter((item) => item.location === 'collection').map((item) => {
+            return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+          })}
         </div>
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">

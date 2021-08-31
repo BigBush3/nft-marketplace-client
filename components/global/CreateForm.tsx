@@ -134,7 +134,6 @@ const {register, handleSubmit} = useForm()
   }
   
   const onSubmit = async (data) => {
-    console.log(web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000))
     console.log(data.price)
     const price = data.price * 1e18
     setOpen(true)

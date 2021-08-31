@@ -15,8 +15,8 @@ interface ButtonStyledProps {
  * @param props
  * @returns
  */
-export default function ButtonsStyled(props: ButtonStyledProps): React.ReactElement {
-  const { text1, fill1, text2, fill2, rate } = props;
+export default function ButtonsStyled(props): React.ReactElement {
+  const { text1, fill1, text2, fill2, rate, type } = props;
   const firstRef = useRef<any>();
   const secondRef = useRef<any>();
   const [firstFill, setFirstFill] = useState<boolean>(fill1);
@@ -26,7 +26,7 @@ export default function ButtonsStyled(props: ButtonStyledProps): React.ReactElem
     /**
      * Для обеспечения переключения цветов как в верстке
      */
-    firstRef.current.addEventListener('mouseenter', () => {
+/*     firstRef.current.addEventListener('mouseenter', () => {
       setFirstFill(rate);
       setSecondFill(!rate);
     });
@@ -41,21 +41,11 @@ export default function ButtonsStyled(props: ButtonStyledProps): React.ReactElem
     secondRef.current.addEventListener('mouseleave', () => {
       setSecondFill(rate);
       setFirstFill(!rate);
-    });
+    }); */
   }, []);
   return (
     <>
-      <a
-        ref={firstRef}
-        href="#"
-        className={clsx(
-          rate && 'rate open_bid btn_blank',
-          fill1 && !rate && 'btn_fill',
-          firstFill && 'fill'
-        )}>
-        <span>{text1}</span>
-      </a>
-      <a
+    {type === 'orderSell' ?       <a
         ref={secondRef}
         href="#"
         className={clsx(
@@ -64,7 +54,18 @@ export default function ButtonsStyled(props: ButtonStyledProps): React.ReactElem
           secondFill && 'fill'
         )}>
         <span>{text2}</span>
-      </a>
+      </a>:       <a
+        ref={firstRef}
+        href="#"
+        className={clsx(
+          rate && 'rate open_bid btn_blank',
+          fill1 && !rate && 'btn_fill',
+          firstFill && 'fill'
+        )}>
+        <span>{text1}</span>
+      </a>}
+
+
     </>
   );
 }

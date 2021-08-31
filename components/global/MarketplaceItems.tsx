@@ -19,10 +19,10 @@ let _count = 0;
  * @param props
  * @returns
  */
-export default function MarketplaceItems(props: MarketplaceItemProps): React.ReactElement {
+export default function MarketplaceItems(props): React.ReactElement {
   const { app } = props;
   const lastItemRef = useRef<any>();
-  const [marketplaceItems, setMarketplaceItems] = useState<Types.ItemProps[]>([]);
+  const [marketplaceItems, setMarketplaceItems] = useState([]);
   async function getMarketPlacePart(): Promise<void> {
     const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft');
     const oldState = marketplaceItems;
@@ -52,7 +52,7 @@ export default function MarketplaceItems(props: MarketplaceItemProps): React.Rea
   }, [_load]);
   return (
     <div className="marketplace__items">
-      {marketplaceItems.map((item, index, array) => {
+      {marketplaceItems.filter((item) => item.location === 'marketplace').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
         return (
           <MarketplaceItem

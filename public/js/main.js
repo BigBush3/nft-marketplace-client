@@ -261,14 +261,6 @@ $(document).ready(function(){
 			}
 		],
 	});
-	$('a.open_checkout').magnificPopup({
-		items: [
-			{
-				src: '.popup__checkout',
-				type: 'inline'
-			}
-		],
-	});
 
 	$('.product__image-resize').magnificPopup({
 		type : 'image',		

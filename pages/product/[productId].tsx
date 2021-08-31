@@ -13,6 +13,7 @@ import CheckoutModal from '../../components/global/CheckoutModal';
 import Likes from '../../components/global/Likes';
 import Favorite from '../../components/global/Favorite';
 import ButtonsStyled from '../../components/product/ButtonsStyled';
+import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 
@@ -30,6 +31,7 @@ function Product({app, data}): React.ReactElement {
   const { lang } = app;
   const [item, setItem] = useState<Types.ItemProps>();
   const [open, setOpen] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false)
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
@@ -39,6 +41,10 @@ function Product({app, data}): React.ReactElement {
    setItem(data)
    axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
   }, []);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Theme>
       <Header app={app} />
@@ -68,7 +74,7 @@ function Product({app, data}): React.ReactElement {
                 </div>
                 {item && (
                   <>
-                    <Favorite favoriteMe={item?.favoriteMe} app={app} product={data._id}/>
+                    <Favorite favoriteMe={item?.favoriteMe} app={app} product={data._id} owner={data.owner}/>
                     <Likes likeMe={item?.likeMe} likes={item?.likes} app={app} product={data._id}/>
                   </>
                 )}
@@ -84,13 +90,8 @@ function Product({app, data}): React.ReactElement {
                 </div>
 
                 <div className="product__buy button">
-                  <ButtonsStyled
-                    rate={true}
-                    text1={lang.placeBid}
-                    fill1={false}
-                    text2={lang.buy}
-                    fill2={true}
-                  />
+                  {data.owner._id === cookie.get('id') ? null : <button onClick={() => setOpenModal(true)}>Купить</button>}
+                  
                 </div>
               </div>
             </div>
@@ -99,7 +100,7 @@ function Product({app, data}): React.ReactElement {
           <aside className="aside author">
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
-              <div className="author__img">
+              <div className="author__img" onClick={() => router.push(`/cabinet/${data.owner._id}`)}>
                 <img src={data.owner.imgUrl} alt="img" />
               </div>
               <div className="author__cover">
@@ -131,7 +132,7 @@ function Product({app, data}): React.ReactElement {
               </p>
             </div>
             <div className="author__buttons button">
-              <ButtonsStyled text1={lang.history} fill1={true} text2={lang.bids} fill2={false} />
+              
             </div>
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
@@ -153,7 +154,7 @@ function Product({app, data}): React.ReactElement {
           </aside>
         </div>
         <PlaceBidModal app={app}/>
-        <CheckoutModal app={app} data={data}/>
+        <CheckoutModal app={app} data={data} open={openModal} handleClose={handleClose}/>
         <Footer {...app} />
       </div>
     </Theme>
