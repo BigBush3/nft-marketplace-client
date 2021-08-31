@@ -25,6 +25,7 @@ export default function MarketplaceItems(props): React.ReactElement {
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   async function getMarketPlacePart(): Promise<void> {
     const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft');
+    const auction = result.data
     const oldState = marketplaceItems;
     const newState = oldState.concat(result.data);
     setMarketplaceItems(newState);
@@ -43,12 +44,6 @@ export default function MarketplaceItems(props): React.ReactElement {
     (async () => {
       await getMarketPlacePart();
     })();
-    window.addEventListener('scroll', windowScrollHandler);
-    return () => {
-      window.removeEventListener('scroll', windowScrollHandler);
-      _load = true;
-      _count = 0;
-    };
   }, [_load]);
   return (
     <div className="marketplace__items">

@@ -48,15 +48,15 @@ function Cabinet(props): React.ReactElement {
   const { lang } = app;
   const [active, setActive] = useState<number>(0);
   const [show, setShow] = useState<boolean>(false);
+  const [sub, setSub] = useState(checkAvailability(data.followers, cookie.get('id')))
+  const [open, setOpen] = useState(false)
+  const [followers, setFollowers] = useState(data.followers)
+  const [followings, setFollowings] = useState(data.followings)
 
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
-  useEffect(() => {
-    console.log(checkAvailability(data.followers, cookie.get('id')))
-    console.log(data.followers, cookie.get('id'))
-  }, [])
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
@@ -79,10 +79,18 @@ function Cabinet(props): React.ReactElement {
     });
   }, [active]);
   async function subscribeHandler(){
+    setSub(true)
+    setFollowers(followers.push({name: cookie.get('name'), imgUrl: cookie.get('imgUrl'), _id: cookie.get('id')}))
     await axios.post('https://desolate-inlet-76011.herokuapp.com/user/follow', {id: cookie.get('id'), user: router.query})
+    
   }
   async function unSubscribeHandler(){
+    setSub(false)
+    const index = followers.indexOf(cookie.get('id'))
+    setFollowers(followers.splice(index, 1))
     await axios.post('https://desolate-inlet-76011.herokuapp.com/user/unfollow', {id:cookie.get('id'), user: router.query})
+
+    
   }
   function checkAvailability(arr, val) {
     return arr.some(function(arrVal) {
@@ -144,14 +152,14 @@ function Cabinet(props): React.ReactElement {
             {data.verified &&             <a href="/create" className="btn btn_black fill">
               <span>+ Create NFT</span>
             </a>}
-          </div>): [ checkAvailability(data.followers, cookie.get('id')) ? <div className="cabinet_top_btns button">
-            <a href="#" className="btn btn_black fill" onClick={unSubscribeHandler}>
+          </div>): [ sub ? <div className="cabinet_top_btns button">
+            <button className="btn btn_black fill" onClick={unSubscribeHandler}>
               <span>Отписаться</span>
-            </a>
+            </button>
           </div> : <div className="cabinet_top_btns button">
-            <a href="#" className="btn btn_black fill" onClick={subscribeHandler}>
+            <button className="btn btn_black fill" onClick={subscribeHandler}>
               <span>Подписаться</span>
-            </a>
+            </button>
           </div>]}
         </div>
 
@@ -245,7 +253,7 @@ function Cabinet(props): React.ReactElement {
         </div>
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
-            {data.followers ? [data.followers.map((item) => {
+            {followers ? [data.followers.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">

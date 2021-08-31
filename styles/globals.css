@@ -1957,13 +1957,17 @@ textarea {
   display: flex;
 }
 
-.aside .author__img {
+.author__img {
   margin-right: 26px;
   width: 200px;
   height: 200px;
-  border-radius: 50%;
-}
 
+}
+.author__img:hover{
+  opacity: 0.7;
+  cursor: pointer;
+  transition:all ease-in 0.1s;
+}
 .aside .author__status {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1993,6 +1997,12 @@ textarea {
   font-weight: 500;
   font-size: 18px;
   margin-top: 6px;
+}
+
+.author__name:hover{
+  opacity: 0.5;
+  transition: ease all 0.3s;
+  cursor: pointer;
 }
 
 .aside .author__count {
@@ -7699,9 +7709,6 @@ a.ui-button:active,
     margin-bottom: 35px;
   }
 
-  .aside .author__img {
-    margin-right: 15px;
-  }
 
   .aside .author__status {
     margin-top: 5px;

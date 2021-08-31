@@ -32,6 +32,7 @@ function Product({app, data}): React.ReactElement {
   const [item, setItem] = useState<Types.ItemProps>();
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
+  const [openBid, setOpenBid] = useState(false)
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
@@ -42,8 +43,12 @@ function Product({app, data}): React.ReactElement {
    axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
   }, []);
   const handleClose = () => {
-    setOpen(false);
+    console.log('somethinghappens')
+    setOpenBid(false);
   };
+  const handleCloseCheckout = () => {
+    setOpenModal(false)
+  }
 
   return (
     <Theme>
@@ -90,7 +95,7 @@ function Product({app, data}): React.ReactElement {
                 </div>
 
                 <div className="product__buy button">
-                  {data.owner._id === cookie.get('id') ? null : <button onClick={() => setOpenModal(true)}>Купить</button>}
+                  {data.owner._id === cookie.get('id') ? null : [ data.type === 'orderSell' ? <button className='fill' onClick={() => setOpenModal(true)}><span>Купить</span></button> : <button className='fill' onClick={() => setOpenBid(true)}><span>Сделать ставку</span></button>]}
                   
                 </div>
               </div>
@@ -137,24 +142,24 @@ function Product({app, data}): React.ReactElement {
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
             </div>
-
-            {/* <div className="author__bid">
+                    
+            <div className="author__bid">
               <div className="author__bid-img">
-                <img src="/img/artist.png" alt="img" />
+                <img src={data.owner.imgUrl} alt="img" />
               </div>
               <div className="author__bid-cover">
                 <div className="author__bid-title">
-                  Highest bid by <span>Assassin7</span>
+                  Highest bid by <span>{data.owner.name}</span>
                 </div>
                 <div className="author__bid-value">
-                  <span className="eth">1.69 ETH</span> <span className="usd">$3,598.05</span>
+                  <span className="eth">{data.currentBid} ETH</span>
                 </div>
               </div>
-            </div> */}
+            </div>
           </aside>
         </div>
-        <PlaceBidModal app={app}/>
-        <CheckoutModal app={app} data={data} open={openModal} handleClose={handleClose}/>
+        <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose}/>
+        <CheckoutModal app={app} data={data} open={openModal} />
         <Footer {...app} />
       </div>
     </Theme>

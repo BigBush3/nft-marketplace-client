@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import cookie from 'js-cookie'
@@ -36,6 +36,7 @@ interface CheckoutModalProps {
  */
 export default function CheckoutModal(props): React.ReactElement {
   const { app, data, open, handleClose } = props;
+  const [openm ,setOpenm] = useState(open)
   const { lang } = app;
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
 // @ts-ignore
@@ -96,6 +97,7 @@ export default function CheckoutModal(props): React.ReactElement {
 		)
 	}
   const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id})
+  handleClose()
   }
   useEffect(() => {
   }, []);

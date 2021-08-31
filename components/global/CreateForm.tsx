@@ -17,6 +17,7 @@ import router from 'next/router';
 import connectMetaMask from './metamask'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
+import TextField from '@material-ui/core/TextField';
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -134,6 +135,7 @@ const {register, handleSubmit} = useForm()
   }
   
   const onSubmit = async (data) => {
+    console.log(data.endDate, data.startDate)
     console.log(data.price)
     const price = data.price * 1e18
     setOpen(true)
@@ -254,7 +256,7 @@ const {register, handleSubmit} = useForm()
               subevent.on("data", async event => {
                             
   const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
- router.push(`/product/${res.data.result._id}`)
+ router.push(`/product/${res.data.resClient._id}`)
               })
 		        } else {
 			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
@@ -310,8 +312,9 @@ const {register, handleSubmit} = useForm()
 
           <div className="create_input">
             <span>{lang.auction.startDate}:</span>
-            <input type='date' {...register('startDate')}/>
-            <span className="icon icon-calendar" />
+            <TextField id="datetime-local"
+        type="datetime-local" {...register('startDate')}/>
+            {/* <span className="icon icon-calendar" /> */}
           </div>
           <div className="create_input">
             <label htmlFor="end">
@@ -327,8 +330,9 @@ const {register, handleSubmit} = useForm()
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
             <div ref={endDateCheckInfoRef}>
-              <input type='date' {...register("endDate")}/>
-              <span className="icon icon-calendar" />
+            <TextField id="datetime-local"
+        type="datetime-local" {...register('endDate')}/>
+{/*               <span className="icon icon-calendar" /> */}
             </div>
           </div>
         </div>

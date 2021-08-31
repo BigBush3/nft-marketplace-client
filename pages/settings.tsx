@@ -161,7 +161,7 @@ function Settings({app,}): React.ReactElement {
                   {header ? <img src={header} alt="img"/>:<img src="img/header.png" alt="img"/>}
                 </div>
                 <div className="settings__form-file button">
-                  <input type="file" onChange={e => {setHeaderCopy(e.target.files[0]); setHeader(URL.createObjectURL(e.target.files[0]))}}/>
+                  <input type="file" accept="image/*" onChange={e => {setHeaderCopy(e.target.files[0]); setHeader(URL.createObjectURL(e.target.files[0]))}}/>
                   <div className="fill">
                     <i className="flaticon-download-1" />
                     <span>{lang.upload}</span>
