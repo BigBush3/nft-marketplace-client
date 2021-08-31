@@ -168,7 +168,7 @@ let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRE
     cookie.set('bidIndex', bidIndex)
     cookie.set('bid', bid)
     cookie.set('update', true)
-    await axios.post('http://localhost:8000/nft/bid', {bidIndex, id: data._id, userId: cookie.get('id'), price: bid})
+    await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/bid', {bidIndex, id: data._id, userId: cookie.get('id'), price: bid})
     handleClose()
   }
   return (
