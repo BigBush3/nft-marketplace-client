@@ -16,11 +16,11 @@ interface FineArtItemProps {
  * @param props
  * @returns
  */
-export default function FineArtItem(props: FineArtItemProps): React.ReactElement {
+export default function FineArtItem(props): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const { item, app } = props;
   const { lang } = app;
-  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, id } = item;
+  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id } = item;
   return (
     <div className="fineart__item products__item">
       <div className="products__item-info">
@@ -34,15 +34,15 @@ export default function FineArtItem(props: FineArtItemProps): React.ReactElement
           <i className="flaticon-letter-x cross" />
         </div>
         {/** Всплывающий список владельцев */}
-        <div className={clsx('item-info__dropdown', open && 'active')}>
+{/*         <div className={clsx('item-info__dropdown', open && 'active')}>
           {owners.map((owner, index) => {
             return <OwnerDropdownItem key={`Owner-${title}_${index}`} {...owner} />;
           })}
-        </div>
+        </div> */}
       </div>
-      <a href={`/product/${id}`} className="products__item-img">
+      <a href={`/product/${_id}`} className="products__item-img">
         <div className="item-img__cover">
-          <img src="/img/artist_item.png" alt="img" />
+          <img src={item?.img} alt="img" />
         </div>
         {mark && (
           <div className="products__item-mark">
@@ -50,7 +50,7 @@ export default function FineArtItem(props: FineArtItemProps): React.ReactElement
           </div>
         )}
       </a>
-      <div className="products__item-title">{author}</div>
+      <div className="products__item-title">{item.owner.name}</div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
         <div className="item-stats__views">
@@ -60,7 +60,7 @@ export default function FineArtItem(props: FineArtItemProps): React.ReactElement
         <Likes likeMe={likeMe} likes={likes} app={app} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">$ {price}</div>
+      <div className="products__item-price">ETH {price}</div>
       <div className="products__item-buy button">
         <a href="#" className="rate btn_blank">
           <span>{lang.placeBid}</span>

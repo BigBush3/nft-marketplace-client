@@ -16,18 +16,18 @@ const settings = utils.$.bannerSettings;
  */
 export default function Banner(props): React.ReactElement {
   const { lang, banners } = props;
-  
+  console.log(banners)
   return (
     <div className="bunner">
       <Slider {...settings} className="bunner__items owl-carousel">
         {banners.map((item, index) => {
           return (
             <div key={`Banner ${index}`}>
-              <div className="bunner__item" style={{ backgroundImage: `url(${item.imgUrl})`, backgroundSize: '100%', minHeight: "360px"}}>
-                <div className="bunner__item-title heading">
-                  <h2>{item.title}</h2>
+              <div className="bunner__item" style={{ backgroundImage: `url(${item.imgUrl})`, backgroundSize: '100%', minHeight: "360px", color: item.color}}>
+                <div style = {{color: item.color}} className="bunner__item-title heading">
+                  <h2 >{item.title}</h2>
                 </div>
-                <div className="bunner__item-text">
+                <div style={{color: item.color}} className="bunner__item-text">
                   <p>{item.text}</p>
                 </div>
                 <div className="bunner__item-more">

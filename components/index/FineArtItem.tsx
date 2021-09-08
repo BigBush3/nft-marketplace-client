@@ -18,14 +18,13 @@ interface FineArtItemsProps {
  * @param props
  * @returns
  */
-function FineArtItem(props: FineArtItemsProps): React.ReactElement {
+function FineArtItem(props): React.ReactElement {
   const { app, data } = props;
-  const { mark, owners, id, title, author, likeMe, price, views, file, favoriteMe, likes } = data;
+  const { mark, owners, _id, title, author, likeMe, price, views, file, favoriteMe, likes } = data;
   const { lang } = app;
   const [open, setOpen] = useState<boolean>(false);
   return (
     <div className="fineart__item products__item round">
-      <div className="products__item-label gif">GIF</div>
       <div className="products__item-info">
         <div
           role="button"
@@ -37,16 +36,16 @@ function FineArtItem(props: FineArtItemsProps): React.ReactElement {
           <i className="flaticon-letter-x cross" />
         </div>
 
-        <div className={clsx('item-info__dropdown', open && 'active')}>
+{/*         <div className={clsx('item-info__dropdown', open && 'active')}>
           {owners.map((owner, index) => {
             return <OwnerDropdownItem key={`Owner-${id}_${index}`} {...owner} />;
           })}
-        </div>
+        </div> */}
       </div>
       <div className="products__item-img">
         <div className="item-img__cover">
-          <Link href={`/product/${id}`}>
-            <img style={{ cursor: 'pointer' }} src={file} alt="img" />
+          <Link href={`/product/${_id}`}>
+            <img style={{ cursor: 'pointer' }} src={data.img} alt="img" />
           </Link>
         </div>
         {mark && (
@@ -67,7 +66,7 @@ function FineArtItem(props: FineArtItemsProps): React.ReactElement {
       </div>
       <div className="products__item-price">$ {price}</div>
       <div className="products__item-buy">
-        <Link href={`/product/${id}`}>{lang.buy}</Link>
+        <Link href={`/product/${_id}`}>{lang.buy}</Link>
       </div>
     </div>
   );

@@ -29,16 +29,18 @@ interface ProductProps {
  */
 function Product({app, data}): React.ReactElement {
   const { lang } = app;
-  const [item, setItem] = useState<Types.ItemProps>();
+  const [item, setItem] = useState();
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
   const [openBid, setOpenBid] = useState(false)
+  const [openHistory, setOpenHistory] = useState(false)
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
 
   useEffect(() => {
+    console.log(data.owner._id, cookie.get('id'))
    setItem(data)
    axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
   }, []);
@@ -49,7 +51,40 @@ function Product({app, data}): React.ReactElement {
   const handleCloseCheckout = () => {
     setOpenModal(false)
   }
+  const calculateTimeLeft = () => {
+    let difference = +new Date(data?.endDate) - +new Date();
+    let timeLeft
 
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60)
+    };
+  }
+
+  return timeLeft;
+
+}
+const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+  });
+  
+  const historyHandler = async () => {
+    const responseHistory = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/history/${router.query.productId}`)
+    console.log(responseHistory)
+    console.log('something')
+    if (openHistory){
+      setOpenHistory(false)
+    } else {
+      setOpenHistory(true)
+    }
+    
+  }
   return (
     <Theme>
       <Header app={app} />
@@ -75,12 +110,12 @@ function Product({app, data}): React.ReactElement {
               </div>
               <div className="product__bottom">
                 <div className="product__views">
-                  <i className="flaticon-eye" /> <span>{item?.views}</span>
+                  <i className="flaticon-eye" /> <span>{data?.views}</span>
                 </div>
                 {item && (
                   <>
-                    <Favorite favoriteMe={item?.favoriteMe} app={app} product={data._id} owner={data.owner}/>
-                    <Likes likeMe={item?.likeMe} likes={item?.likes} app={app} product={data._id}/>
+                    <Favorite favoriteMe={data?.favoriteMe} app={app} product={data._id} owner={data.owner}/>
+                    <Likes likeMe={data?.likeMe} likes={data?.likes} app={app} product={data._id}/>
                   </>
                 )}
                 <div className="product__share">
@@ -95,7 +130,10 @@ function Product({app, data}): React.ReactElement {
                 </div>
 
                 <div className="product__buy button">
-                  {data.owner._id === cookie.get('id') ? null : [ data.type === 'orderSell' ? <button className='fill' onClick={() => setOpenModal(true)}><span>Купить</span></button> : <button className='fill' onClick={() => setOpenBid(true)}><span>Сделать ставку</span></button>]}
+                  {data.owner._id === cookie.get('id') ? 
+                  [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> : 
+                   <button className='fill buy'><span>Завершить Аукцион</span></button>] 
+                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> :  <button className='fill buy' onClick={() => setOpenModal(true)}><span>Сделать ставку</span></button>]}
                   
                 </div>
               </div>
@@ -132,18 +170,20 @@ function Product({app, data}): React.ReactElement {
               </div>
             </div>
             <div className="author__text">
+              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1> : <h1>{`${timeLeft?.days} : ${timeLeft?.hours} : ${timeLeft?.minutes} : ${timeLeft?.seconds}`}</h1>]}
+              
               <p>
                 {data.description}
               </p>
             </div>
             <div className="author__buttons button">
-              
+            <button className='fill buy' onClick={async () => {await historyHandler()}}><span>история ставок</span></button>
             </div>
+            {openHistory ? <div>something</div> : null}
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
             </div>
-                    
-            <div className="author__bid">
+              {data.type === 'orderSell' ? null :  <div className="author__bid">
               <div className="author__bid-img">
                 <img src={data.owner.imgUrl} alt="img" />
               </div>
@@ -156,10 +196,11 @@ function Product({app, data}): React.ReactElement {
                 </div>
               </div>
             </div>
-          </aside>
+          }      
+            </aside>
         </div>
         <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose}/>
-        <CheckoutModal app={app} data={data} open={openModal} />
+        <CheckoutModal app={app} data={data} open={openModal} handleClose={handleCloseCheckout}/>
         <Footer {...app} />
       </div>
     </Theme>

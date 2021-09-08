@@ -26,7 +26,7 @@ interface FineArtProps {
  * @param props
  * @returns
  */
-function FineArt(props: FineArtProps): React.ReactElement {
+function FineArt(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
 
@@ -47,10 +47,10 @@ function FineArt(props: FineArtProps): React.ReactElement {
           </h1>
         </div>
         <Banner {...app} banners={banners} />
-        <Gallery app={app} />
+        <Gallery app={app}/>
         <div className="content">
-          <ArtistsList app={app} />
-          <FineArtItems app={app} />
+          <ArtistsList app={app}/>
+          <FineArtItems app={app}/>
         </div>
         <Footer {...app} />
       </div>

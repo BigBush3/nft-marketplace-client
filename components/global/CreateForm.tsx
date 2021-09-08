@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneIcon from '@material-ui/icons/Done';
 import router from 'next/router';
 import connectMetaMask from './metamask'
+import { makeStyles } from '@material-ui/core/styles';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import TextField from '@material-ui/core/TextField';
@@ -41,10 +42,22 @@ interface CreateFormProps {
   app: Types.AppProps;
   createMany: boolean;
 }
-
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+}));
 export default function CreateForm(props: CreateFormProps): React.ReactElement {
   const { app, createMany } = props;
   const { lang } = app;
+  const classes = useStyles();
+
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   // @ts-ignore
 const NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS) // @ts-ignore
@@ -176,6 +189,7 @@ const {register, handleSubmit} = useForm()
     const ipfsHash = response.data.result.IpfsHash
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
+    	
     let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
@@ -225,7 +239,7 @@ const {register, handleSubmit} = useForm()
               subEvent.on('data', async event => {
                  
   const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
-  router.push(`/product/${res.data.result._id}`)
+  router.push(`/product/${res.data.resClient._id}`)
 
               })
     
@@ -312,7 +326,9 @@ const {register, handleSubmit} = useForm()
 
           <div className="create_input">
             <span>{lang.auction.startDate}:</span>
-            <TextField id="datetime-local"
+            <TextField id="datetime-local" className={classes.textField}         InputLabelProps={{
+          shrink: true,
+        }}
         type="datetime-local" {...register('startDate')}/>
             {/* <span className="icon icon-calendar" /> */}
           </div>

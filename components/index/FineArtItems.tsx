@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
+import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import FineArtItem from './FineArtItem';
@@ -26,8 +27,9 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     }, 1000);
     (async () => {
       if (fineArtItems.length === 0) {
-        const _fineArtItems = await utils.r.getFineArt({ rounds: SLIDER_PRODUCTS_PART * 2 });
-        setFineArtItems(_fineArtItems);
+        let resFineart = await axios.get('http://localhost:8000/nft')
+        const _fineartItems = resFineart.data.filter((item) => item.location === 'FineArt')
+        setFineArtItems(_fineartItems);
       }
     })();
   }, [fineArtItems]);
