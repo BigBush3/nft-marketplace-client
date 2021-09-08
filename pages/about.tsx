@@ -4,6 +4,7 @@
 import React, { useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
+import Slider from 'react-slick';
 import * as utils from '../utils';
 import type * as Types from '../types/index.d';
 import Theme from '../components/Theme';
@@ -22,14 +23,28 @@ function About(props: AboutProps): React.ReactElement {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
 
-  useEffect(() => {
+/*   useEffect(() => {
     $('.about_info_images').slick({
       arrows: false,
       dots: true,
       infinite: false,
       slidesToShow: 1,
     });
-  }, []);
+  }, []); */
+  const settings = {
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    dots: true,
+    autoplay: true,
+    autoplaySpeed: 5000,
+  }
+  const images = [
+    '/images/5.jpg',
+    '/images/5.jpg',
+    '/images/5.jpg',
+    '/images/5.jpg',
+  ]
   return (
     <Theme>
       <Header app={app} />
@@ -47,7 +62,17 @@ function About(props: AboutProps): React.ReactElement {
                 dangerouslySetInnerHTML={{ __html: data[0].description }}
               />
             </div>
-            <div className="about_info_images">
+            <Slider {...settings} className="about_info_images">
+              {images.map((item, index) => {
+                return (
+              <div className="about_info_img" key={`image ${index}`}>
+                <picture>
+                  <img src={item} alt="img"/>
+                </picture>
+              </div>
+                )
+              })}
+{/* 
               <div className="about_info_img">
                 <picture>
                   <source srcSet="images/5.webp" type="image/webp" />
@@ -65,14 +90,8 @@ function About(props: AboutProps): React.ReactElement {
                   <source srcSet="images/5.webp" type="image/webp" />
                   <img src="/images/5.jpg" alt="img" srcSet="images/5.jpg 1x, images/5@2x.jpg 2x" />
                 </picture>
-              </div>
-              <div className="about_info_img">
-                <picture>
-                  <source srcSet="images/5.webp" type="image/webp" />
-                  <img src="/images/5.jpg" alt="img" srcSet="images/5.jpg 1x, images/5@2x.jpg 2x" />
-                </picture>
-              </div>
-            </div>
+              </div> */}
+            </Slider>
           </div>
           <div className="about_info_block">
             <div className="about_info_title">{data[1].title}</div>

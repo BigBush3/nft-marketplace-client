@@ -16,7 +16,6 @@ const settings = utils.$.bannerSettings;
  */
 export default function Banner(props): React.ReactElement {
   const { lang, banners } = props;
-  console.log(banners)
   return (
     <div className="bunner">
       <Slider {...settings} className="bunner__items owl-carousel">

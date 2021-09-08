@@ -110,12 +110,21 @@ const {register, handleSubmit} = useForm()
       $(auctionCheckInfoRef.current).slideUp();
     } else {
       $(auctionCheckInfoRef.current).slideDown();
+      if (fixPayChecked){
+        setFixPayChecked(false)
+        
+      }
     }
     // при фиксированной продаже
     if (!fixPayChecked) {
       $(fixPayCheckInfoRef.current).slideUp();
+
     } else {
-      $(fixPayCheckInfoRef.current).slideDown();
+      $(fixPayCheckInfoRef.current).slideDown(); 
+      if (auctionChecked){
+        setAuctionChecked(false)
+        
+      }
     }
     // при установке даты окончания
     if (!endDateChecked) {
@@ -148,8 +157,6 @@ const {register, handleSubmit} = useForm()
   }
   
   const onSubmit = async (data) => {
-    console.log(data.endDate, data.startDate)
-    console.log(data.price)
     const price = data.price * 1e18
     setOpen(true)
     setCreateLoader(true)
@@ -189,7 +196,7 @@ const {register, handleSubmit} = useForm()
     const ipfsHash = response.data.result.IpfsHash
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
-
+    console.log(data.dateRange)
     let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
@@ -203,6 +210,7 @@ const {register, handleSubmit} = useForm()
     }
 );   setCreateLoader(false)
     setApproveLoader(true)
+    
     txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
       to: NFT_ADDRESS,
@@ -334,18 +342,9 @@ const {register, handleSubmit} = useForm()
           </div>
           <div className="create_input">
             <label htmlFor="end">
-              <input
-                type="checkbox"
-                id="end"
-                checked={endDateChecked}
-                onClick={() => {
-                  setEndDateChecked(!endDateChecked);
-                }}
-              />
-              <span className="icon icon-check_sea" />
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
-            <div ref={endDateCheckInfoRef}>
+            <div ref={auctionCheckInfoRef}>
             <TextField id="datetime-local"
         type="datetime-local" {...register('endDate')}/>
 {/*               <span className="icon icon-calendar" /> */}

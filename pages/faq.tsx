@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useState} from 'react';
 import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
 import type * as Types from '../types/index.d';
@@ -7,6 +7,14 @@ import * as utils from '../utils';
 import Theme from '../components/Theme';
 import Header from '../components/global/Header';
 import FAQItem from '../components/faq/FAQItem';
+import { useForm}from 'react-hook-form';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import router from 'next/router';
 
 interface FAQProps {
   data: {
@@ -19,17 +27,36 @@ function FAQ(props: FAQProps): React.ReactElement {
   const { app, data } = props;
   const { lang } = app;
   const { faqItems } = data;
+  const [loader, setLoader] = useState(false)
   const videoRef = useRef<any>();
-
+  const {register, handleSubmit, reset} = useForm()
+  const [open, setOpen] = React.useState(false);
+  console.log(data)
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
-
+  const handleClose = (event, reason) => {
+    setOpen(false);
+  };
   useEffect(() => {
     if (videoRef?.current) {
       videoRef.current.muted = false;
     }
   }, []);
+  const onSubmit = async (data) => {
+    setLoader(true)
+    try {
+      const result = await axios.post('http://localhost:8000/question', {...data})
+      console.log(result)
+    } catch(err){
+      console.log(err.message)
+    }
+    
+    
+    setLoader(false)
+    setOpen(true);
+    reset({name: '', email: '', text: ''})
+  }
   return (
     <Theme>
       <Header app={app} />
@@ -54,15 +81,16 @@ function FAQ(props: FAQProps): React.ReactElement {
           </main>
 
           <aside className="aside faq_sidebar">
-            <form>
+            {loader ? <CircularProgress color="secondary" /> :             <form  onSubmit={handleSubmit(onSubmit)}>
               <span>{lang.formQuestion.haveQuestions}</span>
-              <input type="text" placeholder={lang.form.yourName} />
-              <input type="email" placeholder={lang.form.yourEmail} />
-              <textarea placeholder={lang.formQuestion.text} />
-              <button type="button" className="btn btn_black">
+              <input type="text" placeholder={lang.form.yourName} {...register('name')} required/>
+              <input type="email" placeholder={lang.form.yourEmail} {...register('email')} required/>
+              <textarea placeholder={lang.formQuestion.text} {...register('text')} required/>
+              <button type="submit" className="btn btn_black">
                 {lang.send}
               </button>
-            </form>
+            </form>}
+
             <div className="faq_chat">
               <span className="icon icon-chat" />
               <span>{lang.chat}</span>
@@ -71,6 +99,16 @@ function FAQ(props: FAQProps): React.ReactElement {
         </div>
         <Footer {...app} />
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="successfully delivered message! be in touch!"
+      />
     </Theme>
   );
 }

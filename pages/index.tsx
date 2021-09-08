@@ -47,7 +47,7 @@ function Home(props): React.ReactElement {
   const { banners } = data;
 
   const classes = useStyles();
-
+  console.log(app)
   const [filterBy, setFilterBy] = useState<number>(1);
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));

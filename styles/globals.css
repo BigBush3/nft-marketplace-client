@@ -4210,6 +4210,7 @@ textarea {
 .about_info_images .slick-dots {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
+  display: flex !important;
   justify-content: center;
   margin-top: 20px;
 }
@@ -4534,7 +4535,8 @@ input::-webkit-inner-spin-button {
 .create_check_info input {
   position: relative;
   bottom: auto;
-  max-width: 112px;
+  max-width: 200px;
+  height: 50px;
   padding: 0 16px !important;
 }
 
