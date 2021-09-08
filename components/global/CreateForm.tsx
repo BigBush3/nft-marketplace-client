@@ -189,7 +189,7 @@ const {register, handleSubmit} = useForm()
     const ipfsHash = response.data.result.IpfsHash
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
-    	
+
     let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,

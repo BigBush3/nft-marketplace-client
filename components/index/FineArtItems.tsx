@@ -27,7 +27,7 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     }, 1000);
     (async () => {
       if (fineArtItems.length === 0) {
-        let resFineart = await axios.get('http://localhost:8000/nft')
+        let resFineart = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft')
         const _fineartItems = resFineart.data.filter((item) => item.location === 'FineArt')
         setFineArtItems(_fineartItems);
       }
