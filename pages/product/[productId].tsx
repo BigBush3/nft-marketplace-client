@@ -170,7 +170,10 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
               </div>
             </div>
             <div className="author__text">
-              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1> : <h1>{`${timeLeft?.days} : ${timeLeft?.hours} : ${timeLeft?.minutes} : ${timeLeft?.seconds}`}</h1>]}
+              <h1>{data.collect}</h1>
+              <hr />
+              <div></div>
+              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1> : <div className='timer_fill'><h1>{`${timeLeft?.days} : ${timeLeft?.hours} : ${timeLeft?.minutes} : ${timeLeft?.seconds}`}</h1></div>]}
               
               <p>
                 {data.description}
@@ -183,7 +186,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
             </div>
-              {data.type === 'orderSell' ? null :  <div className="author__bid">
+{/*               {data.type === 'orderSell' ? null :  <div className="author__bid">
               <div className="author__bid-img">
                 <img src={data.owner.imgUrl} alt="img" />
               </div>
@@ -196,7 +199,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
                 </div>
               </div>
             </div>
-          }      
+          }    */}   
             </aside>
         </div>
         <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose}/>

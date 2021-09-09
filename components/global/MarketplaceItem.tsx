@@ -80,7 +80,7 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
             <img src="/img/verified-gold.png" alt="mark" />
           </div>
         )}
-        <div>{`${timeLeft.days} : ${timeLeft.hours} : ${timeLeft.minutes} : ${timeLeft.seconds}`}</div>
+        <div className='timer_fill place_timer'><h1>{`${timeLeft.days} : ${timeLeft.hours} : ${timeLeft.minutes} : ${timeLeft.seconds}`}</h1></div>
       </div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">

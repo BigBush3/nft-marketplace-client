@@ -19,6 +19,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import TextField from '@material-ui/core/TextField';
+import { WithContext as ReactTags } from 'react-tag-input';
+
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -57,7 +59,13 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
   const { app, createMany } = props;
   const { lang } = app;
   const classes = useStyles();
-
+  const KeyCodes = {
+    comma: 188,
+    enter: [10, 13],
+  };
+  
+  const delimiters = [...KeyCodes.enter, KeyCodes.comma];
+  const [tags, setTag] = useState([])
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   // @ts-ignore
 const NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS) // @ts-ignore
@@ -79,6 +87,23 @@ const {register, handleSubmit} = useForm()
   const [auctionChecked, setAuctionChecked] = useState<boolean>(true);
   const [endDateChecked, setEndDateChecked] = useState<boolean>(false);
   const [fixPayChecked, setFixPayChecked] = useState<boolean>(false);
+  function handleDelete(i) {
+    setTag(
+     tags.filter((tag, index) => index !== i),
+    );
+}
+function handleAddition(tag) {
+  setTag([...tags, tag]);
+}
+function handleDrag(tag, currPos, newPos) {
+  const newTags = tags.slice();
+
+  newTags.splice(currPos, 1);
+  newTags.splice(newPos, 0, tag);
+
+  // re-render
+  setTag(newTags);
+}
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -246,7 +271,7 @@ const {register, handleSubmit} = useForm()
               
               subEvent.on('data', async event => {
                  
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
+  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
   router.push(`/product/${res.data.resClient._id}`)
 
               })
@@ -277,7 +302,7 @@ const {register, handleSubmit} = useForm()
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
                             
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
+  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
  router.push(`/product/${res.data.resClient._id}`)
               })
 		        } else {
@@ -373,11 +398,15 @@ const {register, handleSubmit} = useForm()
           </div>
         </div>
       </div>
-{/*       <div className="create_input">
+{/*        <div className="create_input" style={{position: 'static'}}> */}
         <span>{lang.auction.createHashTag}:</span>
-        <input type="text" name='hashtag'/>
-        <span className="icon icon-sharp" />
-      </div> */}
+        <ReactTags  className="create_input" tags={tags}
+                    handleDelete={handleDelete}
+                    handleAddition={handleAddition}
+                    handleDrag={handleDrag}
+                    delimiters={delimiters} />
+        {/* <span className="icon icon-sharp" /> */}
+{/*        </div>  */}
       <div className="create_input">
         <span>{lang.auction.nftName}:</span>
         <input type="text" name='name' {...register("title")} required/>

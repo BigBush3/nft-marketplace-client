@@ -1689,6 +1689,14 @@ textarea {
 .products__item-img {
   display: block;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.place_timer{
+  position: absolute;
+  top: 80%;
 }
 
 .products__item-img .item-img__cover {
@@ -2754,6 +2762,19 @@ textarea {
   margin-bottom: 18px;
   position: relative;
   z-index: 9;
+}
+
+.timer_fill{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 170px;
+  background: rgb(93,152,226);
+  background: linear-gradient(90deg, rgba(93,152,226,1) 15%, rgba(6,219,150,1) 76%);
+
+  color: white;
+  border-radius: 20px;
 }
 
 .settings__form-item label.active {
@@ -4607,7 +4628,16 @@ input::-webkit-inner-spin-button {
 }
 
 .create_input input {
-  display: inline-block;
+  margin-top: 5px;
+  width: 100%;
+  padding: 0 28px;
+  font-weight: 700;
+  line-height: 50px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 12px 38px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.32);
+}
+.ReactTags__tagInputField{
   width: 100%;
   padding: 0 28px;
   font-weight: 700;
