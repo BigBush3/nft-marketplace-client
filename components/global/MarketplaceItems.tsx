@@ -20,17 +20,24 @@ let _count = 0;
  * @returns
  */
 export default function MarketplaceItems(props): React.ReactElement {
-  const { app } = props;
+  const { app, search, searchBy, filterBy} = props;
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   async function getMarketPlacePart(): Promise<void> {
-    const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft');
+    const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
     const auction = result.data
     const oldState = marketplaceItems;
     const newState = oldState.concat(result.data);
-    setMarketplaceItems(newState);
+    setMarketplaceItems(result.data);
     _load = true;
   }
+  useEffect(() => {
+    (async () => { 
+      const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
+      setMarketplaceItems(result.data.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
+    })()
+   
+  }, [search, searchBy])
   async function windowScrollHandler(): Promise<void> {
     const rects = lastItemRef.current.getBoundingClientRect();
     const { y } = rects;
@@ -44,7 +51,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     (async () => {
       await getMarketPlacePart();
     })();
-  }, [_load]);
+  }, []);
   return (
     <div className="marketplace__items">
       {marketplaceItems.filter((item) => item.location === 'marketplace').map((item, index, array) => {

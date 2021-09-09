@@ -24,6 +24,8 @@ function Marketplace(props): React.ReactElement {
   const { banners } = data;
   const { lang } = app;
   const [filterBy, setFilterBy] = useState<number>(1);
+  const [searchBy, setSearchBy] = useState('')
+  const [search, setSearch] = useState('')
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
@@ -32,9 +34,13 @@ function Marketplace(props): React.ReactElement {
   useEffect(() => {
     utils.$.setStylesArtistList();
   }, []);
+  const onChange = (e, search) => {
+    setSearchBy(search)
+    setSearch(e)
+  }
   return (
     <Theme>
-      <Header app={app} {...app}/>
+      <Header app={app} {...app} onChange={onChange}/>
       <div className="wrapper ">
         <div className="heading center">
           <h1>
@@ -74,7 +80,7 @@ function Marketplace(props): React.ReactElement {
                 />
               </div>
             </div>
-            <MarketplaceItems app={app} />
+            <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy}/>
           </main>
         </div>
         <Footer {...app} />

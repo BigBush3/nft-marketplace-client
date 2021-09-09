@@ -44,7 +44,6 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
       setTimeLeft(calculateTimeLeft());
     }, 1000);
   });
-  console.log(timeLeft)
 
   if (data.startDate){
     if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){

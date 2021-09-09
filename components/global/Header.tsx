@@ -64,9 +64,10 @@ interface HeaderProps {
 function Header(props): React.ReactElement {    
   const [verified, setVerified] = useState(false)
   const router = useRouter();
-  const { app, data} = props;
+  const { app, data, onChange} = props;
   const { lang } = app;
   const [searchBy, setSearchBy] = useState<'title' | 'author' | 'collection'>('title');
+
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false)
   let scrollPos = 0;
@@ -443,6 +444,7 @@ function Header(props): React.ReactElement {
               type="text"
               name="search"
               placeholder={`${lang.searchBy.name} ${lang.searchBy[searchBy]}`}
+              onChange={(e) => onChange(e.target.value, searchBy)}
             />
           </div>
           <div className="header__search-button">
