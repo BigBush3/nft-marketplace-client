@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import PopularItem from './PopularItem';
+import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 
@@ -26,7 +27,14 @@ export default function PopularItems(props: PopularItemsProps): React.ReactEleme
     }, 1000);
     (async () => {
       if (popularItems.length === 0) {
-        const _popularItems = await utils.r.getPopular({ rounds: SLIDER_PRODUCTS_PART * 2 });
+        let popular = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft')
+        popular = popular.data.filter((item) => item.location !== 'collection')
+        // @ts-ignore
+        // @ts-ignore
+        const sortedPopular = popular.sort(function (a, b) {
+          return b.currentBid - a.currentBid || a.likes - b.likes;
+      });
+      const _popularItems = sortedPopular.slice(0, 10);
         setPopularItems(_popularItems);
       }
     })();

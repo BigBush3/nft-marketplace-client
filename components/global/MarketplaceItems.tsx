@@ -23,21 +23,75 @@ export default function MarketplaceItems(props): React.ReactElement {
   const { app, search, searchBy, filterBy} = props;
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
+  const [allMarketplaceItems, setAllMarketplaceItems] = useState([])
   async function getMarketPlacePart(): Promise<void> {
     const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
+    console.log(result)
     const auction = result.data
     const oldState = marketplaceItems;
     const newState = oldState.concat(result.data);
+    setAllMarketplaceItems(result.data)
     setMarketplaceItems(result.data);
     _load = true;
   }
   useEffect(() => {
-    (async () => { 
-      const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
-      setMarketplaceItems(result.data.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
-    })()
+      setMarketplaceItems(allMarketplaceItems.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
    
   }, [search, searchBy])
+  useEffect(() => {
+    if (filterBy === 1){
+      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+        {
+          if (a.type === 'orderSell' && b.type === 'orderSell'){
+            return parseInt(a.price) > parseInt(b.price) ? 1: -1
+          } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
+            return parseInt(a.currentBid) > parseInt(b.price) ? 1: -1
+          } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
+            return parseInt(a.price) > parseInt(b.currentBid) ? 1: -1
+          } else {
+            return parseInt(a.currentBid) > parseInt(b.currentBid) ? 1: -1
+          }
+        }
+      }))
+    } else if (filterBy === 2){
+      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+        if (a.type === 'orderSell' && b.type === 'orderSell'){
+          return parseInt(a.price) < parseInt(b.price) ? 1: -1
+        } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
+          return parseInt(a.currentBid) < parseInt(b.price) ? 1: -1
+        } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
+          return parseInt(a.price) < parseInt(b.currentBid) ? 1: -1
+        } else {
+          return parseInt(a.currentBid) < parseInt(b.currentBid) ? 1: -1
+        }
+      }))
+    }else if (filterBy === 3){
+      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+        if (a.type === 'orderSell' && b.type === 'orderSell'){
+          return new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime() ? -1: 1
+        } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
+          return new Date(a.startDate).getTime() > new Date(b.creationDate).getTime() ? -1: 1
+        } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
+          return new Date(a.creationDate).getTime() > new Date(b.startDate).getTime() ? -1: 1
+        } else {
+          return new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? -1: 1
+        }
+      }))
+    }else if (filterBy === 4){
+      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+        console.log(a.price, b.price)
+        if (a.type === 'orderSell' && b.type === 'orderSell'){
+          return new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
+        } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
+          return new Date(a.startDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
+        } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
+          return new Date(a.creationDate).getTime() < new Date(b.startDate).getTime() ? -1: 1
+        } else {
+          return new Date(a.startDate).getTime() < new Date(b.startDate).getTime() ? -1: 1
+        }
+      }))
+    }
+  }, [filterBy])
   async function windowScrollHandler(): Promise<void> {
     const rects = lastItemRef.current.getBoundingClientRect();
     const { y } = rects;

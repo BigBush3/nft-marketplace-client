@@ -19,7 +19,7 @@ interface MarketplaceItem {
  */
 const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactElement => {
   const { app, data } = props;
-  const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate } = data;
+  const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate, amount, initialAmount } = data;
   const { lang } = app;
   const [open, setOpen] = useState<boolean>(false);
   const calculateTimeLeft = () => {
@@ -88,7 +88,7 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
         </div>
 {/*         <Favorite favoriteMe={favoriteMe} app={app} />
         <Likes likeMe={likeMe} likes={likes} app={app} /> */}
-        <div className="item-stats__count">1/1</div>
+        <div className="item-stats__count">{amount ? `${amount}/${initialAmount}` : '1/1'}</div>
       </div>
       <div className="products__item-price">ETH {currentBid}</div>
       <div className="products__item-buy">

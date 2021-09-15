@@ -7,6 +7,9 @@ import Header from '../components/global/Header';
 import Banner from '../components/global/Banner';
 import ArtistsList from '../components/global/ArtistsList';
 import StyledSelect from '../components/UI/StyledSelect';
+import Popover from '@material-ui/core/Popover';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import MarketplaceItems from '../components/global/MarketplaceItems';
 
 import type * as Types from '../types/index.d';
@@ -26,6 +29,18 @@ function Marketplace(props): React.ReactElement {
   const [filterBy, setFilterBy] = useState<number>(1);
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
@@ -53,6 +68,9 @@ function Marketplace(props): React.ReactElement {
           <main className="main marketplace">
             <div className="main__top">
               <div className="heading__sort main__sort">
+      {/*         <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+        Open Popover
+      </Button> */}
                 <StyledSelect
                   variant="outlined"
                   value={filterBy}
@@ -73,11 +91,27 @@ function Marketplace(props): React.ReactElement {
                       text: `${lang.date} &uarr;`,
                     },
                     {
-                      value: 3,
+                      value: 4,
                       text: `${lang.date} &darr;`,
                     },
                   ]}
                 />
+                     {/*  <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <input type="number" />
+      </Popover> */}
               </div>
             </div>
             <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy}/>

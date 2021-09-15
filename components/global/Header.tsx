@@ -332,6 +332,13 @@ function Header(props): React.ReactElement {
                       </a>
                     </Link>
                   </li>
+                  <li className="header__nav-item">
+                    <Link href="/activity">
+                      <a role="button" onClick={unHiddenHtml} className="header__nav-link">
+                        {lang.pageNames.activity}
+                      </a>
+                    </Link>
+                  </li>
                 </ul>
               </nav>
 

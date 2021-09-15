@@ -270,9 +270,14 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
-                 
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
+                 if (createMany){
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, amount: data.amount})
   router.push(`/product/${res.data.resClient._id}`)
+                 } else {
+                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
+                  router.push(`/product/${res.data.resClient._id}`)
+                 }
+
 
               })
     
@@ -301,9 +306,14 @@ function handleDrag(tag, currPos, newPos) {
 		        if(price>0){
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
-                            
-  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
+                        if (createMany){
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data), amount: data.amount})
  router.push(`/product/${res.data.resClient._id}`)
+                        } else {
+                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
+ router.push(`/product/${res.data.resClient._id}`)
+                        }
+
               })
 		        } else {
 			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
@@ -353,7 +363,7 @@ function handleDrag(tag, currPos, newPos) {
         <div className="create_check_info create_inputs" ref={auctionCheckInfoRef}>
           <div className="create_input w100">
             <span>{lang.auction.firstBid}:</span>
-            <input type="number" step="any" {...register('firstBid')}/>
+            <input type="number" step="any" {...register('firstBid')} required/>
             <span className="icon icon-eth" />
           </div>
 
@@ -433,7 +443,7 @@ function handleDrag(tag, currPos, newPos) {
         {createMany && (
           <div className="create_input">
             <span>{lang.auction.countNFT}:</span>
-            <input type="number" />
+            <input type="number" {...register("amount")}/>
           </div>
         )}
       </div>

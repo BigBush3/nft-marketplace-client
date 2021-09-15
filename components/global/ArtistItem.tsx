@@ -8,10 +8,11 @@ import type * as Types from '../../types/index.d';
  * Элемент списка артистов
  * @returns
  */
-export default function ArtistItem(props: Types.ArtistItemData): React.ReactElement {
-  const { name, children } = props;
+export default function ArtistItem(props): React.ReactElement {
+  const { name, nfts } = props;
   const lR = useRef<any>();
   const [active, setActive] = useState<boolean>(false);
+  console.log(props)
   return (
     <li
       className={clsx('artist__item', active && 'active')}
@@ -24,10 +25,10 @@ export default function ArtistItem(props: Types.ArtistItemData): React.ReactElem
       }}>
       <h4 className="artist__item-title">{name}</h4>
       <ul className="artist__sublist" ref={lR}>
-        {children.map((child, key) => {
+        {nfts.map((child, key) => {
           return (
             <li key={`ArtistChild-${key}`} className="artist__subitem">
-              <Link href={child.link}>
+              <Link href={`/product/${child._id}`}>
                 <a
                   onClick={() => {
                     // Закрытие мобильного меню артистов

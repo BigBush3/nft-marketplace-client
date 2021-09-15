@@ -55,6 +55,7 @@ const lang: Language = {
     marketPlace: 'Marketplace',
     support: 'Support',
     about: 'About us',
+    activity: 'Activity',
     settings: 'Profile settings',
     createNFT: 'Create NFT',
     createOne: 'Create a single instance',

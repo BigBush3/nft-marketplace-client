@@ -18,11 +18,12 @@ interface PopularIntemProps {
  * @param props
  * @returns
  */
-function PopularItem(props: PopularIntemProps): React.ReactElement {
+function PopularItem(props): React.ReactElement {
   const { app, data } = props;
-  const { mark, owners, id, title, likeMe, likes, price, views, favoriteMe, file } = data;
+  const { mark, owners, _id, title, likeMe, likes, price, views, favoriteMe, img, verified , currentBid} = data;
   const { lang } = app;
   const [open, setOpen] = useState<boolean>(false);
+  console.log(data)
   return (
     <div className="popular__item products__item">
       <div className="products__item-info">
@@ -36,19 +37,19 @@ function PopularItem(props: PopularIntemProps): React.ReactElement {
           <i className="flaticon-letter-x cross" />
         </div>
 
-        <div className={clsx('item-info__dropdown', open && 'active')}>
+ {/*        <div className={clsx('item-info__dropdown', open && 'active')}>
           {owners.map((owner, index) => {
             return <OwnerDropdownItem key={`Owner-${id}_${index}`} {...owner} />;
           })}
-        </div>
+        </div> */}
       </div>
       <div className="products__item-img">
         <div className="item-img__cover">
-          <Link href={`/product/${id}`}>
-            <img style={{ cursor: 'pointer' }} src={file} alt="img" />
+          <Link href={`/product/${_id}`}>
+            <img style={{ cursor: 'pointer' }} src={img} alt="img" />
           </Link>
         </div>
-        {mark && (
+        {verified && (
           <div className="products__item-mark">
             <img src="/img/mark.png" alt="mark" />
           </div>
@@ -63,9 +64,9 @@ function PopularItem(props: PopularIntemProps): React.ReactElement {
         <Likes likeMe={likeMe} likes={likes} app={app} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">$ {price}</div>
+      <div className="products__item-price">ETH {price ? price: currentBid}</div>
       <div className="products__item-buy">
-        <Link href={`/product/${id}`}>{lang.buyBid}</Link>
+        <Link href={`/product/${_id}`}>{lang.buyBid}</Link>
       </div>
     </div>
   );

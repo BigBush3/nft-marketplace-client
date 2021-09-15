@@ -38,6 +38,7 @@ const lang: Language = {
     nftName: 'Название NFT-токена',
     collectionName: 'Название коллекции',
     countNFT: 'Количество NFT',
+    
   },
   form: {
     yourName: 'Ваше имя',
@@ -51,6 +52,7 @@ const lang: Language = {
   },
   pageNames: {
     home: 'Главная',
+    activity: 'Активность',
     fineArt: 'Fine Art',
     marketPlace: 'Marketplace',
     support: 'Поддержка',

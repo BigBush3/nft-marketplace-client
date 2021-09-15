@@ -60,6 +60,7 @@ export default interface Language {
     createNFT: string;
     createOne: string;
     createMany: string;
+    activity: string;
   };
   searchBy: {
     name: string;

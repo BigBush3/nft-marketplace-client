@@ -13,6 +13,8 @@ import CheckoutModal from '../../components/global/CheckoutModal';
 import Likes from '../../components/global/Likes';
 import Favorite from '../../components/global/Favorite';
 import ButtonsStyled from '../../components/product/ButtonsStyled';
+import ShareModal from '../../components/global/ShareModal';
+import {FacebookShareButton, TelegramShareButton, TwitterShareButton} from 'react-share'
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
@@ -34,6 +36,7 @@ function Product({app, data}): React.ReactElement {
   const [openModal, setOpenModal] = useState(false)
   const [openBid, setOpenBid] = useState(false)
   const [openHistory, setOpenHistory] = useState(false)
+  const [openShare, setOpenShare] = useState(false)
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
@@ -50,6 +53,9 @@ function Product({app, data}): React.ReactElement {
   };
   const handleCloseCheckout = () => {
     setOpenModal(false)
+  }
+  const handleCloseShare = () => {
+    setOpenShare(false)
   }
   const calculateTimeLeft = () => {
     let difference = +new Date(data?.endDate) - +new Date();
@@ -119,9 +125,9 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
                   </>
                 )}
                 <div className="product__share">
-                  <a href="#">
+                  <button onClick={() => setOpenShare(true)}>
                     <i className="flaticon-share" /> <span>{lang.share}</span>
-                  </a>
+                  </button>
                 </div>
                <div className="product__doc">
                   <a href={data.pdf} target="_blank" rel="noreferrer">
@@ -166,11 +172,14 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
                   </div>
                 </div>
                 <div className="author__name">{data.owner.name}</div>
-                <div className="author__count">1/1</div>
+                <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
               </div>
             </div>
             <div className="author__text">
-              <h1>{data.collect}</h1>
+              <div>{data.hashtags.map((item) => {
+                return (<span>#{item.text} </span>)
+              })}</div>
+              <h1 style={{fontSize: '30px'}}>{data.collect}</h1>
               <hr />
               <div></div>
               {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1> : <div className='timer_fill'><h1>{`${timeLeft?.days} : ${timeLeft?.hours} : ${timeLeft?.minutes} : ${timeLeft?.seconds}`}</h1></div>]}
@@ -204,6 +213,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
         </div>
         <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose}/>
         <CheckoutModal app={app} data={data} open={openModal} handleClose={handleCloseCheckout}/>
+        <ShareModal app={app} data={data} open={openShare} handleClose={handleCloseShare}/>
         <Footer {...app} />
       </div>
     </Theme>
