@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import axios from 'axios'
+import cookie from 'js-cookie'
 import type * as Types from '../../types/index.d';
 
 interface LikesProps {
@@ -23,9 +24,15 @@ export default function Likes(props): React.ReactElement {
       className={clsx('item-stats__likes', (like || likeMe) && 'active')}
       role="button"
       onClick={async () => {
-        await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/likes', {status: !like, product: product})
+        if (cookie.get('id')){
+                  await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/likes', {status: !like, product: product})
         setLike(!like);
         setNewLikes(like ? newLikes - 1 : newLikes + 1);
+        } else {
+          //@ts-ignore
+          document.querySelector('.open_connect').click();
+        }
+
       }}>
       <i className="flaticon-heart" /> <span>{newLikes}</span>
     </div>

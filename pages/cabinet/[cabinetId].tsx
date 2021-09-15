@@ -79,9 +79,15 @@ function Cabinet(props): React.ReactElement {
     });
   }, [active]);
   async function subscribeHandler(){
-    setSub(true)
+    if (cookie.get('id')){
+         setSub(true)
     setFollowers(followers.push({name: cookie.get('name'), imgUrl: cookie.get('imgUrl'), _id: cookie.get('id')}))
-    await axios.post('https://desolate-inlet-76011.herokuapp.com/user/follow', {id: cookie.get('id'), user: router.query})
+    await axios.post('https://desolate-inlet-76011.herokuapp.com/user/follow', {id: cookie.get('id'), user: router.query}) 
+    } else {
+      // @ts-ignore
+      document.querySelector('.open_connect').click();
+    }
+
     
   }
   async function unSubscribeHandler(){

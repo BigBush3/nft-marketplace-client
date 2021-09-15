@@ -23,8 +23,14 @@ export default function Favorite(props): React.ReactElement {
       className={clsx('item-stats__favorites', (favorite || favoriteMe) && 'active')}
       role="button"
       onClick={async () => {
-        await axios.post('https://desolate-inlet-76011.herokuapp.com/user/favorite', {status: !favorite, id: cookie.get('id'), product: product})
+        if (cookie.get('id')){
+                  await axios.post('https://desolate-inlet-76011.herokuapp.com/user/favorite', {status: !favorite, id: cookie.get('id'), product: product})
         setFavorite(!favorite);
+        } else {
+          // @ts-ignoreß
+          document.querySelector('.open_connect').click();
+        }
+
       }}>
       <i className="flaticon-star" />
     </div>

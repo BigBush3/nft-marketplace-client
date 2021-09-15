@@ -27,6 +27,7 @@ const lang: Language = {
   highestBid: 'Максимальная ставка',
   history: 'История',
   bids: 'Ставки',
+  shareModalText: 'Поделится этим NFT',
   auction: {
     title: 'Аукцион',
     firstBid: 'Начальная ставка',

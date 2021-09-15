@@ -157,12 +157,19 @@ let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRE
     return result;
   }
   const handleClick = async(e) => {
-    if (cookie.get('update')){
+    if (!cookie.get('id')){
+      // @ts-ignore
+      document.querySelector('.open_connect').click();
+      handleClose()
+    } else {
+          if (cookie.get('update')){
       await updateBidAuction(data.tokenId, data.orderIndex, cookie.get('bidIndex'), bid)
       
     } else {
       await createBidAuction(data.tokenId, data.orderIndex, bid)
     }
+    }
+
     
     console.log(bidIndex)
     cookie.set('bidIndex', bidIndex)

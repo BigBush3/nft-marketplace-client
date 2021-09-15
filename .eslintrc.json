@@ -73,7 +73,9 @@
       "no-else-return": 0,
       "no-unneeded-ternary": 0,
       "jsx-a11y/anchor-is-valid": 0,
-      "no-lone-blocks": 0
+      "no-lone-blocks": 0,
+      "no-lonely-if": 0,
+      "spaced-comment": 0
     },
     "settings": {
       "import/resolver": {

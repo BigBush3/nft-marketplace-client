@@ -10,6 +10,7 @@ import StyledSelect from '../components/UI/StyledSelect';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import MarketplaceItems from '../components/global/MarketplaceItems';
 
 import type * as Types from '../types/index.d';
@@ -26,10 +27,12 @@ function Marketplace(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
   const { lang } = app;
-  const [filterBy, setFilterBy] = useState<number>(1);
+  const [filterBy, setFilterBy] = useState<number>(null);
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [fromEth, setFromEth] = useState(null)
+  const [toEth, setToEth] = useState(null)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -68,9 +71,9 @@ function Marketplace(props): React.ReactElement {
           <main className="main marketplace">
             <div className="main__top">
               <div className="heading__sort main__sort">
-      {/*         <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+              <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Open Popover
-      </Button> */}
+      </Button> 
                 <StyledSelect
                   variant="outlined"
                   value={filterBy}
@@ -96,7 +99,7 @@ function Marketplace(props): React.ReactElement {
                     },
                   ]}
                 />
-                     {/*  <Popover
+                      <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -110,8 +113,29 @@ function Marketplace(props): React.ReactElement {
           horizontal: 'center',
         }}
       >
-        <input type="number" />
-      </Popover> */}
+        <div>
+          <div style={{display: 'flex', margin: '20px'}}>
+            <div style={{marginRight:'10px'}}>
+              <TextField type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
+            </div>
+            <div>
+              <TextField type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
+            </div>
+          </div>
+          <div style={{display: 'flex', justifyContent: 'space-around'}}>
+            <div>
+              <Button variant="contained" color="secondary">
+                clear
+              </Button>
+            </div>
+            <div>
+              <Button variant="contained" color="primary">
+                apply
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Popover>
               </div>
             </div>
             <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy}/>

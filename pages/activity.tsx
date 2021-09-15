@@ -38,23 +38,30 @@ function Activity(props): React.ReactElement {
         <div className="prescription">
             <p style={{color: 'gray', marginTop: '15px', textAlign: 'center'}}>System will update every 5 minutes</p>
         </div>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto'}}>
             {actions.map((item) => {
                 console.log(item)
                 return (
                     <div className='action_item'>
-                        <div className='img_crop'>
-                            <img src={item.nft.img} alt="" />
+                        <div className='img_crop' style={{marginRight: '20px'}}>
+                            <img style={{  width: '360px',
+    height: '400px',
+    borderRadius: '10px',}} src={item.nft.img} alt="" />
                         </div>
                         <div>
-                            {item.action}
+                            <p>{item.action}</p>
+                            
                         </div>
-                        <div>
-                            <Link href={`/product/${item.nft._id}`}><a>view item</a>
-                            </Link>
-                            <div>
-                                {moment(item.creationDate).fromNow()}
+                        <div style={{width: '140px', marginLeft: '20px'}}>                            <div>
+                                <span>{moment(item.creationDate).fromNow()}</span>
                             </div>
+                            <hr/>
+                            <div style={{marginTop: '20px'}}>
+                              <Link href={`/product/${item.nft._id}`}><a className='view_item'>view item</a>
+                            </Link>  
+                            </div>
+                            
+
                         </div>
                     </div>
                 )

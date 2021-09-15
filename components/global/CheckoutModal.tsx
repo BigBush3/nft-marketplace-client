@@ -65,7 +65,12 @@ export default function CheckoutModal(props): React.ReactElement {
   }
   
   async function handleClick(e){
-    console.log('hi')
+    if (!cookie.get('id')){
+      // @ts-ignore
+      document.querySelector('.open_connect').click();
+      handleClose()
+    } else {
+      console.log('hi')
     let metamask = await connectMetaMask()
 	let walletAddress = metamask.userAddress
 	let wallet = metamask.web3
@@ -98,6 +103,8 @@ export default function CheckoutModal(props): React.ReactElement {
 	}
   const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id})
   handleClose()
+    }
+    
   }
   useEffect(() => {
   }, []);

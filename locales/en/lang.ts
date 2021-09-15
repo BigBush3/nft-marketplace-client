@@ -27,6 +27,7 @@ const lang: Language = {
   highestBid: 'Highest bid',
   history: 'History',
   bids: 'Bids',
+  shareModalText: 'Share this NFT',
   auction: {
     title: 'Auction',
     firstBid: 'Initial bid',

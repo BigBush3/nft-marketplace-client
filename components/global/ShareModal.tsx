@@ -31,7 +31,25 @@ function ShareModal(props): React.ReactElement {
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
   ><div className='popup'>
-        <FacebookShareButton url={url}><FacebookIcon/></FacebookShareButton> <TelegramShareButton url={`https://t.me/share/url?url=${url}&text=${text}`}><TelegramIcon/></TelegramShareButton> <TwitterShareButton url={url}><TwitterIcon/></TwitterShareButton>
+      <div className='share_text'>
+          <p className="share_paragraph">{app.lang.shareModalText}</p>
+      </div>
+      <div style={{display: 'flex', justifyContent: 'space-around'}}>
+          <div>
+             <FacebookShareButton  url={url}><FacebookIcon style={{width: '50px', height: '50px', marginRight: '20px'}}/></FacebookShareButton>
+             <p style={{fontSize: '10px'}}>Facebook</p>
+          </div>
+          <div>
+             <TelegramShareButton url={`https://t.me/share/url?url=${url}&text=${text}`}><TelegramIcon style={{width: '50px', height: '50px', marginRight:'20px'}}/></TelegramShareButton> 
+             <p style={{fontSize: '10px'}}>Telegram</p>
+          </div>
+          <div>
+             <TwitterShareButton url={url}><TwitterIcon style={{width: '50px', height: '50px'}}/></TwitterShareButton> 
+             <p style={{fontSize: '10px'}}>Twitter</p>
+          </div>
+            
+      </div>
+        
     </div>
 </Modal>
   );

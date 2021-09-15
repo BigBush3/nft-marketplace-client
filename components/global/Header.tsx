@@ -383,10 +383,13 @@ function Header(props): React.ReactElement {
                   </div>
                  ] : [
                   <div className="header__user" key='too much gang'>
-                    <a href="#" className="open_connect" onClick={connectWalletsHandler}>
+                    <div className='secret_key'>
+                                         <a href="#" className="open_connect" onClick={connectWalletsHandler}>
                       <i className="flaticon-wallet" />
                       <span>{lang.wallet}</span>
                     </a>
+                    </div>
+ 
                   </div>
                  ]}
                 <div className="header__lang">

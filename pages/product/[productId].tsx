@@ -179,7 +179,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
               <div>{data.hashtags.map((item) => {
                 return (<span>#{item.text} </span>)
               })}</div>
-              <h1 style={{fontSize: '30px'}}>{data.collect}</h1>
+              <span style={{display: 'flex'}}>Collection name: {data.collect}</span>
               <hr />
               <div></div>
               {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1> : <div className='timer_fill'><h1>{`${timeLeft?.days} : ${timeLeft?.hours} : ${timeLeft?.minutes} : ${timeLeft?.seconds}`}</h1></div>]}
