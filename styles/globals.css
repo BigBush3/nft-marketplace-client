@@ -415,6 +415,7 @@ textarea {
   border-radius: 20px;
 }
 
+
 .slick-prev:hover,
 .slick-next:hover {
   color: #fff;
@@ -2708,6 +2709,28 @@ textarea {
   align-items: center;
   font-size: 17px;
 }
+.picture_square{
+  width: 360px;
+  height: 400px;
+  border-radius: 10px;
+}
+@media (max-width: 500px) {
+  .action_item{
+  width: 375px;
+  height: 200px;  
+  }
+  .picture_square{
+    margin-top: 120px;
+    height: 180px;
+    width: 150px;
+  }
+  .sad_pepe{
+    margin-top: 20px;
+    font-size: 10px;
+    width: 100px;
+  }
+  
+}
 .view_item{
   padding: 10px 20px;
   background: mediumspringgreen;
@@ -3590,6 +3613,18 @@ textarea {
 
 .popup__connect-items {
   margin-top: 37px;
+}
+@media screen and (max-width: 500px) {
+  .popup__connect{
+    width: 300px;
+  }
+  .popup__modal{
+    width: 400px;
+    left: 50%;
+  }
+}
+.popup__error{
+  width: 300px;
 }
 
 .popup__connect-item {

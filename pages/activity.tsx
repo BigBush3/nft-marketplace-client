@@ -44,9 +44,7 @@ function Activity(props): React.ReactElement {
                 return (
                     <div className='action_item'>
                         <div className='img_crop' style={{marginRight: '20px'}}>
-                            <img style={{  width: '360px',
-    height: '400px',
-    borderRadius: '10px',}} src={item.nft.img} alt="" />
+                            <img className='picture_square' src={item.nft.img} alt="" />
                         </div>
                         <div>
                             <p>{item.action}</p>
@@ -56,7 +54,7 @@ function Activity(props): React.ReactElement {
                                 <span>{moment(item.creationDate).fromNow()}</span>
                             </div>
                             <hr/>
-                            <div style={{marginTop: '20px'}}>
+                            <div className='sad_pepe' style={{marginTop: '20px'}}>
                               <Link href={`/product/${item.nft._id}`}><a className='view_item'>view item</a>
                             </Link>  
                             </div>
