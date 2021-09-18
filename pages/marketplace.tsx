@@ -27,22 +27,25 @@ function Marketplace(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
   const { lang } = app;
-  const [filterBy, setFilterBy] = useState<number>(null);
+  const [filterBy, setFilterBy] = useState<number>(1);
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [fromEth, setFromEth] = useState(null)
   const [toEth, setToEth] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [priceList, setPriceList] = useState([])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    setOpen(true)
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setOpen(false)
   };
 
-  const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   const Footer = useMemo(() => {
@@ -52,13 +55,23 @@ function Marketplace(props): React.ReactElement {
   useEffect(() => {
     utils.$.setStylesArtistList();
   }, []);
-  const onChange = (e, search) => {
+  const onChangeSome = (e, search) => {
     setSearchBy(search)
     setSearch(e)
   }
+  const priceHandler = () => {
+    handleClose()
+    setPriceList([fromEth, toEth])
+  }
+  const clickHandler = () => {
+    setFromEth(null)
+    setToEth(null)
+    setPriceList([0, 0])
+    handleClose()
+  }
   return (
     <Theme>
-      <Header app={app} {...app} onChange={onChange}/>
+      <Header app={app} {...app} onChange={onChangeSome}/>
       <div className="wrapper ">
         <div className="heading center">
           <h1>
@@ -71,8 +84,8 @@ function Marketplace(props): React.ReactElement {
           <main className="main marketplace">
             <div className="main__top">
               <div className="heading__sort main__sort">
-              <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        Open Popover
+              <Button style={{backgroundColor: 'transparent', width: '170px', height: '57px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+        Price range
       </Button> 
                 <StyledSelect
                   variant="outlined"
@@ -83,19 +96,19 @@ function Marketplace(props): React.ReactElement {
                   options={[
                     {
                       value: 1,
-                      text: `${lang.price} &uarr;`,
+                      text: `Highest price`,
                     },
                     {
                       value: 2,
-                      text: `${lang.price} &darr;`,
+                      text: `Lowest price`,
                     },
                     {
                       value: 3,
-                      text: `${lang.date} &uarr;`,
+                      text: `Popular`,
                     },
                     {
                       value: 4,
-                      text: `${lang.date} &darr;`,
+                      text: `Date`,
                     },
                   ]}
                 />
@@ -114,22 +127,23 @@ function Marketplace(props): React.ReactElement {
         }}
       >
         <div>
-          <div style={{display: 'flex', margin: '20px'}}>
+          <div style={{display: 'flex', marginTop: '20px', marginLeft: '15px', marginRight: '15px', marginBottom: '30px'}}>
             <div style={{marginRight:'10px'}}>
-              <TextField type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
+              <TextField style={{width: '130px', height: '30px'}} type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
             </div>
             <div>
-              <TextField type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
+              <TextField style={{width: '130px', height: '30px'}} type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
             </div>
           </div>
-          <div style={{display: 'flex', justifyContent: 'space-around'}}>
+          <hr/>
+          <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
             <div>
-              <Button variant="contained" color="secondary">
+              <Button style={{width: '100px', height: '40px', borderRadius: '20px'}} variant="contained" color="secondary" onClick={clickHandler}>
                 clear
               </Button>
             </div>
             <div>
-              <Button variant="contained" color="primary">
+              <Button style={{width: '100px', height: '40px', borderRadius: '20px'}} variant="contained" color="primary" onClick={priceHandler}>
                 apply
               </Button>
             </div>
@@ -138,7 +152,7 @@ function Marketplace(props): React.ReactElement {
       </Popover>
               </div>
             </div>
-            <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy}/>
+            <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy} priceRange={priceList}/>
           </main>
         </div>
         <Footer {...app} />

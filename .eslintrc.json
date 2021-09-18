@@ -75,7 +75,8 @@
       "jsx-a11y/anchor-is-valid": 0,
       "no-lone-blocks": 0,
       "no-lonely-if": 0,
-      "spaced-comment": 0
+      "spaced-comment": 0,
+      "eqeqeq": 0
     },
     "settings": {
       "import/resolver": {

@@ -284,6 +284,9 @@ function Header(props): React.ReactElement {
     cookie.set('id', '')
     cookie.set('verified', false)
   }
+  function findHandler(){
+    router.push('/marketplace')
+  }
   return (
     <><header className="header top">
       <div className="wrapper">
@@ -459,7 +462,7 @@ function Header(props): React.ReactElement {
           </div>
           <div className="header__search-button">
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="submit">
+            <button type="submit" onClick={findHandler}>
               <i className="flaticon-search" />
             </button>
           </div>
