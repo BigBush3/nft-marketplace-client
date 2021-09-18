@@ -50,7 +50,7 @@ function Activity(props): React.ReactElement {
                             <p>{item.action}</p>
                             
                         </div>
-                        <div style={{width: '140px', marginLeft: '20px'}}>                            <div>
+                        <div className="crop_text" style={{width: '140px', marginLeft: '20px'}}>                            <div>
                                 <span>{moment(item.creationDate).fromNow()}</span>
                             </div>
                             <hr/>

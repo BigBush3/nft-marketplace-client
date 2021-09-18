@@ -2716,20 +2716,28 @@ textarea {
 }
 @media (max-width: 500px) {
   .action_item{
-  width: 375px;
-  height: 200px;  
+  width: 230px;
+  height: 335px;
+  flex-direction: column;  
   }
   .picture_square{
-    margin-top: 120px;
+    margin-left: 27%;
     height: 180px;
-    width: 150px;
+    width: 180px;
   }
   .sad_pepe{
     margin-top: 20px;
+
     font-size: 10px;
     width: 100px;
   }
-  
+  .img_crop{
+    height: 200px;
+  }
+  .crop_text{
+    margin-right: 15px;
+    width: 100% !important;
+  }
 }
 .view_item{
   padding: 10px 20px;
@@ -2746,7 +2754,6 @@ textarea {
 .img_crop{
   margin-left: 20px;
   width: 400px;
-  height: 400px;
 }
 
 .product__bottom > div span {
@@ -3619,8 +3626,11 @@ textarea {
     width: 300px;
   }
   .popup__modal{
-    width: 400px;
+    width: 300px;
     left: 50%;
+  }
+  .popup__error{
+    width: 200px;
   }
 }
 .popup__error{
