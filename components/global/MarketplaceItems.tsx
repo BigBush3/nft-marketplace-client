@@ -3,6 +3,7 @@ import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import MarketplaceItem from './MarketplaceItem';
+import router from 'next/router';
 
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
@@ -45,11 +46,15 @@ export default function MarketplaceItems(props): React.ReactElement {
       
   }, [search, searchBy])
   useEffect(() => {
-    if (priceRange[0] == 0 && priceRange[1] == 0){
+    if (router.asPath === '/marketplace'){
+              if (priceRange[0] === 0 && priceRange[1] === 0){
       setMarketplaceItems(allMarketplaceItems)
     } else {
       setMarketplaceItems(allMarketplaceItems.filter((item) => item.price > priceRange[0] && item.price < priceRange[1]))
     }
+    }
+ 
+ 
     
   }, [priceRange])
   useEffect(() => {

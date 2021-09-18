@@ -48,7 +48,7 @@ function Cabinet(props): React.ReactElement {
   const { lang } = app;
   const [active, setActive] = useState<number>(0);
   const [show, setShow] = useState<boolean>(false);
-  const [sub, setSub] = useState(checkAvailability(data.followers, cookie.get('id')))
+  const [sub, setSub] = useState(false)
   const [open, setOpen] = useState(false)
   const [followers, setFollowers] = useState(data.followers)
   const [followings, setFollowings] = useState(data.followings)
@@ -98,11 +98,17 @@ function Cabinet(props): React.ReactElement {
 
     
   }
-  function checkAvailability(arr, val) {
-    return arr.some(function(arrVal) {
+/*   function checkAvailability(arr, val) {
+    if (arr){
+      console.log(arr)
+          return arr.some(function(arrVal) {
       return val === arrVal._id;
     });
-  }
+    } else {
+      return false
+    }
+
+  } */
   return (
     <Theme>
       <Header app={app}/>
@@ -259,7 +265,7 @@ function Cabinet(props): React.ReactElement {
         </div>
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
-            {followers ? [data.followers.map((item) => {
+{/*             {followers ? [data.followers.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
@@ -273,7 +279,7 @@ function Cabinet(props): React.ReactElement {
               <span className="cabinet_sub_name">{item.name}</span>
             </a>
               )
-            })] : <span>You don't have followers yet</span>}
+            })] : <span>You don't have followers yet</span>} */}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 5}>

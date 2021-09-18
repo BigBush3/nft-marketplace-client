@@ -34,7 +34,7 @@ function Marketplace(props): React.ReactElement {
   const [fromEth, setFromEth] = useState(null)
   const [toEth, setToEth] = useState(null)
   const [open, setOpen] = useState(false)
-  const [priceList, setPriceList] = useState([])
+  const [priceList, setPriceList] = useState([0, 0])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -108,7 +108,7 @@ function Marketplace(props): React.ReactElement {
                     },
                     {
                       value: 4,
-                      text: `Date`,
+                      text: `Newest`,
                     },
                   ]}
                 />
