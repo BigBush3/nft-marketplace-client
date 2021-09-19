@@ -62,6 +62,7 @@ const lang: Language = {
     createNFT: 'Создать NFT',
     createOne: 'Создать единичный экземпляр',
     createMany: 'Создать несколько экземпляров',
+    resell: 'Перепродажа'
   },
   searchBy: {
     name: 'Поиск по',

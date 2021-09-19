@@ -910,6 +910,10 @@ textarea {
   color: #1cc9cf;
   border-color: #1cc9cf;
 }
+.secret_key img{
+  width: 50px;
+  height: 50px;
+}
 
 
 .header__user:hover .header__user-title {

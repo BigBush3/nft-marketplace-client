@@ -61,6 +61,7 @@ const lang: Language = {
     createNFT: 'Create NFT',
     createOne: 'Create a single instance',
     createMany: 'Create multiple instances',
+    resell: 'Resell'
   },
   searchBy: {
     name: 'Search by',

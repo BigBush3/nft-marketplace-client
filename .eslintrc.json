@@ -76,7 +76,8 @@
       "no-lone-blocks": 0,
       "no-lonely-if": 0,
       "spaced-comment": 0,
-      "eqeqeq": 0
+      "eqeqeq": 0,
+      "import/no-unresolved": 0
     },
     "settings": {
       "import/resolver": {

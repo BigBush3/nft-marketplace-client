@@ -62,6 +62,7 @@ export default interface Language {
     createOne: string;
     createMany: string;
     activity: string;
+    resell: string;
   };
   searchBy: {
     name: string;
