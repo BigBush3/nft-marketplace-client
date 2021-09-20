@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import type * as Types from '../types';
 import Theme from '../components/Theme';
 import Header from '../components/global/Header';
-import CreateForm from '../components/global/CreateForm';
+import UpdateForm from '../components/global/updateForm';
 
 interface CreateOneProps {
   app?: Types.AppProps;
@@ -29,7 +29,7 @@ function UpdateOne(props: CreateOneProps): React.ReactElement {
         <div className="heading center">
           <h1>{lang.pageNames.resell}</h1>
         </div>
-        <CreateForm app={app} createMany={false} />
+        <UpdateForm app={app} createMany={false} />
         <Footer {...app} />
       </div>
     </Theme>

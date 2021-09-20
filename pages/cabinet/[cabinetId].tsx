@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import cookie from 'js-cookie'
 import axios from 'axios';
 import MarketplaceItem from '../../components/global/MarketplaceItem';
+import CollectionItem from '../../components/global/CollectionItem';
 import Header from '../../components/global/Header';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
@@ -253,7 +254,7 @@ function Cabinet(props): React.ReactElement {
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
           {data.nfts.filter((item) => item.location === 'collection').map((item) => {
-            return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+            return <CollectionItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
           })}
         </div>
         <div className="cabinet_block" hidden={active !== 3}>

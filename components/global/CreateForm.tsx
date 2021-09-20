@@ -159,7 +159,7 @@ function handleDrag(tag, currPos, newPos) {
     }
   }, [auctionChecked, fixPayChecked, endDateChecked]);
   const isOwner = async (address) => {
-    NFT.methods.admins(address).call({}, (err, res)=>{
+    NFTSTORE.methods.admins(address).call({}, (err, res)=>{
       console.log(`it's owners address ${address} - ${res}`)
     })
   }
@@ -197,6 +197,17 @@ function handleDrag(tag, currPos, newPos) {
     } 
     const walletAddress = metamask.userAddress
     const wallet = metamask.web3
+        let txData = NFTSTORE.methods.addOwner(wallet).encodeABI()
+        await wallet.eth.sendTransaction({
+                to: NFT_ADDRESS,
+                from: walletAddress,
+                data: txData
+            },
+            function(error, res){
+                console.log(error);
+                console.log(res);
+            }
+        )		
     console.log('metamask connected')
     console.log('NFT contract connected')
     console.log(NFT)
@@ -222,7 +233,7 @@ function handleDrag(tag, currPos, newPos) {
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
     console.log(data.dateRange)
-    let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
+    txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
         from: walletAddress,
@@ -363,7 +374,7 @@ function handleDrag(tag, currPos, newPos) {
         <div className="create_check_info create_inputs" ref={auctionCheckInfoRef}>
           <div className="create_input w100">
             <span>{lang.auction.firstBid}:</span>
-            <input type="number" step="any" {...register('firstBid')} required/>
+            <input type="number" step="any" {...register('firstBid')}/>
             <span className="icon icon-eth" />
           </div>
 

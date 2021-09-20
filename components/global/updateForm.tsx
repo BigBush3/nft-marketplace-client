@@ -63,7 +63,6 @@ export default function UpdateForm(props: CreateFormProps): React.ReactElement {
     comma: 188,
     enter: [10, 13],
   };
-  
   const delimiters = [...KeyCodes.enter, KeyCodes.comma];
   const [tags, setTag] = useState([])
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
@@ -183,8 +182,6 @@ function handleDrag(tag, currPos, newPos) {
   
   const onSubmit = async (data) => {
     const price = data.price * 1e18
-    setOpen(true)
-    setCreateLoader(true)
     const metamask = await connectMetaMask()
     const subscription = (contractAddress, topic)=>{
       console.log('start subscription')
@@ -197,46 +194,7 @@ function handleDrag(tag, currPos, newPos) {
     } 
     const walletAddress = metamask.userAddress
     const wallet = metamask.web3
-    console.log('metamask connected')
-    console.log('NFT contract connected')
-    console.log(NFT)
-    console.log('walletAddress: ', walletAddress)
-    console.log('web3: ', web3)
-    const owner = await isOwner(walletAddress)
-    console.log(owner)
-    const formData = new FormData();
-    // Update the formData object
-    formData.append(
-      'file',
-      fileCopy,
-    );
-    const pdfData = new FormData()
-    pdfData.append(
-      'file',
-      pdf
-    )
-
-    const response = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/upload', formData)
-    const resPdf = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/upload', pdfData)
-    const ipfsHash = response.data.result.IpfsHash
-    const ipfsPdfHash = resPdf.data.result.IpfsHash
-    console.log(ipfsHash)
-    console.log(data.dateRange)
-    let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
-    await wallet.eth.sendTransaction({
-        to: NFT_ADDRESS,
-        from: walletAddress,
-        data: txData
-    },
-    function(error, res){
-        console.log(error);
-        console.log(res);
-        subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
-    }
-);   setCreateLoader(false)
-    setApproveLoader(true)
-    
-    txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
+    let txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
       to: NFT_ADDRESS,
       from: walletAddress,
@@ -247,14 +205,11 @@ function handleDrag(tag, currPos, newPos) {
       console.log(res);
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
-); setApproveLoader(false)
-  const something = await NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
-    console.log(`tokenID of URI ${ipfsHash} - ${res}`)
-  })
+);
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
-      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, something, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
+      txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, router.query.tokenId, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
       } else {
@@ -270,13 +225,9 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
-                 if (createMany){
-                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, amount: data.amount})
-  router.push(`/product/${res.data.resClient._id}`)
-                 } else {
-                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
-                  router.push(`/product/${res.data.resClient._id}`)
-                 }
+                     const res = await axios.post('http://localhost:8000/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, location: 'marketplace'})
+  router.push(`/product/${res.data._id}`)
+                 
 
 
               })
@@ -290,7 +241,10 @@ function handleDrag(tag, currPos, newPos) {
     
   } else {
   let fee = await getGasFee(gasFee.createOrderSell)
-	let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, web3.utils.toWei(String(data.price))).encodeABI()
+  console.log(fee, NFT_ADDRESS, data.price)
+  
+  // @ts-ignore
+	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, router.query.tokenId, 1, web3.utils.toWei(String(data.price))).encodeABI()
 	if(!wallet){
 		alert('you have to connect cryptowallet')
 	} else {
@@ -306,13 +260,10 @@ function handleDrag(tag, currPos, newPos) {
 		        if(price>0){
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
-                        if (createMany){
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data), amount: data.amount})
- router.push(`/product/${res.data.resClient._id}`)
-                        } else {
-                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
- router.push(`/product/${res.data.resClient._id}`)
-                        }
+     
+                            const res = await axios.post('http://localhost:8000/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), location: 'marketplace'})
+ router.push(`/product/${res.data._id}`)
+                        
 
               })
 		        } else {
@@ -357,7 +308,7 @@ function handleDrag(tag, currPos, newPos) {
         <div className="create_check_info create_inputs" ref={auctionCheckInfoRef}>
           <div className="create_input w100">
             <span>{lang.auction.firstBid}:</span>
-            <input type="number" step="any" {...register('firstBid')} required/>
+            <input type="number" step="any" {...register('firstBid')}/>
             <span className="icon icon-eth" />
           </div>
 
@@ -403,44 +354,8 @@ function handleDrag(tag, currPos, newPos) {
         </div>
       </div>
 {/*        <div className="create_input" style={{position: 'static'}}> */}
-        <span>{lang.auction.createHashTag}:</span>
-        <ReactTags  className="create_input" tags={tags}
-                    handleDelete={handleDelete}
-                    handleAddition={handleAddition}
-                    handleDrag={handleDrag}
-                    delimiters={delimiters} />
         {/* <span className="icon icon-sharp" /> */}
 {/*        </div>  */}
-      <div className="create_input">
-        <span>{lang.auction.nftName}:</span>
-        <input type="text" name='name' {...register("title")} required/>
-      </div>
-      <div className="create_input">
-        <span>{lang.auction.collectionName}:</span>
-        <input type="text" name='collection' {...register("collection")} required/>
-      </div>
-      <div className="create_input">
-        <span>{lang.description}:</span>
-        <textarea name='description' {...register("description")} required/>
-      </div>
-      <label htmlFor="pdf" className="create_download btn btn_gray icon icon-download-black">
-        <input type="file" id="pdf" accept=".pdf" onChange={handlePdfChange}/>
-        <span>{lang.uploadDescription}</span>
-      </label>
-      <div>{pdf ? pdf.name: null}</div>
-      <div className="create_inputs">
-        <div className="create_input">
-          <span>{lang.roalty}:</span>
-          <input type="number" name='royalty' {...register("royalty")} required/>
-          <span className="icon icon-persent" />
-        </div>
-        {createMany && (
-          <div className="create_input">
-            <span>{lang.auction.countNFT}:</span>
-            <input type="number" {...register("amount")}/>
-          </div>
-        )}
-      </div>
       <button type="submit" className="fill btn btn_sea">
         <span>{lang.pageNames.createNFT}</span>
       </button>

@@ -3,6 +3,7 @@ import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import MarketplaceItem from './MarketplaceItem';
+import SoldOutItem from './SoldOut'
 import router from 'next/router';
 
 
@@ -130,10 +131,11 @@ export default function MarketplaceItems(props): React.ReactElement {
   }, []);
   return (
     <div className="marketplace__items">
-      {marketplaceItems.filter((item) => item.location === 'marketplace').map((item, index, array) => {
+      {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
         console.log('I am inside')
-        return (
+        if (item.location === 'marketplace'){
+                  return (
           <MarketplaceItem
             ref={lastRef}
             app={app}
@@ -141,6 +143,12 @@ export default function MarketplaceItems(props): React.ReactElement {
             data={item}
           />
         );
+        } else {
+          return (
+            <SoldOutItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
+          )
+        }
+
       })}
     </div>
   );
