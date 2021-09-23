@@ -54,9 +54,8 @@ function Activity(props): React.ReactElement {
                                 <span>{moment(item.creationDate).fromNow()}</span>
                             </div>
                             <hr/>
-                            <div className='sad_pepe' style={{marginTop: '20px'}}>
-                              <Link href={`/product/${item.nft._id}`}><a className='view_item'>view item</a>
-                            </Link>  
+                            <div className='sad_pepe button' style={{marginTop: '20px'}}>
+                              <button className='fill'><span>View item</span></button>
                             </div>
                             
 

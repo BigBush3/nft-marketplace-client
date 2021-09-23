@@ -86,6 +86,7 @@ const lang: Language = {
     created: 'Created',
     inMarket: 'In Market',
     myCollection: 'My collection',
+    Collection: 'Collection',
     favorites: 'Favorites',
     followers: 'Followers',
     following: 'Subscriptions',

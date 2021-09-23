@@ -115,7 +115,7 @@ export default function CheckoutModal(props): React.ReactElement {
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
   >
-    <div className="popup">
+    <div className="popup__checkout popup">
       <div className="popup__heading heading">
         <h3>Checkout</h3>
       </div>

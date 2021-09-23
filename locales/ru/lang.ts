@@ -90,6 +90,7 @@ const lang: Language = {
     favorites: 'Избранные',
     followers: 'Подписчики',
     following: 'Подписки',
+    Collection: 'Коллекция'
   },
   footer: {
     weInSocial: 'Мы в соц сетях',

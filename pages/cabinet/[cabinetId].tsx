@@ -177,7 +177,7 @@ function Cabinet(props): React.ReactElement {
         </div>
 
         <div className="cabinet_nav flex">
-          <label
+          {data.verified === true && <label
             role="button"
             onClick={() => {
               setShow(false);
@@ -186,7 +186,7 @@ function Cabinet(props): React.ReactElement {
             className={clsx('cabinet_nav_li', active === 0 && 'active')}
             htmlFor="slick-slide-control00">
             {lang.cabinet.created}
-          </label>
+          </label>}
           <label
             role="button"
             onClick={() => {
@@ -205,7 +205,7 @@ function Cabinet(props): React.ReactElement {
             }}
             className={clsx('cabinet_nav_li', active === 2 && 'active')}
             htmlFor="slick-slide-control02">
-            {lang.cabinet.myCollection}
+            {cookie.get('id') === data._id ? lang.cabinet.myCollection : lang.cabinet.Collection}
           </label>
           <label
             role="button"
@@ -238,13 +238,13 @@ function Cabinet(props): React.ReactElement {
             {lang.cabinet.following}
           </label>
         </div>
-        <div className="cabinet_block" hidden={active !== 0}>
+        {data.verified === true && <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
        {data.nfts.filter((item) => item.location !== 'collection').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
-        </div>
+        </div>}
         <div className="cabinet_block" hidden={active !== 1}>
         <div className="marketplace__items">
        {data.nfts.filter((item) => item.location !== 'collection').map((item) => {

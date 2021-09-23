@@ -2715,7 +2715,7 @@ textarea {
 }
 .picture_square{
   width: 360px;
-  height: 400px;
+  height: auto;
   border-radius: 10px;
 }
 @media (max-width: 500px) {
@@ -2745,16 +2745,13 @@ textarea {
 }
 .view_item{
   padding: 10px 20px;
-  background: mediumspringgreen;
   text-decoration: none;
   color: black;
   cursor: pointer;
   border-radius: 5px;
   transition: all ease-in .3s;
 }
-.view_item:hover{
-  background-color: chartreuse;
-}
+
 .img_crop{
   margin-left: 20px;
   width: 400px;
@@ -3634,7 +3631,10 @@ textarea {
     left: 50%;
   }
   .popup__error{
-    width: 200px;
+    width: 300px;
+  }
+  .popup__checkout{
+    width: 350px !important;
   }
 }
 .popup__error{
@@ -3716,6 +3716,22 @@ textarea {
 
 .popup__terms-check {
   margin-top: 36px;
+}
+.popup__terms{
+  border-radius: 50px;
+}
+.MuiPaper-rounded {
+  border-radius: 10px !important;
+}
+.MuiDialog-paperWidthSm {
+  max-width: 500px !important;
+}
+.terms{
+  margin-bottom: 10px !important;
+}
+.MuiDialogContent-root {
+  margin-bottom: 20px !important;
+
 }
 
 .popup__terms .terms-check__item input {

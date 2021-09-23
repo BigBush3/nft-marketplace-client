@@ -26,8 +26,8 @@ function TermsOfServiceModal(props: Types.AppProps): React.ReactElement {
       </div>
 
       <div className="popup__button button">
-        <a href="#" className="fill">
-          <span>{lang.modal.termsOfService.proceed}</span>
+        <a href="#" className="fill terms">
+          <span style={{marginBottom: '20px'}}>{lang.modal.termsOfService.proceed}</span>
         </a>
       </div>
     </div>

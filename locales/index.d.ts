@@ -90,6 +90,7 @@ export default interface Language {
     favorites: string;
     followers: string;
     following: string;
+    Collection: string;
   };
   footer: {
     weInSocial: string;
