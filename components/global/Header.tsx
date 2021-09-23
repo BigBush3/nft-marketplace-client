@@ -211,6 +211,8 @@ function Header(props): React.ReactElement {
      * Прослушиватель нажатия на MEW
      */
     async function connectToMew(): Promise<void> {
+      // @ts-ignore
+      document.querySelector('.header__burger').click();
       let MEWconnect = await import('@myetherwallet/mewconnect-web-client');
       if (utils.h.isApp()) {
         MEWconnect = MEWconnect.default;
