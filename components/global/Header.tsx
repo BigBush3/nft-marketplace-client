@@ -130,7 +130,7 @@ function Header(props): React.ReactElement {
         const requestOptions = {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({wallet: accounts[0]})
+          body: JSON.stringify({wallet: accounts[0].toLowerCase()})
         }
         fetch('https://desolate-inlet-76011.herokuapp.com/user/login', requestOptions)
         .then(response => response.json())
