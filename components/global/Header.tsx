@@ -127,6 +127,7 @@ function Header(props): React.ReactElement {
       if (accounts?.length !== 0) {
         mfpClose.click();
         cookie.set('wallet', accounts[0]);
+        console.log(accounts)
         const requestOptions = {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
