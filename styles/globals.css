@@ -1420,7 +1420,12 @@ textarea {
 .bunner__item-more a {
   font-weight: 200;
   font-size: 13px;
-  color: #1cc9cf;
+  transition: all ease-in 0.3s;
+}
+.bunner__item-more a:hover {
+  font-weight: 200;
+  font-size: 13px;
+  color: #1cc9cf !important;
 }
 
 .bunner__item-more a i {

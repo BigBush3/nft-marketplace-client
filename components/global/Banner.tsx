@@ -22,7 +22,7 @@ export default function Banner(props): React.ReactElement {
         {banners.map((item, index) => {
           return (
             <div key={`Banner ${index}`}>
-              <div className="bunner__item" style={{ backgroundImage: `url(${item.imgUrl})`, backgroundSize: '100%', minHeight: "360px", color: item.color}}>
+              <div className="bunner__item" style={{ backgroundImage: `url(${item.imgUrl})`, backgroundSize: 'cover', minHeight: "360px", color: item.color}}>
                 <div style = {{color: item.color}} className="bunner__item-title heading">
                   <h2 >{item.title}</h2>
                 </div>
@@ -30,7 +30,7 @@ export default function Banner(props): React.ReactElement {
                   <p>{item.text}</p>
                 </div>
                 <div className="bunner__item-more">
-                  <a href={item.url}>
+                  <a href={item.url} style={{color: item.color}}>
                     {lang.more}
                     <i className="flaticon-right-arrow" />
                   </a>
