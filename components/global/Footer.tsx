@@ -8,8 +8,8 @@ import cookie from 'js-cookie'
 import {useForm} from 'react-hook-form'
 import ConnectWalletModal from './ConnectWalletModal';
 import TermsOfServiceModal from './TermsOfServiceModal';
-import ReportModal from './ReportModal';
 import LogoImage from '../../public/img/logo.png';
+import Some from '@material-ui/icons/Clear'
 
 
 
@@ -86,9 +86,9 @@ function Footer(props: Types.AppProps): React.ReactElement {
             </a>
           </li>
           <li className="footer__nav-item">
-            <button type='button' className="footer__nav-link open_error" onClick={handleOpen}>
+            <a href='#' type='button' className="footer__nav-link open_error" onClick={handleOpen}>
               {lang.footer.reportAnError}
-            </button>
+            </a>
           </li>
         </ul>
       </div>
@@ -111,7 +111,6 @@ function Footer(props: Types.AppProps): React.ReactElement {
       </div>
       <ConnectWalletModal {...props} />
       <TermsOfServiceModal {...props} />
-      <ReportModal {...props} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -119,6 +118,7 @@ function Footer(props: Types.AppProps): React.ReactElement {
         aria-describedby="simple-modal-description"
       >
     <div className='popup__modal'>
+      <Some className='close_cross' onClick={handleClose} style={{cursor: 'pointer'}}/>
           <div className="popup__heading heading">
         <h3>{lang.footer.reportAnError}</h3>
       </div>
@@ -136,6 +136,7 @@ function Footer(props: Types.AppProps): React.ReactElement {
           </button>
         </div>
       </form>
+      
         </div>
 
       </Modal>

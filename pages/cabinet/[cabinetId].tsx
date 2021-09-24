@@ -17,6 +17,7 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import Theme from '../../components/Theme';
 import * as clipboard from "clipboard-polyfill/text";
+import Snackbar from '@material-ui/core/Snackbar';
 import { getItems } from '../../utils/data';
 
 
@@ -53,8 +54,11 @@ function Cabinet(props): React.ReactElement {
   const [open, setOpen] = useState(false)
   const [followers, setFollowers] = useState(data.followers)
   const [followings, setFollowings] = useState(data.followings)
+  const [openSnack, setOpenSnack] = React.useState(false);
 
-
+  const handleClose = (event, reason) => {
+    setOpenSnack(false);
+  };
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
@@ -144,7 +148,7 @@ function Cabinet(props): React.ReactElement {
             <div className="cabinet_top_user_link icon icon-copy" onClick={() => {
                 clipboard.writeText(data.wallet).then(
                   function () {
-                    alert("address of the wallet was successfully copied!");
+                    setOpenSnack(true)
                   },
                   function () {
                     alert("error!");
@@ -305,6 +309,16 @@ function Cabinet(props): React.ReactElement {
 
         <Footer {...app} />
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={openSnack}
+        autoHideDuration={1000}
+        onClose={handleClose}
+        message="Copied!"
+      />
     </Theme>
   );
 }

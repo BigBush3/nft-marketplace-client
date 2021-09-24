@@ -45,6 +45,7 @@ function Home(props): React.ReactElement {
   const { data, app } = props;
   const { lang } = app;
   const { banners } = data;
+  console.log(banners)
 
   const classes = useStyles();
   console.log(app)

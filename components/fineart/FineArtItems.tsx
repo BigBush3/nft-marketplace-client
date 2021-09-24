@@ -81,7 +81,7 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
         </Slider>
       </div>
 
-      <div className="fineart__overview-pagination pagination">
+      {/* <div className="fineart__overview-pagination pagination">
         <div className="pagination__prev">
           <a href="#">
             <i className="flaticon-left-arrow" />
@@ -114,6 +114,6 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
           </a>
         </div>
       </div>
-    </main>
+     */}</main>
   );
 }

@@ -351,7 +351,7 @@ function Header(props): React.ReactElement {
                 { cookie.get('id') ? [
                   <div className="header__user" key='some gang'>
                     <div className="header__user-img">
-                      {cookie.get('imgUrl') ? <img src={cookie.get('imgUrl')} alt='avatar'/> : <img src="/img/avatar_0.png" alt="avatar" />}
+                      {cookie.get('imgUrl') ? <img style={{borderRadius: '50%'}} src={cookie.get('imgUrl')} alt='avatar'/> : <img src="/img/avatar_0.png" alt="avatar" />}
                       
                     </div>
                     <div className="header__user-title">{lang.userMenu.title}</div>

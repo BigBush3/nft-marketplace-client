@@ -400,19 +400,26 @@ textarea {
   border: none;
   z-index: 9;
 }
-
+.close_cross{
+  position: absolute;
+  top: -8%;
+  left: 100%;
+  color: white;
+  font-weight: bold;
+}
 .popup__modal{
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 450px;
   background: white;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 80px;
+  padding-right: 80px;
   padding-top: 20px;
   border-radius: 20px;
+  
 }
 
 
@@ -1569,7 +1576,12 @@ textarea {
   -webkit-transition: 0.25s ease all;
   -o-transition: 0.25s ease all;
   transition: 0.25s ease all;
+
 }
+.popular__item{
+  padding-right: 18px;
+}
+
 
 .products__item:hover {
   -webkit-box-shadow: 0px 20px 21px 0px rgba(0, 0, 0, 0.16);
@@ -2708,7 +2720,6 @@ textarea {
   width: 900px;
   height: 450px;
   display: flex;
-  border: gray solid 1px;
   border-radius: 5px;
   align-items: center;
   font-size: 17px;
@@ -3629,6 +3640,9 @@ textarea {
   .popup__modal{
     width: 300px;
     left: 50%;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 350px;
   }
   .popup__error{
     width: 300px;
@@ -7897,6 +7911,7 @@ a.ui-button:active,
     padding: 0 35px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    width: 100%;
   }
 
   .content {

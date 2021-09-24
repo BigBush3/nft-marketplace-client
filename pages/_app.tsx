@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps, router }: AppProps): React.ReactElement {
       <Head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <title>NFT</title>
+        <title>iNifty</title>
         <script defer src="/js/jquery-3.5.1.min.js" />
         <script defer src="/js/jquery-ui.min.js" />
         <script defer src="/plugins/magnific-popup/js/jquery.magnific-popup.min.js" />

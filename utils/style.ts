@@ -211,14 +211,6 @@ export function setStylesFooter(): void {
       ],
     });
     // @ts-ignore
-    $('a.open_error').magnificPopup({
-      items: [
-        {
-          src: '.popup__error',
-          type: 'inline',
-        },
-      ],
-    });
     // @ts-ignore
     $('.product__image-resize').magnificPopup({
       type: 'image',

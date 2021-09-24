@@ -245,14 +245,6 @@ $(document).ready(function(){
 			}
 		],
 	});
-	$('a.open_error').magnificPopup({
-		items: [
-			{
-				src: '.popup__error',
-				type: 'inline'
-			}
-		],
-	});
 	$('a.open_bid').magnificPopup({
 		items: [
 			{

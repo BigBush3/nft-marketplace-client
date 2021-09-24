@@ -20,7 +20,7 @@ export default function FineArtItem(props): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const { item, app } = props;
   const { lang } = app;
-  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id } = item;
+  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type } = item;
   return (
     <div className="fineart__item products__item">
       <div className="products__item-info">
@@ -62,12 +62,13 @@ export default function FineArtItem(props): React.ReactElement {
       </div>
       <div className="products__item-price">ETH {price}</div>
       <div className="products__item-buy button">
-        <a href="#" className="rate btn_blank">
+
+        { type === 'timedAuction' ? <a href="#" className="rate btn_blank">
           <span>{lang.placeBid}</span>
-        </a>
+        </a>:
         <a href="#" className="buy fill btn_fill">
           <span>{lang.buy}</span>
-        </a>
+        </a>}
       </div>
     </div>
   );

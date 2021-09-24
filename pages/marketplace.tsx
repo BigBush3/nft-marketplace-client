@@ -137,15 +137,15 @@ function Marketplace(props): React.ReactElement {
           </div>
           <hr/>
           <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
-            <div>
-              <Button style={{width: '100px', height: '40px', borderRadius: '20px'}} variant="contained" color="secondary" onClick={clickHandler}>
-                clear
-              </Button>
+            <div className='button'>
+            <button  style={{width: '100px', height: '40px'}} onClick={priceHandler}>
+             <span>Clear</span>
+              </button>
             </div>
-            <div>
-              <Button style={{width: '100px', height: '40px', borderRadius: '20px'}} variant="contained" color="primary" onClick={priceHandler}>
-                apply
-              </Button>
+            <div className='button'>
+              <button className='fill' style={{width: '100px', height: '40px'}} onClick={priceHandler}>
+             <span>Apply</span>
+              </button>
             </div>
           </div>
         </div>

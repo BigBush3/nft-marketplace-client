@@ -101,8 +101,8 @@ function FAQ(props: FAQProps): React.ReactElement {
       </div>
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={open}
         autoHideDuration={6000}

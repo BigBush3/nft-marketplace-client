@@ -15,6 +15,8 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <title>iNifty</title>
+          <link rel="shortcut icon" href='/img/logo.png'/>
         </Head>
         <body>
           <Main />
