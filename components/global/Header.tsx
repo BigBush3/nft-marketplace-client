@@ -168,7 +168,7 @@ function Header(props): React.ReactElement {
       if (ethereum.isMetaMask){
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       }else{
-        router.push('https://metamask.app.link/dapp/inifty.vercel.app/')
+        window.location.replace("hhttps://metamask.app.link/dapp/inifty.vercel.app/");
       }
       
       /*
