@@ -126,8 +126,8 @@ function Header(props): React.ReactElement {
       // Если получены номера аккаунтов
       if (accounts?.length !== 0) {
         mfpClose.click();
-        cookie.set('wallet', accounts[0]);
-        console.log(accounts)
+        cookie.set('wallet', accounts[0].toLowerCase());
+        console.log(accounts[0].toLowerCase())
         const requestOptions = {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -188,6 +188,7 @@ function Header(props): React.ReactElement {
               "metamask",
             ],
           },
+          qrcode: false
         });
         accounts = await provider?.enable();
       }
