@@ -175,17 +175,8 @@ function Header(props): React.ReactElement {
       let accounts;
       const { ethereum }: any = window;
       // Если подключение к расширению браузера
-      if (ethereum?.isMetaMask) {
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      } else {
-        // Если подключение к мобильному устройству
-        const provider = new WalletConnectProvider({
-          rpc: {
-            1: providerUrl,
-          },
-        });
-        accounts = await provider?.enable();
-      }
+     
       /*
        TODO ...
        const NFT = new web3.eth.Contract(NFT_ABI, ac6);
@@ -286,6 +277,7 @@ function Header(props): React.ReactElement {
     cookie.set('wallet', '')
     cookie.set('id', '')
     cookie.set('verified', false)
+    cookie.set('imgUrl', '')
   }
   function findHandler(){
     router.push('/marketplace')
