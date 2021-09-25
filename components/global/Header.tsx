@@ -180,8 +180,7 @@ function Header(props): React.ReactElement {
             mobileLinks: [
               "metamask",
             ],
-          },
-          qrcode: false
+          }
         });
         accounts = await provider?.enable();
       }
