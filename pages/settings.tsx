@@ -36,8 +36,11 @@ function Settings({app,}): React.ReactElement {
     if(cookie.get('email')){
       setEmail(cookie.get('email'))
     }
-    if (cookie.get('img')){
+    if (cookie.get('imgUrl')){
       setFile(cookie.get('imgUrl'))
+    }
+    if (cookie.get('headerUrl')){
+      setHeader(cookie.get('headerUrl'))
     }
   }, [])
   const Footer = useMemo(() => {
