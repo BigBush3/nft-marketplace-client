@@ -142,17 +142,10 @@ function Header(props): React.ReactElement {
             cookie.set('email', dame.email)
             cookie.set('id', dame.id)
             cookie.set('verified', dame.verified)
+            cookie.set('imgUrl', dame.imgUrl)
+            cookie.set('headerUrl', dame.headerUrl)
             console.log(cookie.get('verified'))
             
-            if (dame.imgUrl){
-              fetch(cookie.get('imgUrl'))
-    .then(r => r)
-    .then(picture => picture.blob())
-    .then(img => URL.createObjectURL(img))
-    .then(blob => {
-      cookie.set('img', blob)
-    })
-            }
             closeConnectDialog()
             setOpen(false)
             console.log(data)
