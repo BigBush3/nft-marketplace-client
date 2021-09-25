@@ -165,7 +165,12 @@ function Header(props): React.ReactElement {
       let accounts;
       const { ethereum }: any = window;
       // Если подключение к расширению браузера
+      if (ethereum.isMetaMask){
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      }else{
+        router.push('https://metamask.app.link/dapp/inifty.vercel.app/')
+      }
+      
       /*
        TODO ...
        const NFT = new web3.eth.Contract(NFT_ABI, ac6);
