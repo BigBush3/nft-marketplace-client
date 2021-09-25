@@ -143,6 +143,16 @@ function Header(props): React.ReactElement {
             cookie.set('id', dame.id)
             cookie.set('verified', dame.verified)
             console.log(cookie.get('verified'))
+            
+            if (dame.imgUrl){
+              fetch(cookie.get('imgUrl'))
+    .then(r => r)
+    .then(picture => picture.blob())
+    .then(img => URL.createObjectURL(img))
+    .then(blob => {
+      cookie.set('img', blob)
+    })
+            }
             closeConnectDialog()
             setOpen(false)
             console.log(data)
@@ -165,12 +175,22 @@ function Header(props): React.ReactElement {
       let accounts;
       const { ethereum }: any = window;
       // Если подключение к расширению браузера
-      if (ethereum.isMetaMask){
+      if (ethereum?.isMetaMask) {
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      }else{
-        window.location.replace("hhttps://metamask.app.link/dapp/inifty.vercel.app/");
+      } else {
+        // Если подключение к мобильному устройству
+        const provider = new WalletConnectProvider({
+          rpc: {
+            1: providerUrl,
+          },
+          qrcodeModalOptions: {
+            mobileLinks: [
+              "metamask",
+            ],
+          },
+        });
+        accounts = await provider?.enable();
       }
-      
       /*
        TODO ...
        const NFT = new web3.eth.Contract(NFT_ABI, ac6);
