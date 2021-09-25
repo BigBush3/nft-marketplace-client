@@ -181,6 +181,7 @@ function Header(props): React.ReactElement {
               "metamask",
             ],
           },
+          qrcode: false
         });
         accounts = await provider?.enable();
       }
