@@ -18,7 +18,7 @@ import {FacebookShareButton, TelegramShareButton, TwitterShareButton} from 'reac
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
-import { getTokenOwnHistory } from '../../utils/blockchain';
+import { getTokenOwnHistory, getAllTokenHistory } from '../../utils/blockchain';
 
 
 
@@ -84,18 +84,12 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   });
   
   const historyHandler = async () => {
-    const responseHistory = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/history/${router.query.productId}`)
-    console.log(responseHistory)
-    console.log('something')
-    if (openHistory){
-      setOpenHistory(false)
-    } else {
-      setOpenHistory(true)
+    if (!openHistory){
+    const allTokenHistory = await getAllTokenHistory(data.tokenId)
+    console.log(allTokenHistory) 
     }
-    
-  }
-  const getHistory = async () => {
-    
+
+    setOpenHistory(!openHistory)
   }
 
   const ownerHandler = async () => {
