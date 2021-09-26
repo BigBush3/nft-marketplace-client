@@ -30,7 +30,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
     console.log(result)
     let auction = result.data
-    auction = auction.filter((item) => item.location === 'marketplace')
+    auction = auction.filter((item) => item.location === 'marketplace' || item.status === 'soldOut')
     setAllMarketplaceItems(auction)
     setMarketplaceItems(auction);
     _load = true;
@@ -59,7 +59,6 @@ export default function MarketplaceItems(props): React.ReactElement {
     
   }, [priceRange])
   useEffect(() => {
-    console.log(filterBy)
     if (filterBy === 1){
       setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
         {
@@ -75,9 +74,7 @@ export default function MarketplaceItems(props): React.ReactElement {
         }
       }))
     } else if (filterBy === 2){
-      console.log('hi!!!')
       setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
-        console.log('i am inside')
         if (a.type === 'orderSell' && b.type === 'orderSell'){
           return parseInt(a.price) < parseInt(b.price) ? 1: -1
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
@@ -102,7 +99,6 @@ export default function MarketplaceItems(props): React.ReactElement {
       }))
     }else if (filterBy === 4){
       setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
-        console.log(a.price, b.price)
         if (a.type === 'orderSell' && b.type === 'orderSell'){
           return new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
@@ -133,7 +129,6 @@ export default function MarketplaceItems(props): React.ReactElement {
     <div className="marketplace__items">
       {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
-        console.log('I am inside')
         if (item.location === 'marketplace'){
                   return (
           <MarketplaceItem

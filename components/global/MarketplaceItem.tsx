@@ -6,6 +6,8 @@ import type * as Types from '../../types/index.d';
 import OwnerDropdownItem from './OwnerDropdownItem';
 import Likes from './Likes';
 import Favorite from './Favorite';
+import { getTokenOwnHistory } from '../../utils/blockchain';
+import axios from 'axios'
 
 interface MarketplaceItem {
   app?: Types.AppProps;
@@ -21,6 +23,8 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
   const { app, data } = props;
   const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate, amount, initialAmount } = data;
   const { lang } = app;
+  const [historyItem, setHistoryItem] = useState([])
+
   const [open, setOpen] = useState<boolean>(false);
   const calculateTimeLeft = () => {
     let difference = +new Date(endDate) - +new Date();
@@ -37,6 +41,20 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
 
   return timeLeft;
 
+}
+const ownerHandler = async () => {
+  if (!open){
+  const el = []
+  const resHistory = await getTokenOwnHistory(data.tokenId)
+  el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+  for (let i = 0; i < resHistory.length; i++) {
+    el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+    
+  }
+  const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+  setHistoryItem(finalHistory.data.result)
+  }
+  setOpen(!open)
 }
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   useEffect(() => {
@@ -55,17 +73,15 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
         {/** Всплывающий список владельцев */}
         <div className={clsx('item-info__dropdown', open && 'active')}>
-{/*           {owner.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${index}`} {...owner} />;
-          })} */}
+        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
         </div>
       </div>
       <div className="products__item-img">
@@ -104,17 +120,15 @@ const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.Rea
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
         {/** Всплывающий список владельцев */}
         <div className={clsx('item-info__dropdown', open && 'active')}>
-{/*           {owner.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${index}`} {...owner} />;
-          })} */}
+        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
         </div>
       </div>
       <div className="products__item-img">

@@ -18,6 +18,8 @@ import {FacebookShareButton, TelegramShareButton, TwitterShareButton} from 'reac
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
+import { getTokenOwnHistory } from '../../utils/blockchain';
+
 
 
 interface ProductProps {
@@ -37,6 +39,7 @@ function Product({app, data}): React.ReactElement {
   const [openBid, setOpenBid] = useState(false)
   const [openHistory, setOpenHistory] = useState(false)
   const [openShare, setOpenShare] = useState(false)
+  const [historyItem, setHistoryItem] = useState([])
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
@@ -90,6 +93,25 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       setOpenHistory(true)
     }
     
+  }
+  const getHistory = async () => {
+    
+  }
+
+  const ownerHandler = async () => {
+    if (!open){
+const el = []
+    
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+    for (let i = 0; i < resHistory.length; i++) {
+      el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+      
+    }
+    const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+    setHistoryItem(finalHistory.data.result)
+    }
+    setOpen(!open)
   }
   return (
     <Theme>
@@ -159,14 +181,15 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
                     <div
                       role="button"
                       className={clsx('item-info__icon', open && 'close')}
-                      onClick={() => {
-                        setOpen(!open);
-                      }}>
+                      onClick={ownerHandler}>
                       <i className="flaticon-information" />
                       <i className="flaticon-letter-x cross" />
                     </div>
                     <div className={clsx('item-info__dropdown', open && 'active')}>
-                        <OwnerDropdownItem {...data.owner} />
+                        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+                        
                       
                     </div>
                   </div>

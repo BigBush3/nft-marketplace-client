@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type * as Types from '../../types/index.d';
@@ -9,14 +9,14 @@ import type * as Types from '../../types/index.d';
  * @returns
  */
 function OwnerDropdownItem(props): React.ReactElement {
-  const { author, imgUrl, name, _id } = props;
+  const { author, imgUrl, name, _id, ind } = props;
   return (
-    <div className={clsx('info__dropdown-item', author ? 'artist' : 'owner')}>
+    <div className={clsx('info__dropdown-item', ind === 0 ? 'artist' : 'owner')}>
       <div className="dropdown-item__img">
-        <img src={imgUrl || '/img/artist.png'} alt="img" />
+        <img style={{width: '50px', height: '50px'}} src={imgUrl || '/img/artist.png'} alt="img" />
       </div>
       <div className="dropdown-item__cover">
-        <div className="dropdown-item__status">{author ? 'Артист' : 'Владелец'}</div>
+        <div className="dropdown-item__status">{ind === 0 ? 'Артист' : 'Владелец'}</div>
         <Link href={`/cabinet/${_id}`}>
           <a href="?" className="dropdown-item__title">
             {name}

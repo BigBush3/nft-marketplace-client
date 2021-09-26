@@ -225,7 +225,7 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
-                     const res = await axios.post('http://localhost:8000/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, location: 'marketplace'})
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active'})
   router.push(`/product/${res.data._id}`)
                  
 
@@ -241,7 +241,7 @@ function handleDrag(tag, currPos, newPos) {
     
   } else {
   let fee = await getGasFee(gasFee.createOrderSell)
-  console.log(fee, NFT_ADDRESS, data.price)
+  console.log(fee, NFT_ADDRESS, data.price, router.query.tokenId)
   
   // @ts-ignore
 	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, router.query.tokenId, 1, web3.utils.toWei(String(data.price))).encodeABI()
@@ -261,7 +261,7 @@ function handleDrag(tag, currPos, newPos) {
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
      
-                            const res = await axios.post('http://localhost:8000/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), location: 'marketplace'})
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), location: 'marketplace', status: 'active'})
  router.push(`/product/${res.data._id}`)
                         
 

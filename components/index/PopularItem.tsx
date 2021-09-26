@@ -6,6 +6,9 @@ import type * as Types from '../../types/index.d';
 import OwnerDropdownItem from '../global/OwnerDropdownItem';
 import Likes from '../global/Likes';
 import Favorite from '../global/Favorite';
+import axios from 'axios'
+import { getTokenOwnHistory } from '../../utils/blockchain';
+
 
 interface PopularIntemProps {
   app?: Types.AppProps;
@@ -22,26 +25,39 @@ function PopularItem(props): React.ReactElement {
   const { app, data } = props;
   const { mark, owners, _id, title, likeMe, likes, price, views, favoriteMe, img, verified , currentBid} = data;
   const { lang } = app;
+  const [historyItem, setHistoryItem] = useState([])
   const [open, setOpen] = useState<boolean>(false);
   console.log(data)
+  const ownerHandler = async () => {
+    if (!open){
+    const el = []
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+    for (let i = 0; i < resHistory.length; i++) {
+      el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+      
+    }
+    const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+    setHistoryItem(finalHistory.data.result)
+    }
+    setOpen(!open)
+  }
   return (
     <div className="popular__item products__item">
       <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
 
- {/*        <div className={clsx('item-info__dropdown', open && 'active')}>
-          {owners.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${id}_${index}`} {...owner} />;
-          })}
-        </div> */}
+        <div className={clsx('item-info__dropdown', open && 'active')}>
+        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+        </div>
       </div>
       <div className="products__item-img">
         <div className="item-img__cover">

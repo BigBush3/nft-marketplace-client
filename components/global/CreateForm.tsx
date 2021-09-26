@@ -197,7 +197,8 @@ function handleDrag(tag, currPos, newPos) {
     } 
     const walletAddress = metamask.userAddress
     const wallet = metamask.web3
-        let txData = NFTSTORE.methods.addOwner(wallet).encodeABI()
+    console.log(walletAddress)
+/*         let txData = NFTSTORE.methods.addOwner(walletAddress).encodeABI()
         await wallet.eth.sendTransaction({
                 to: NFT_ADDRESS,
                 from: walletAddress,
@@ -207,14 +208,12 @@ function handleDrag(tag, currPos, newPos) {
                 console.log(error);
                 console.log(res);
             }
-        )		
+        )		 */
     console.log('metamask connected')
     console.log('NFT contract connected')
     console.log(NFT)
     console.log('walletAddress: ', walletAddress)
     console.log('web3: ', web3)
-    const owner = await isOwner(walletAddress)
-    console.log(owner)
     const formData = new FormData();
     // Update the formData object
     formData.append(
@@ -233,7 +232,7 @@ function handleDrag(tag, currPos, newPos) {
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
     console.log(data.dateRange)
-    txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
+    let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
         from: walletAddress,

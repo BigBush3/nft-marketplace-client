@@ -70,7 +70,6 @@ export default function CheckoutModal(props): React.ReactElement {
       document.querySelector('.open_connect').click();
       handleClose()
     } else {
-      console.log('hi')
     let metamask = await connectMetaMask()
 	let walletAddress = metamask.userAddress
 	let wallet = metamask.web3
@@ -83,8 +82,8 @@ export default function CheckoutModal(props): React.ReactElement {
 	console.log('web3: ', web3)
     let fee = await getGasFee(136400)
     console.log(data)
-	let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, 0, 1).encodeABI()
-	let order = await getOrder(data.tokenId, 0)
+	let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, data.orderIndex, 1).encodeABI()
+	let order = await getOrder(data.tokenId, data.orderIndex)
   console.log(fee)
 	if(!wallet){
 		alert('you have to connect cryptowallet')
@@ -106,8 +105,6 @@ export default function CheckoutModal(props): React.ReactElement {
     }
     
   }
-  useEffect(() => {
-  }, []);
   return (
     <Modal
     open={open}

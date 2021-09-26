@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -14,7 +14,7 @@ import StyledSelect from '../components/UI/StyledSelect';
 import MarketplaceItems from '../components/global/MarketplaceItems';
 import FineArtItems from '../components/index/FineArtItems';
 import PopularItems from '../components/index/PopularItems';
-
+import {getAllTokenHistory, getTokenOwnHistory} from '../utils/blockchain'
 
 import * as utils from '../utils';
 import type * as Types from '../types/index.d';
@@ -50,6 +50,13 @@ function Home(props): React.ReactElement {
   const classes = useStyles();
   console.log(app)
   const [filterBy, setFilterBy] = useState<number>(1);
+  useEffect(() => {
+    const getHistory = async () => {
+      const resHistory = await getTokenOwnHistory(1)
+      console.log(resHistory)
+    }
+    getHistory()
+  }, [])
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
