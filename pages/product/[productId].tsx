@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import axios from 'axios'
 import router from 'next/router';
-import { SettingsRemoteTwoTone } from '@material-ui/icons';
+import { SettingsRemoteTwoTone, Web } from '@material-ui/icons';
 import Theme from '../../components/Theme';
 import Header from '../../components/global/Header';
 import OwnerDropdownItem from '../../components/global/OwnerDropdownItem';
@@ -15,10 +15,29 @@ import Favorite from '../../components/global/Favorite';
 import ButtonsStyled from '../../components/product/ButtonsStyled';
 import ShareModal from '../../components/global/ShareModal';
 import {FacebookShareButton, TelegramShareButton, TwitterShareButton} from 'react-share'
+import Web3 from 'web3';
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import { getTokenOwnHistory, getAllTokenHistory } from '../../utils/blockchain';
+import WideHistory from '../../components/global/WideHistory'
+import {
+	NFT_ABI, 
+	NFT_ADDRESS, 
+
+	NFTSTORE_ADDRESS, 
+	NFTSTORE_ABI,
+	
+	TIMEDAUCTION_ABI,
+	TIMEDAUCTION_ADDRESS,
+	
+	SIMPLEAUCTION_ABI,
+	SIMPLEAUCTION_ADDRESS,
+
+	RINKEBY_RPC_URL, 
+	ULR_INFURA_WEBSOCKET, 
+	EVENTS_TOPICS
+} from '../../config/default.json'
 
 
 
@@ -40,6 +59,8 @@ function Product({app, data}): React.ReactElement {
   const [openHistory, setOpenHistory] = useState(false)
   const [openShare, setOpenShare] = useState(false)
   const [historyItem, setHistoryItem] = useState([])
+  const [wideHistory, setWideHistory] = useState([])
+  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
@@ -84,9 +105,51 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   });
   
   const historyHandler = async () => {
+    let oneList = []
+    let fullHistory = []
+    let clearList = []
     if (!openHistory){
     const allTokenHistory = await getAllTokenHistory(data.tokenId)
-    console.log(allTokenHistory) 
+
+    for (const item of allTokenHistory) {
+      if (item.event === 'Create'){
+        oneList.push(item.returnValues.creator.toLowerCase())
+        clearList.push({user: item.returnValues.creator.toLowerCase(), event: 'Minted by', time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
+      }
+      else if (item.event === 'FixOrder'){
+        oneList.push(item.returnValues.seller.toLowerCase())
+        clearList.push({user: item.returnValues.seller.toLowerCase(), event: 'Listed for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
+      } else if(item.event === 'Deal'){
+        oneList.push(item.returnValues.addressFrom.toLowerCase())
+        oneList.push(item.returnValues.addressTo.toLowerCase())
+        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'bought', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
+      }
+    }
+    const yourmom = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: oneList})
+    setWideHistory(allTokenHistory)
+    for(let i = 0; i < clearList.length; i++){
+      for(let j = 0; j < yourmom.data.result.length; j++){
+        if (clearList[i].event === 'bought'){
+          console.log(yourmom.data.result[j].wallet)
+          if (yourmom.data.result[j].wallet === clearList[i].userFrom){
+            clearList[i].userFrom = yourmom.data.result[j]
+          } else if (yourmom.data.result[j].wallet === clearList[i].userTo){
+            clearList[i].userTo = yourmom.data.result[j]
+          }
+        } else {
+          if (yourmom.data.result[j].wallet === clearList[i].user){
+            clearList[i].user = yourmom.data.result[j]
+          }
+        }
+      }
+    }
+    clearList = clearList.sort((a, b) => {
+      if (a.time > b.time){
+        return 1
+      }
+      return -1
+    })
+    setWideHistory(clearList)
     }
 
     setOpenHistory(!openHistory)
@@ -97,13 +160,19 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 const el = []
     
     const resHistory = await getTokenOwnHistory(data.tokenId)
-    el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+    if (resHistory[0]){
+          el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
     for (let i = 0; i < resHistory.length; i++) {
       el.push(resHistory[i].returnValues.addressTo.toLowerCase())
       
     }
     const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
     setHistoryItem(finalHistory.data.result)
+    } else {
+      console.log(data.owner)
+      el.push(data.owner)
+      setHistoryItem(el)
+    }
     }
     setOpen(!open)
   }
@@ -208,7 +277,13 @@ const el = []
             <div className="author__buttons button">
             <button className='fill buy' onClick={async () => {await historyHandler()}}><span>история ставок</span></button>
             </div>
-            {openHistory ? <div>something</div> : null}
+            {openHistory ? [wideHistory.map((item, index, array) => {
+              return (
+                <div>
+                  {item.event}
+                </div>
+              )
+            })] : null}
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
             </div>

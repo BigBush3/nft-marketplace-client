@@ -30,6 +30,7 @@
     "dotenv": "^10.0.0",
     "eccrypto": "^1.1.6",
     "ecdh": "^0.1.1",
+    "ethereum-block-by-date": "^1.4.2",
     "express": "^4.17.1",
     "gridfs-stream": "^1.1.1",
     "helmet": "^4.6.0",

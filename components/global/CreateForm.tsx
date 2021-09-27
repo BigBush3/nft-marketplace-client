@@ -280,12 +280,13 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
+                console.log(event)
                  if (createMany){
                      const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, amount: data.amount})
-  router.push(`/product/${res.data.resClient._id}`)
+/*   router.push(`/product/${res.data.resClient._id}`) */
                  } else {
                   const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
-                  router.push(`/product/${res.data.resClient._id}`)
+     /*              router.push(`/product/${res.data.resClient._id}`) */
                  }
 
 
@@ -313,21 +314,21 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-		        if(price>0){
-		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
-              subevent.on("data", async event => {
+		        let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
+            subevent.on("data", async event => {
+              const pure = event.data.slice(2)
+              const sth = pure.substring(0, 63)
+              console.log(parseInt(sth))
                         if (createMany){
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data), amount: data.amount})
+                          
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount})
  router.push(`/product/${res.data.resClient._id}`)
                         } else {
-                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(event.data)})
- router.push(`/product/${res.data.resClient._id}`)
+                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth)})
+  router.push(`/product/${res.data.resClient._id}`) 
                         }
 
               })
-		        } else {
-			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
-		        }
 		    }
 		)		
 	}

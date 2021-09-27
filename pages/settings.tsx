@@ -36,12 +36,12 @@ function Settings({app,}): React.ReactElement {
     if(cookie.get('email')){
       setEmail(cookie.get('email'))
     }
-    if (cookie.get('imgUrl')){
+    if (cookie.get('img')){
       setFile(cookie.get('imgUrl'))
     }
-    if (cookie.get('headerUrl')){
+      if (cookie.get('headerUrl')){
       setHeader(cookie.get('headerUrl'))
-    }
+    } 
   }, [])
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));

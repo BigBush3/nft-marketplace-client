@@ -225,7 +225,10 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
-                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active'})
+                const pure = event.data.slice(2)
+                const sth = pure.substring(0, 63)
+                console.log(parseInt(sth))
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active'})
   router.push(`/product/${res.data._id}`)
                  
 
@@ -260,8 +263,10 @@ function handleDrag(tag, currPos, newPos) {
 		        if(price>0){
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
-     
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(event.data), location: 'marketplace', status: 'active'})
+                const pure = event.data.slice(2)
+                const sth = pure.substring(0, 63)
+                console.log(parseInt(sth))
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(sth), location: 'marketplace', status: 'active'})
  router.push(`/product/${res.data._id}`)
                         
 

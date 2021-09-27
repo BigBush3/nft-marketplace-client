@@ -23,7 +23,10 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
   const settings = utils.$.sliderSettings;
   useEffect(() => {
     setTimeout(() => {
-      sliderRef?.current.slickGoTo(0);
+      if (sliderRef.current){
+        sliderRef?.current.slickGoTo(0);
+      }
+      
     }, 1000);
     (async () => {
       if (fineArtItems.length === 0) {

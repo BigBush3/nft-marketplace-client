@@ -1005,7 +1005,7 @@ const getMinted = async(_tokenId)=>{
 			fromBlock: 0,
 			toBlock: 'latest',
 			filter: {
-				tokenId: _tokenId
+				_id: _tokenId
 			}
 		}, 
 		(err, events) => {
@@ -1120,11 +1120,14 @@ const example = async ()=>{
 	const bids = await getAllTokenAuctionBids(1)
 	console.log("bids: ", bids)
 
-	const history = await getAllTokenHistory(1)
+	const history = await getAllTokenHistory(4)
 	console.log('history: ', history)
 
 	const updateis = await getUpdatedBidByToken(1)
 	console.log('updateis: ', updateis)
+
+	// const Minted = await getMinted(4)
+	// console.log("Minted: ", Minted)
 
 	// getServiceFee()
 	// console.log(web3)
@@ -1148,7 +1151,6 @@ const example = async ()=>{
 	// const balance = await getBalance('0xd09Eb1fcCD1b0A04799F4763EB2aC63296633C54') 
 	// console.log(balance)
 }
-
 
 
 

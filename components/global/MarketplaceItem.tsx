@@ -4,6 +4,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import type * as Types from '../../types/index.d';
 import OwnerDropdownItem from './OwnerDropdownItem';
+import Web3 from 'web3';
 import Likes from './Likes';
 import Favorite from './Favorite';
 import { getTokenOwnHistory } from '../../utils/blockchain';
@@ -46,13 +47,19 @@ const ownerHandler = async () => {
   if (!open){
   const el = []
   const resHistory = await getTokenOwnHistory(data.tokenId)
-  el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
-  for (let i = 0; i < resHistory.length; i++) {
-    el.push(resHistory[i].returnValues.addressTo.toLowerCase())
-    
-  }
-  const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
-  setHistoryItem(finalHistory.data.result)
+  if (resHistory[0]){
+    el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+for (let i = 0; i < resHistory.length; i++) {
+el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+
+}
+const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+setHistoryItem(finalHistory.data.result)
+} else {
+console.log(data.owner)
+el.push(data.owner)
+setHistoryItem(el)
+}
   }
   setOpen(!open)
 }
