@@ -236,22 +236,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     }
     fee = await getGasFee(gasFee.returnFreeBalance)
     txData = NFTSTORE.methods.returnFreeBalance().encodeABI()
-/*     if(!wallet){
-      alert('you have to connect cryptowallet')
-    } else {
-      wallet.eth.sendTransaction({
-              to: NFTSTORE_ADDRESS,
-              from: walletAddress,
-              value: web3.utils.toWei(String(fee/1e18)),
-              data: txData
-          },
-          function(error, res){
-              console.log(error);
-              console.log(res);
-              subscription(EVENTS_TOPICS.CREATE_ORDER)
-          }
-      )		
-    } */
+/*  */
     await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
   }
   const historyHandler = async () => {
@@ -451,8 +436,9 @@ const el = []
               return (
                 <div style={{display: 'flex', marginTop: '15px'}}>
                   <div className='history_img' style={{marginRight:'10px'}}>
-                    <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.event === 'Purchased for' ? [item.userTo?.imgUrl ? item.userTo.imgUrl : '/img/avatar_0.png'] : [item.user?.imgUrl ? item.user.imgUrl : '/img/avatar_0.png']} alt="/img/avatar_0.png" />
-                    </Link>
+                    {item.event === 'Purchased for' ? <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.userTo?.imgUrl ? item.userTo.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
+                    </Link>: <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.user?.imgUrl ? item.user.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
+                    </Link>}
                     
                   </div>
                   <div>
