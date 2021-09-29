@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
 import { makeStyles } from '@material-ui/core/styles';
 
-
+import Web3 from 'web3';
 import { useRouter } from 'next/router';
 import cookie from 'js-cookie'
 import axios from 'axios';
@@ -19,6 +19,23 @@ import Theme from '../../components/Theme';
 import * as clipboard from "clipboard-polyfill/text";
 import Snackbar from '@material-ui/core/Snackbar';
 import { getItems } from '../../utils/data';
+import {
+	NFT_ABI, 
+	NFT_ADDRESS, 
+
+	NFTSTORE_ADDRESS, 
+	NFTSTORE_ABI,
+	
+	TIMEDAUCTION_ABI,
+	TIMEDAUCTION_ADDRESS,
+	
+	SIMPLEAUCTION_ABI,
+	SIMPLEAUCTION_ADDRESS,
+
+	RINKEBY_RPC_URL, 
+	ULR_INFURA_WEBSOCKET, 
+	EVENTS_TOPICS
+} from '../../config/default.json'
 
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
@@ -55,13 +72,58 @@ function Cabinet(props): React.ReactElement {
   const [followers, setFollowers] = useState(data.followers)
   const [followings, setFollowings] = useState(data.followings)
   const [openSnack, setOpenSnack] = React.useState(false);
-
+  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  //@ts-ignore
+  let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)
   const handleClose = (event, reason) => {
     setOpenSnack(false);
   };
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
+  const getBlock = async(timeFrom)=>{
+    if(timeFrom==='latest'){
+      return web3.eth.getBlockNumber()
+    }
+  }
+
+const getUpdatedBidByToken = async(userAddress)=>{
+	let res
+	await TIMEDAUCTION.getPastEvents(
+		'UpdateBidAuction', 
+		{
+			fromBlock: 0,
+			toBlock: 'latest',
+			filter: {
+				user: userAddress
+			}
+		}, 
+		(err, events) => {
+			if(events!=null){
+				res = events
+			}
+		})
+	return res
+}
+  const getAllUserAuctionBids = async(userAddress)=>{
+     let res
+    await TIMEDAUCTION.getPastEvents(
+      'AuctionBid', 
+      {
+        fromBlock: 0,
+        toBlock: 'latest',
+        filter: {
+          user: userAddress
+        }
+      }, 
+      (err, events) => {
+        if(events!=null){
+          console.log("AuctionBids", events)
+          res = events
+        }
+      })
+    return res
+  }
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
@@ -94,6 +156,11 @@ function Cabinet(props): React.ReactElement {
     }
 
     
+  }
+  const asHandler = async() => {
+    const history = await getAllUserAuctionBids(cookie.get('wallet'))
+    const secHistory = await getUpdatedBidByToken(cookie.get('wallet'))
+    console.log(history, secHistory)
   }
   async function unSubscribeHandler(){
     setSub(false)
@@ -160,7 +227,7 @@ function Cabinet(props): React.ReactElement {
           </div>
           {cookie.get('id') === data._id ?
           (<div className="cabinet_top_btns button">
-            <a href="#" className="btn btn_black fill">
+            <a href="#" onClick={asHandler} className="btn btn_black fill">
               <span>{lang.cabinet.auctionBallance}</span>
             </a>
             <a href="#" className="btn btn_black fill">

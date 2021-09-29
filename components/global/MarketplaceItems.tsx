@@ -25,33 +25,34 @@ export default function MarketplaceItems(props): React.ReactElement {
   const { app, search, searchBy, filterBy, priceRange} = props;
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
-  const [allMarketplaceItems, setAllMarketplaceItems] = useState([])
+  const allMarketplaceItems = useRef([])
+  const [state, setState] = useState({});
   async function getMarketPlacePart(): Promise<void> {
     const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
     console.log(result)
     let auction = result.data
     auction = auction.filter((item) => item.location === 'marketplace' || item.status === 'soldOut')
-    setAllMarketplaceItems(auction)
+    allMarketplaceItems.current = auction
     setMarketplaceItems(auction);
     _load = true;
   }
   useEffect(() => {
     console.log(searchBy)
     if (searchBy === 'collection'){
-      setMarketplaceItems(allMarketplaceItems.filter((item) => item.collect.toLowerCase().includes(search.toLowerCase())))
+      setMarketplaceItems(allMarketplaceItems.current.filter((item) => item.collect.toLowerCase().includes(search.toLowerCase())))
     } else if (searchBy === 'author'){
-      setMarketplaceItems(allMarketplaceItems.filter((item) => item.owner.name.toLowerCase().includes(search.toLowerCase())))
+      setMarketplaceItems(allMarketplaceItems.current.filter((item) => item.owner.name.toLowerCase().includes(search.toLowerCase())))
     } else {
-      setMarketplaceItems(allMarketplaceItems.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
+      setMarketplaceItems(allMarketplaceItems.current.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())))
     }
       
   }, [search, searchBy])
   useEffect(() => {
     if (router.asPath === '/marketplace'){
               if (priceRange[0] === 0 && priceRange[1] === 0){
-      setMarketplaceItems(allMarketplaceItems)
+      setMarketplaceItems(allMarketplaceItems.current)
     } else {
-      setMarketplaceItems(allMarketplaceItems.filter((item) => item.price > priceRange[0] && item.price < priceRange[1]))
+      setMarketplaceItems(allMarketplaceItems.current.filter((item) => item.price > priceRange[0] && item.price < priceRange[1]))
     }
     }
  
@@ -59,34 +60,37 @@ export default function MarketplaceItems(props): React.ReactElement {
     
   }, [priceRange])
   useEffect(() => {
-    if (filterBy === 1){
-      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
-        {
+    
+    if (Number(filterBy) === 1){
+      console.log(filterBy)
+      let resno = allMarketplaceItems.current.sort((a, b) => {
+          
           if (a.type === 'orderSell' && b.type === 'orderSell'){
-            return parseInt(a.price) > parseInt(b.price) ? 1: -1
+            return Number(a.price) - Number(b.price)
           } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
-            return parseInt(a.currentBid) > parseInt(b.price) ? 1: -1
+            return Number(a.currentBid) - Number(b.price)
           } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
-            return parseInt(a.price) > parseInt(b.currentBid) ? 1: -1
+            return Number(a.price) - Number(b.currentBid)
           } else {
-            return parseInt(a.currentBid) > parseInt(b.currentBid) ? 1: -1
+            return Number(a.currentBid) - Number(b.currentBid)
           }
-        }
-      }))
-    } else if (filterBy === 2){
-      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+        
+      })
+      setMarketplaceItems(resno)
+    } else if (Number(filterBy) === 2){
+      setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
         if (a.type === 'orderSell' && b.type === 'orderSell'){
-          return parseInt(a.price) < parseInt(b.price) ? 1: -1
+          return Number(b.price) - Number(a.price)
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
-          return parseInt(a.currentBid) < parseInt(b.price) ? 1: -1
+          return Number(b.currentBid) - Number(a.price)
         } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
-          return parseInt(a.price) < parseInt(b.currentBid) ? 1: -1
+          return Number(b.price) - Number(a.currentBid)
         } else {
-          return parseInt(a.currentBid) < parseInt(b.currentBid) ? 1: -1
+          return Number(b.currentBid) - Number(a.currentBid)
         }
       }))
-    }else if (filterBy === 3){
-      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+    }else if (Number(filterBy) === 3){
+      setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
         if (a.type === 'orderSell' && b.type === 'orderSell'){
           return new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime() ? -1: 1
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
@@ -97,8 +101,8 @@ export default function MarketplaceItems(props): React.ReactElement {
           return new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? -1: 1
         }
       }))
-    }else if (filterBy === 4){
-      setMarketplaceItems(allMarketplaceItems.sort((a, b) => {
+    }else if (Number(filterBy) === 4){
+      setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
         if (a.type === 'orderSell' && b.type === 'orderSell'){
           return new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
@@ -120,12 +124,24 @@ export default function MarketplaceItems(props): React.ReactElement {
       await getMarketPlacePart();
     }
   }
+  //@ts-ignore
   useEffect(() => {
+    let cleanupFunction = false;
     (async () => {
-      await getMarketPlacePart();
+      const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
+      console.log(result)
+      let auction = result.data
+      auction = auction.filter((item) => item.location === 'marketplace' || item.status === 'soldOut')
+      allMarketplaceItems.current = auction
+      console.log(allMarketplaceItems)
+      if(!cleanupFunction) setMarketplaceItems(auction);
     })();
+    return () => cleanupFunction = true;
   }, []);
+  console.log(filterBy)
+  console.log(marketplaceItems)
   return (
+    
     <div className="marketplace__items">
       {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;

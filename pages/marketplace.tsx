@@ -15,6 +15,8 @@ import MarketplaceItems from '../components/global/MarketplaceItems';
 
 import type * as Types from '../types/index.d';
 import * as utils from '../utils';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 
@@ -87,31 +89,25 @@ function Marketplace(props): React.ReactElement {
               <Button style={{backgroundColor: 'transparent', width: '170px', height: '57px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Price range
       </Button> 
-                <StyledSelect
-                  variant="outlined"
-                  value={filterBy}
-                  onChange={(e: any) => {
-                    setFilterBy(e.target.value);
-                  }}
-                  options={[
-                    {
-                      value: 1,
-                      text: `Highest price`,
-                    },
-                    {
-                      value: 2,
-                      text: `Lowest price`,
-                    },
-                    {
-                      value: 3,
-                      text: `Popular`,
-                    },
-                    {
-                      value: 4,
-                      text: `Newest`,
-                    },
-                  ]}
-                />
+      <Select
+        title='Filter'
+        labelId="search-filter"
+        value={filterBy}
+        //@ts-ignore
+        onChange={(e) => setFilterBy(e.target.value)}>
+            <MenuItem key={`Select-Highestprice`}  value='1'>
+              <p dangerouslySetInnerHTML={{__html: 'Highest price'}} />
+            </MenuItem>
+            <MenuItem key={`Select-LowestPrice`}  value='2'>
+              <p dangerouslySetInnerHTML={{__html: 'Lowest price'}} />
+            </MenuItem>
+            <MenuItem key={`Select-Newest`}  value='3'>
+              <p dangerouslySetInnerHTML={{__html: 'Newest'}} />
+            </MenuItem>
+            <MenuItem key={`Select-Popular`}  value='4'>
+              <p dangerouslySetInnerHTML={{__html: 'Popular'}} />
+            </MenuItem>
+      </Select>
                       <Popover
         id={id}
         open={open}

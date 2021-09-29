@@ -228,7 +228,7 @@ function handleDrag(tag, currPos, newPos) {
                 const pure = event.data.slice(2)
                 const sth = pure.substring(0, 63)
                 console.log(parseInt(sth))
-                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active'})
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid}`})
   router.push(`/product/${res.data._id}`)
                  
 
@@ -266,7 +266,7 @@ function handleDrag(tag, currPos, newPos) {
                 const pure = event.data.slice(2)
                 const sth = pure.substring(0, 63)
                 console.log(parseInt(sth))
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(sth), location: 'marketplace', status: 'active'})
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.price}`})
  router.push(`/product/${res.data._id}`)
                         
 

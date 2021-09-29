@@ -100,7 +100,7 @@ export default function CheckoutModal(props): React.ReactElement {
 		    }
 		)
 	}
-  const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id})
+  const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price}`})
   handleClose()
     }
     

@@ -7,6 +7,8 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import connectMetaMask from './metamask'
 import cookie from 'js-cookie'
+import { getAllBidHistory, getAllTokenHistory } from '../../utils/blockchain';
+
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -44,17 +46,40 @@ interface PlaceBidModalProps {
  * @returns
  */
 export default function PlaceBidModal(props): React.ReactElement {
-  const { app, open, data, handleClose} = props;
+  const { app, open, data, handleClose, bids, groupedBids} = props;
   const { lang } = app;
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   let bidIndex
   let subevent
+  const [myBid, setMyBid] = useState({value: 0})
+  const [myValue, setMyValue] = useState(0)
   // @ts-ignore
   let NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS)// @ts-ignore
 let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
 // @ts-ignore
 let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)// @ts-ignore
 let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRESS)
+useEffect(() => {
+/*   if(open){
+    const trademe = async () => {
+      let bidHistory = await getAllBidHistory(data.tokenId)
+      console.log(bidHistory)
+    }
+    trademe()
+  } */
+  console.log(bids)
+  for (const item of bids) {
+    if (item.user.wallet === cookie.get('wallet')){
+      setMyBid(item)
+    }
+  }
+  for (const item of groupedBids) {
+    if (item.user.wallet === cookie.get('wallet')){
+      setMyValue(item.value)
+    }
+  }
+}, [open])
+
 
   const [bid, setBid] = useState(0)
   const classes = useStyles();
@@ -126,6 +151,7 @@ let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRE
 	console.log('walletAddress: ', walletAddress)
 	console.log('web3: ', web3)
     let fee = await getGasFee(gasFee.createBidAuction)
+    console.log(fee, value)
     let txData = TIMEDAUCTION.methods.createBidAuction(NFT_ADDRESS, tokenId, auctionIndex).encodeABI()
     if(!wallet){
       alert('you have to connect cryptowallet')
@@ -162,20 +188,17 @@ let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRE
       document.querySelector('.open_connect').click();
       handleClose()
     } else {
-          if (cookie.get('update')){
-      await updateBidAuction(data.tokenId, data.orderIndex, cookie.get('bidIndex'), bid)
+      //@ts-ignore
+      if (myBid.user){
+        //@ts-ignore
+        await updateBidAuction(data.tokenId, data.orderIndex, myBid.bidIndex, bid)
+      } else {
+        await createBidAuction(data.tokenId, data.orderIndex, bid)
+      }
       
-    } else {
-      await createBidAuction(data.tokenId, data.orderIndex, bid)
-    }
     }
 
     
-    console.log(bidIndex)
-    cookie.set('bidIndex', bidIndex)
-    cookie.set('bid', bid)
-    cookie.set('update', true)
-    await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/bid', {bidIndex, id: data._id, userId: cookie.get('id'), price: bid})
     handleClose()
   }
   return (
@@ -216,12 +239,16 @@ let SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRE
         </div>
 
         <div className="bid-form__calc">
+        <div className="form__calc-item">
+            <div className="calc-item__title">Bidding balance</div>
+            <div className="calc-item__value">{myValue} ETH</div>
+          </div>
           <div className="form__calc-item">
             <div className="calc-item__title">Service free</div>
             <div className="calc-item__value">2.5 %</div>
           </div>
           <div className="form__calc-item">
-            <div className="calc-item__title">Current Bid</div>
+            <div className="calc-item__title">Min Bid</div>
             <div className="calc-item__value">{data.currentBid} ETH</div>
           </div>
         </div>

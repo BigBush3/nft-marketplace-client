@@ -19,8 +19,11 @@ import Web3 from 'web3';
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
-import { getTokenOwnHistory, getAllTokenHistory } from '../../utils/blockchain';
+import { getTokenOwnHistory, getAllTokenHistory, getAllBidHistory } from '../../utils/blockchain';
 import WideHistory from '../../components/global/WideHistory'
+import { CircularProgress } from '@material-ui/core';
+import connectMetaMask from '../../components/global/metamask'
+import moment from 'moment'
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -38,6 +41,7 @@ import {
 	ULR_INFURA_WEBSOCKET, 
 	EVENTS_TOPICS
 } from '../../config/default.json'
+import Link from 'next/link';
 
 
 
@@ -50,27 +54,57 @@ interface ProductProps {
  * @param props
  * @returns
  */
+interface iMaxBid {
+  user: any;
+  value: any;
+}
 function Product({app, data}): React.ReactElement {
   const { lang } = app;
   const [item, setItem] = useState();
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
+  const [historySpinner, setHistorySpinner] = useState(false)
   const [openBid, setOpenBid] = useState(false)
   const [openHistory, setOpenHistory] = useState(false)
   const [openShare, setOpenShare] = useState(false)
   const [historyItem, setHistoryItem] = useState([])
   const [wideHistory, setWideHistory] = useState([])
+  const [maxBid, setMaxBid] = useState<iMaxBid>()
+  const [openBids, setOpenBids] = useState(false)
+  const [bids, setBids] = useState([])
+  const [groupedBids, setGrouped] = useState([])
+  const subscription = (contractAddress, topic)=>{
+    console.log('start subscription')
+    console.log('contractAddress: ', contractAddress)
+    console.log('topic: ', topic)
+    return web3.eth.subscribe('logs', {
+        address: contractAddress,
+        topics: [topic]
+    })
+  } 
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
-
+  //@ts-ignore
+  let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
+  let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
 
   useEffect(() => {
     console.log(data.owner._id, cookie.get('id'))
-   setItem(data)
-   axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
+    setItem(data)
+    const beach = async () => {
+      await getBids()
+    }
+    beach()
+    axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
   }, []);
+  useEffect(() => {
+    const beach = async () => {
+      await getMaxBid()
+    }
+    beach()
+  }, [bids])
   const handleClose = () => {
     console.log('somethinghappens')
     setOpenBid(false);
@@ -103,14 +137,134 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       setTimeLeft(calculateTimeLeft());
     }, 1000);
   });
+  const getMaxBid = async () => {
+    let grouped = Array.from(
+      bids.reduce(
+          (m, { user, value }) => m.set( user, (m.get(user) || 0) + Number(value)),
+          new Map
+      ).entries(),
+      ([user, value]) => ({ user, value })
+  );
+      grouped = grouped.sort((a,b) => {
+        return b.value - a.value
+      })
+      setGrouped(grouped)
+      setMaxBid(grouped[0])
+
+  }
+  const getBids = async () => {
+    const allBidHistory = await getAllBidHistory(data.tokenId)
+    if (allBidHistory){
+      let users = []
+      let clearBids = []
+      for (const item of allBidHistory) {
+        users.push(item.returnValues.user.toLowerCase())
+        clearBids.push({event: item.event, bidIndex: item.returnValues.bidIndex, user: item.returnValues.user.toLowerCase(), tokenId: item.returnValues.tokenId, value: Web3.utils.fromWei(String(item.returnValues.value), 'ether', ), time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
+      }
+      const resBids = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: users})
+      for(let i = 0; i < clearBids.length; i++){
+        for(let j = 0; j < resBids.data.result.length; j++){
+            if (resBids.data.result[j].wallet === clearBids[i].user){
+              clearBids[i].user = resBids.data.result[j]
+            }
+          
+        }
+      }
+      clearBids = clearBids.sort((a,b) => {
+        return b.time - a.time
+      })
+      setBids(clearBids)
+    }
+  }
+  const bidHandler = async () => {
+    if (openHistory){
+      setOpenHistory(false)
+    }
+    if (!openBids){
+    setHistorySpinner(true)
+    await getBids()
+    setHistorySpinner(false)
+    }
+    setOpenBids(!openBids)
+    
+  }
+  const getGasFee = async(gasLimit)=>{
+    let result = 0
+    await NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{
+      console.log(`gasFee - ${res}`)
+      result = res
+    })
+    return result;
+  }
   
+  const gasFee = {
+    createAuction: 180100,
+    createOrderSell: 159100,
+    returnFreeBalance: 58100,
+  
+    createBidAuction: 216400,
+    updateBidAuction: 76700,
+    finishAuction: 144800,
+    cancelAuction: 59700,
+  
+    buyOrder :136500,
+      cancelOrderSell :63100,
+      createBidMarket : 219800,
+      realizeBid : 140500,
+      cancelBid :58500
+  }
+  const finishAuction = async (tokenId, auctionIndex)=> {
+    const metamask = await connectMetaMask()
+    const walletAddress = metamask.userAddress
+    const wallet = metamask.web3
+    let fee = await getGasFee(gasFee.finishAuction)
+    let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, tokenId, auctionIndex).encodeABI()
+    if(!wallet){
+      alert('you have to connect cryptowallet')
+    } else {
+      wallet.eth.sendTransaction({
+              to: TIMEDAUCTION_ADDRESS,
+              from: walletAddress,
+              value: web3.utils.toWei(String(fee/1e18)),
+              data: txData
+          },
+          function(error, res){
+              console.log(error);
+              console.log(res);
+          }
+      )		
+    }
+    fee = await getGasFee(gasFee.returnFreeBalance)
+    txData = NFTSTORE.methods.returnFreeBalance().encodeABI()
+/*     if(!wallet){
+      alert('you have to connect cryptowallet')
+    } else {
+      wallet.eth.sendTransaction({
+              to: NFTSTORE_ADDRESS,
+              from: walletAddress,
+              value: web3.utils.toWei(String(fee/1e18)),
+              data: txData
+          },
+          function(error, res){
+              console.log(error);
+              console.log(res);
+              subscription(EVENTS_TOPICS.CREATE_ORDER)
+          }
+      )		
+    } */
+    await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
+  }
   const historyHandler = async () => {
+    if (openBids){
+      setOpenBids(false)
+    }
+    setHistorySpinner(true)
     let oneList = []
     let fullHistory = []
     let clearList = []
     if (!openHistory){
     const allTokenHistory = await getAllTokenHistory(data.tokenId)
-
+      console.log(allTokenHistory)
     for (const item of allTokenHistory) {
       if (item.event === 'Create'){
         oneList.push(item.returnValues.creator.toLowerCase())
@@ -122,14 +276,24 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       } else if(item.event === 'Deal'){
         oneList.push(item.returnValues.addressFrom.toLowerCase())
         oneList.push(item.returnValues.addressTo.toLowerCase())
-        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'bought', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
+        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'Purchased for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
+      } else if(item.event === 'AuctionOrder'){
+        oneList.push(item.returnValues.seller.toLowerCase())
+        clearList.push({user: item.returnValues.seller.toLowerCase(), event: 'Auctioned for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.minValue), 'ether')})
+      } else if(item.event === 'AuctionBid'){
+        oneList.push(item.returnValues.user.toLowerCase())
+        clearList.push({user: item.returnValues.user.toLowerCase(), event: 'Bid', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.value), 'ether')})
+      } else if(item.event === "UpdateBidAuction"){
+        oneList.push(item.returnValues.user.toLowerCase())
+        clearList.push({user: item.returnValues.user.toLowerCase(), event: 'Bid', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.value), 'ether')})
+      
       }
     }
     const yourmom = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: oneList})
     setWideHistory(allTokenHistory)
     for(let i = 0; i < clearList.length; i++){
       for(let j = 0; j < yourmom.data.result.length; j++){
-        if (clearList[i].event === 'bought'){
+        if (clearList[i].event === 'Purchased for'){
           console.log(yourmom.data.result[j].wallet)
           if (yourmom.data.result[j].wallet === clearList[i].userFrom){
             clearList[i].userFrom = yourmom.data.result[j]
@@ -144,17 +308,20 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       }
     }
     clearList = clearList.sort((a, b) => {
-      if (a.time > b.time){
+      if (a.time < b.time){
         return 1
       }
       return -1
     })
+    
     setWideHistory(clearList)
     }
-
+    setHistorySpinner(false)
     setOpenHistory(!openHistory)
   }
+  const endHandler = async () => {
 
+  }
   const ownerHandler = async () => {
     if (!open){
 const el = []
@@ -223,8 +390,8 @@ const el = []
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> : 
-                   <button className='fill buy'><span>Завершить Аукцион</span></button>] 
-                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> :  <button className='fill buy' onClick={() => setOpenModal(true)}><span>Сделать ставку</span></button>]}
+                   <button className='fill buy' onClick={endHandler}><span>Завершить Аукцион</span></button>] 
+                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> :  <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>Сделать ставку</span></button>]}
                   
                 </div>
               </div>
@@ -275,35 +442,73 @@ const el = []
               </p>
             </div>
             <div className="author__buttons button">
-            <button className='fill buy' onClick={async () => {await historyHandler()}}><span>история ставок</span></button>
+            <button className='fill buy' onClick={async () => {await historyHandler()}}><span>история токена</span></button>
+            {data.type === 'timedAuction' ? <button className='fill buy' onClick={async () => {await bidHandler()}}><span>история ставок</span></button> : null}
             </div>
+            {historySpinner && <CircularProgress/>}
             {openHistory ? [wideHistory.map((item, index, array) => {
+              console.log(item)
               return (
-                <div>
-                  {item.event}
+                <div style={{display: 'flex', marginTop: '15px'}}>
+                  <div className='history_img' style={{marginRight:'10px'}}>
+                    <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.event === 'Purchased for' ? [item.userTo?.imgUrl ? item.userTo.imgUrl : '/img/avatar_0.png'] : [item.user?.imgUrl ? item.user.imgUrl : '/img/avatar_0.png']} alt="/img/avatar_0.png" />
+                    </Link>
+                    
+                  </div>
+                  <div>
+                      <div>
+                        {item.event === 'Minted by' ? <p>{item.event + ' ' + item.user?.name}</p> : <p>{`${item.event} ${item.price} ETH`}</p>}
+                        
+                      </div>
+                      <div>
+                        {item.event === 'Minted by' ? <p>{moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}</p> : <p>by {item.event === 'Purchased for' ? <Link href={`/cabinet/${item.userTo?._id}`}>{item.userTo?.name}</Link> : <Link href={`/cabinet/${item.user?._id}`}>{item.user?.name}</Link>}, {moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}</p>}
+                      </div>
+                  </div>
                 </div>
               )
             })] : null}
+            {
+              openBids ? [bids.map((item, index, array) => {
+                return (
+                  <div style={{display: 'flex', marginTop: '15px'}}>
+                    <div className='history_img' style={{marginRight:'10px'}}>
+                      <Link href={`/cabinet/${item.user?._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.user?.imgUrl !== '' ? item.user?.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
+                      </Link>
+                      
+                    </div>
+                    <div>
+                        <div>
+                          <p>{`Bid ${item.value} ETH`}</p>
+                          
+                        </div>
+                        <div>
+                          <p>by <Link href={`/cabinet/${item.user?._id}`}>{item.user.name}</Link>, {moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}</p>
+                        </div>
+                    </div>
+                  </div>
+                )
+              })]: null
+            }
             <div className="author__sale">
               <span>{data.royalty}%</span> of sales will go to creator
             </div>
-{/*               {data.type === 'orderSell' ? null :  <div className="author__bid">
+{    maxBid ?          <div className="author__bid">
               <div className="author__bid-img">
-                <img src={data.owner.imgUrl} alt="img" />
+                <Link href={`/cabinet/${maxBid.user._id}`}><img style={{width: '75px', height:'75px', borderRadius: '50%', cursor: 'pointer'}} src={maxBid.user.imgUrl || 'unknown'} alt="img" /></Link>
               </div>
               <div className="author__bid-cover">
                 <div className="author__bid-title">
-                  Highest bid by <span>{data.owner.name}</span>
+                  Highest bid by <span>{maxBid.user.name}</span>
                 </div>
                 <div className="author__bid-value">
-                  <span className="eth">{data.currentBid} ETH</span>
+                  <span className="eth">{maxBid.value} ETH</span>
                 </div>
               </div>
             </div>
-          }    */}   
+           : null   }   
             </aside>
         </div>
-        <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose}/>
+        <PlaceBidModal app={app} open={openBid} data={data} handleClose={handleClose} bids={bids} groupedBids={groupedBids}/>
         <CheckoutModal app={app} data={data} open={openModal} handleClose={handleCloseCheckout}/>
         <ShareModal app={app} data={data} open={openShare} handleClose={handleCloseShare}/>
         <Footer {...app} />

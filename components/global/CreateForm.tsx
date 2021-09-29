@@ -80,6 +80,7 @@ const {register, handleSubmit} = useForm()
   const endDateCheckInfoRef = useRef();
   const [createLoader, setCreateLoader] = useState(false)
   const [approveLoader, setApproveLoader] = useState(false)
+  const [sellLoader, setSellLoader] = useState(false)
   const [fileCopy, setFileCopy] = useState(null)
   const [file, setFile] = useState(null)
   const [pdfCopy, setPdfCopy] = useState(null)
@@ -261,6 +262,7 @@ function handleDrag(tag, currPos, newPos) {
   const something = await NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
     console.log(`tokenID of URI ${ipfsHash} - ${res}`)
   })
+  setSellLoader(true)
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
@@ -282,11 +284,11 @@ function handleDrag(tag, currPos, newPos) {
               subEvent.on('data', async event => {
                 console.log(event)
                  if (createMany){
-                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, amount: data.amount})
-/*   router.push(`/product/${res.data.resClient._id}`) */
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+  router.push(`/product/${res.data.resClient._id}`)
                  } else {
-                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate})
-     /*              router.push(`/product/${res.data.resClient._id}`) */
+                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(event.data), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+                 router.push(`/product/${res.data.resClient._id}`) 
                  }
 
 
@@ -321,10 +323,10 @@ function handleDrag(tag, currPos, newPos) {
               console.log(parseInt(sth))
                         if (createMany){
                           
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount})
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
  router.push(`/product/${res.data.resClient._id}`)
                         } else {
-                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth)})
+                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
   router.push(`/product/${res.data.resClient._id}`) 
                         }
 
@@ -482,6 +484,12 @@ function handleDrag(tag, currPos, newPos) {
             </div>
             <div>
               {approveLoader ? <CircularProgress /> : <DoneIcon/>}
+            </div>
+            <div>
+              <h2>Выкладка токена на площадку</h2>
+            </div>
+            <div>
+              {sellLoader ? <CircularProgress/> : <DoneIcon/>}
             </div>
             
 

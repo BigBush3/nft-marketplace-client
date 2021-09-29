@@ -1043,6 +1043,12 @@ export const getAllTokenHistory = async(_tokenId)=>{
 		
 	return sortEvents(result)
 }
+export const getAllBidHistory = async(_tokenId) => {
+	const bids = await getAllTokenAuctionBids(_tokenId)
+	const updateBids = await getUpdatedBidByToken(_tokenId)
+	let bidHistory = bids.concat(updateBids)
+	return sortEvents(bidHistory)
+}
 
 const sortEvents = (events)=>{
 	

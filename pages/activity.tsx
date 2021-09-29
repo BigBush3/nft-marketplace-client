@@ -38,7 +38,7 @@ function Activity(props): React.ReactElement {
         <div className="prescription">
             <p style={{color: 'gray', marginTop: '15px', textAlign: 'center'}}>System will update every 5 minutes</p>
         </div>
-        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto'}}>
+        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column'}}>
             {actions.map((item) => {
                 console.log(item)
                 return (
