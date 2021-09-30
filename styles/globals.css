@@ -1907,7 +1907,6 @@ textarea {
 }
 
 .products__item.round .products__item-img .item-img__cover {
-  border-radius: 50%;
   height: auto;
 }
 
@@ -2897,13 +2896,13 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px;
-  width: 170px;
+  height: 45px;
+  width: 150px;
   background: rgb(93,152,226);
   background: linear-gradient(90deg, rgba(93,152,226,1) 15%, rgba(6,219,150,1) 76%);
 
   color: white;
-  border-radius: 20px;
+  border-radius: 16px;
 }
 
 .settings__form-item label.active {
@@ -3826,8 +3825,8 @@ textarea {
 }
 
 .popup .bid-form__item input {
-  width: 114px;
-  height: 50px;
+  width: 100px;
+  height: 45px;
   border: none;
   -webkit-box-shadow: 0px 10px 21px 0px rgba(0, 0, 0, 0.16);
   box-shadow: 0px 10px 21px 0px rgba(0, 0, 0, 0.16);

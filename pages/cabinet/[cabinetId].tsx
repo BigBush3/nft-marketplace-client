@@ -17,8 +17,12 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import Theme from '../../components/Theme';
 import * as clipboard from "clipboard-polyfill/text";
+import Modal from '@material-ui/core/Modal';
 import Snackbar from '@material-ui/core/Snackbar';
+import connectMetaMask from '../../components/global/metamask'
 import { getItems } from '../../utils/data';
+
+
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -36,6 +40,7 @@ import {
 	ULR_INFURA_WEBSOCKET, 
 	EVENTS_TOPICS
 } from '../../config/default.json'
+import moment from 'moment';
 
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
@@ -69,12 +74,17 @@ function Cabinet(props): React.ReactElement {
   const [show, setShow] = useState<boolean>(false);
   const [sub, setSub] = useState(false)
   const [open, setOpen] = useState(false)
+  const [openBids, setOpenBids] = useState(false)
   const [followers, setFollowers] = useState(data.followers)
   const [followings, setFollowings] = useState(data.followings)
   const [openSnack, setOpenSnack] = React.useState(false);
+  const [bidHistory, setBidHistory] = useState([])
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)
+  const handleCloseBids = () => {
+    setOpenBids(false)
+  }
   const handleClose = (event, reason) => {
     setOpenSnack(false);
   };
@@ -86,7 +96,54 @@ function Cabinet(props): React.ReactElement {
       return web3.eth.getBlockNumber()
     }
   }
-
+  //@ts-ignore
+  let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
+  const gasFee = {
+    createAuction: 180100,
+    createOrderSell: 159100,
+    returnFreeBalance: 58100,
+  
+    createBidAuction: 216400,
+    updateBidAuction: 76700,
+    finishAuction: 144800,
+    cancelAuction: 59700,
+  
+    buyOrder :136500,
+      cancelOrderSell :63100,
+      createBidMarket : 219800,
+      realizeBid : 140500,
+      cancelBid :58500
+  }
+  const getGasFee = async(gasLimit)=>{
+    let result = 0
+    await NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{
+      console.log(`gasFee - ${res}`)
+      result = res
+    })
+    return result;
+  }
+  const returnFreeBalance = async ()=> {
+    const metamask = await connectMetaMask()
+    const walletAddress = metamask.userAddress
+    const wallet = metamask.web3
+    let fee = await getGasFee(gasFee.returnFreeBalance)
+    let txData = NFTSTORE.methods.returnFreeBalance().encodeABI()
+    if(!wallet){
+      alert('you have to connect cryptowallet')
+    } else {
+      wallet.eth.sendTransaction({
+              to: NFTSTORE_ADDRESS,
+              from: walletAddress,
+              value: web3.utils.toWei(String(fee/1e18)),
+              data: txData
+          },
+          function(error, res){
+              console.log(error);
+              console.log(res);
+          }
+      )		
+    }
+  }
 const getUpdatedBidByToken = async(userAddress)=>{
 	let res
 	await TIMEDAUCTION.getPastEvents(
@@ -118,7 +175,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
       }, 
       (err, events) => {
         if(events!=null){
-          console.log("AuctionBids", events)
           res = events
         }
       })
@@ -158,9 +214,34 @@ const getUpdatedBidByToken = async(userAddress)=>{
     
   }
   const asHandler = async() => {
-    const history = await getAllUserAuctionBids(cookie.get('wallet'))
+    setOpenBids(true)
+    let clearHistory = []
+    let tokenIds= []
+    let history = await getAllUserAuctionBids(cookie.get('wallet'))
     const secHistory = await getUpdatedBidByToken(cookie.get('wallet'))
-    console.log(history, secHistory)
+    history = [...history, ...secHistory]
+    for (const item of history) {
+      tokenIds.push(item.returnValues.tokenId)
+      clearHistory.push({nft: item.returnValues.tokenId, bid: web3.utils.fromWei(String(item.returnValues.value), 'ether'), time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
+    }
+    const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/nftHistory', {history: tokenIds})
+    for (let i = 0; i < clearHistory.length; i++) {
+      for (const item of finalHistory.data.result) {
+        console.log(item.tokenId, clearHistory[i].nft)
+        if (Number(clearHistory[i].nft) === Number(item.tokenId)){
+          clearHistory[i].nft = item
+        }
+      }
+      
+
+    }
+    clearHistory.sort((a, b) => {
+      return Number(a.time) - Number(b.time)
+    })
+    setBidHistory(clearHistory)
+  }
+  const returnBalance = async() => {
+
   }
   async function unSubscribeHandler(){
     setSub(false)
@@ -230,8 +311,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
             <a href="#" onClick={asHandler} className="btn btn_black fill">
               <span>{lang.cabinet.auctionBallance}</span>
             </a>
-            <a href="#" className="btn btn_black fill">
-              <span>{lang.cabinet.walletBallance}</span>
+            <a href="#" onClick={returnBalance} className="btn btn_black fill">
+              <span>Auction balanace</span>
             </a>
             {data.verified &&             <a href="/create" className="btn btn_black fill">
               <span>+ Create NFT</span>
@@ -386,6 +467,38 @@ const getUpdatedBidByToken = async(userAddress)=>{
         onClose={handleClose}
         message="Copied!"
       />
+          <Modal
+    open={openBids}
+    onClose={handleCloseBids}
+    aria-labelledby="simple-modal-title"
+    aria-describedby="simple-modal-description"
+  ><div className='popup'>
+      {bidHistory.map((item) => {
+        console.log(item)
+        return (
+          <div>
+            <div>
+              <img style={{width: '75px', height: '75px'}} src={item.nft.img} alt="" />
+            </div>
+            <div>
+              <div>
+                {item.nft.title} made bid {item.bid} ETH
+              </div>
+              <div>
+              {moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}
+              </div>
+            </div>
+            <div className='button'>
+                <button className='fill buy' onClick={() => {router.push(`/product/${item.nft._id}`)}}>
+                  <span>View item</span>
+                </button>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+</Modal>
+      
     </Theme>
   );
 }

@@ -220,7 +220,7 @@ useEffect(() => {
       <div className="popup__bid-form">
         <div className="bid-form__header">
           <div className="bid-form__item">
-            <input type="number" placeholder="Enter bid" onChange={(e) => setBid(Number(e.target.value))}/>
+            <input type="number" placeholder="Enter bid" style={{fontSize: '13px'}} onChange={(e) => setBid(Number(e.target.value))}/>
             <div className="bid-form__cover">
               <div className="info">
                 <div className="info">
@@ -229,11 +229,7 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <select ref={selectRef} className={classes.select}>
-                <option value={1}>ETH</option>
-                <option value={2}>ETH</option>
-                <option value={3}>ETH</option>
-              </select>
+              <h2>ETH</h2>
             </div>
           </div>
         </div>
@@ -252,7 +248,7 @@ useEffect(() => {
             <div className="calc-item__value">{data.currentBid} ETH</div>
           </div>
         </div>
-
+          {Number(bid) < data.currentBid && Number(bid) !== 0 ? <h2>Please bid more than min bid</h2>: null}
         <div className="popup__button button">
           <button className="fill" onClick={handleClick}>
             <span>{lang.placeBid}</span>
