@@ -472,17 +472,19 @@ const getUpdatedBidByToken = async(userAddress)=>{
     onClose={handleCloseBids}
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
-  ><div className='popup'>
+  ><div className='popup' style={{maxWidth: '720px'}}>
       {bidHistory.map((item) => {
         console.log(item)
-        return (
-          <div>
+        if (item){
+           return (
+          <div style={{display: 'flex', justifyContent: 'space-between', flex: '0 1 33%'}}>
+            
             <div>
               <img style={{width: '75px', height: '75px'}} src={item.nft.img} alt="" />
             </div>
             <div>
               <div>
-                {item.nft.title} made bid {item.bid} ETH
+                {item.nft.title} made bid {Math.round(item.bid * 10000) / 10000} ETH
               </div>
               <div>
               {moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}
@@ -495,6 +497,14 @@ const getUpdatedBidByToken = async(userAddress)=>{
             </div>
           </div>
         )
+        } else {
+          return (
+            <div>
+              Нет истории ставок
+            </div>
+          )
+        }
+       
       })}
     </div>
 </Modal>

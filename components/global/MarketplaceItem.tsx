@@ -102,8 +102,8 @@ setHistoryItem(el)
             <img src="/img/verified-gold.png" alt="mark" />
           </div>
         )}
-        {timeLeft.days === 0 ? <div className='timer_fill place_timer'><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
-        <div className='timer_fill place_timer'><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>}
+        {timeLeft.days === 0 ? <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'gray', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
+        <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'gray', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>}
       </div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">

@@ -4885,6 +4885,9 @@ input::-webkit-inner-spin-button {
 .create_inputs .create_input.w100 {
   width: 100%;
 }
+.create_slider{
+  width: 300px;
+}
 
 .btn_gray {
   background-color: #f4f4f4;

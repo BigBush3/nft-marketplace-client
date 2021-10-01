@@ -56,7 +56,7 @@ const SoldOutItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactEl
       </div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
-        <h1>Sold out</h1>
+        <h1 style={{fontWeight: 'bold', color: 'red'}}>Sold out</h1>
         {/* <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>
         </div> */}

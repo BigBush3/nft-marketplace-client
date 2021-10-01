@@ -6,6 +6,8 @@ import cookie from 'js-cookie'
 import connectMetaMask from './metamask'
 import axios from 'axios'
 import Modal from '@material-ui/core/Modal';
+import { CircularProgress } from '@material-ui/core';
+
 import {
 	NFT_ABI, 
 	NFT_ADDRESS, 
@@ -38,6 +40,7 @@ export default function CheckoutModal(props): React.ReactElement {
   const { app, data, open, handleClose } = props;
   const [openm ,setOpenm] = useState(open)
   const { lang } = app;
+  const [proceed, setProceed] = useState(false)
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
 // @ts-ignore
   const NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
@@ -52,7 +55,7 @@ export default function CheckoutModal(props): React.ReactElement {
     return result;
   }
   const showFee = (price) => {
-    return (<p>{String(parseInt(price)/1e18*1+(954800000000000/1e18))}</p>)
+    return (<p>{String(Math.round((parseInt(price)/1e18*1+(954800000000000/1e18)) * 100000000) / 100000000)}</p>)
   }
   const getOrder = async (tokenId, orderIndex) => {
     let result
@@ -70,7 +73,8 @@ export default function CheckoutModal(props): React.ReactElement {
       document.querySelector('.open_connect').click();
       handleClose()
     } else {
-    let metamask = await connectMetaMask()
+  setProceed(true)
+  let metamask = await connectMetaMask()
 	let walletAddress = metamask.userAddress
 	let wallet = metamask.web3
 	console.log('metamask connected')
@@ -100,7 +104,13 @@ export default function CheckoutModal(props): React.ReactElement {
 		    }
 		)
 	}
-  const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price}`})
+  try{
+      const result = await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data.tokenId, action: `${cookie.get('name')} bought it for ${data.price}`})
+
+  } catch(err){
+    console.log(err.message)
+  }
+  setProceed(false)
   handleClose()
     }
     
@@ -113,6 +123,7 @@ export default function CheckoutModal(props): React.ReactElement {
     aria-describedby="simple-modal-description"
   >
     <div className="popup__checkout popup">
+       <div>
       <div className="popup__heading heading">
         <h3>Checkout</h3>
       </div>
@@ -147,16 +158,21 @@ export default function CheckoutModal(props): React.ReactElement {
             <div className="calc-item__value">{showFee(data.price)} ETH</div>
           </div>
         </div>
-
-        <div className="popup__button button">
+        {proceed ? <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <CircularProgress/>
+      </div>: <div className="popup__button button">
           <button className="fill" onClick={handleClick}>
             <span>Proceed to payment</span>
           </button>
           <a href="#" className="cancel" onClick={handleClose}>
             <span>Cancel</span>
           </a>
-        </div>
+        </div>}
+        
       </div>
+        </div>
+
+      
     </div>
     </Modal>
   );

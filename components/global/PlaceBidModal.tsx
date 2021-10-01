@@ -7,6 +7,7 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import connectMetaMask from './metamask'
 import cookie from 'js-cookie'
+import { CircularProgress } from '@material-ui/core';
 import { getAllBidHistory, getAllTokenHistory } from '../../utils/blockchain';
 
 import {
@@ -48,6 +49,7 @@ interface PlaceBidModalProps {
 export default function PlaceBidModal(props): React.ReactElement {
   const { app, open, data, handleClose, bids, groupedBids} = props;
   const { lang } = app;
+  const [proceed, setProceed] = useState(false)
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   let bidIndex
   let subevent
@@ -249,11 +251,12 @@ useEffect(() => {
           </div>
         </div>
           {Number(bid) < data.currentBid && Number(bid) !== 0 ? <h2>Please bid more than min bid</h2>: null}
+          {proceed ? <CircularProgress/>: 
         <div className="popup__button button">
           <button className="fill" onClick={handleClick}>
             <span>{lang.placeBid}</span>
           </button>
-        </div>
+        </div>}
       </div>
     </div>
     </Modal>

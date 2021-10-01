@@ -16,6 +16,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import router from 'next/router';
 import connectMetaMask from './metamask'
 import { makeStyles } from '@material-ui/core/styles';
+import Slider from '@material-ui/core/Slider';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import TextField from '@material-ui/core/TextField';
@@ -75,6 +76,7 @@ const TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRES
 const SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRESS)
 const {register, handleSubmit} = useForm()
   const auctionCheckInfoRef = useRef();
+  const [royalty, setRoyalty] = useState()
   const [open, setOpen] = React.useState(false);
   const fixPayCheckInfoRef = useRef();
   const endDateCheckInfoRef = useRef();
@@ -92,6 +94,9 @@ const {register, handleSubmit} = useForm()
     setTag(
      tags.filter((tag, index) => index !== i),
     );
+}
+const handleRoyalty = (e, newValue) => {
+  setRoyalty(newValue)
 }
 function handleAddition(tag) {
   setTag([...tags, tag]);
@@ -129,6 +134,24 @@ function handleDrag(tag, currPos, newPos) {
     setOpen(false);
   };
   useEffect(() => {
+    if (fixPayChecked){
+      $(auctionCheckInfoRef.current).slideUp();
+      $(fixPayCheckInfoRef.current).slideDown();
+      setAuctionChecked(false)
+    } else {
+      $(fixPayCheckInfoRef.current).slideUp();
+    }
+  }, [fixPayChecked])
+  useEffect(() => {
+    if (auctionChecked){
+      $(auctionCheckInfoRef.current).slideDown();
+      $(fixPayCheckInfoRef.current).slideUp();
+      setFixPayChecked(false)
+    } else {
+      $(auctionCheckInfoRef.current).slideUp();
+    }
+  }, [auctionChecked])
+  /* useEffect(() => {
     utils.$.setStylesDatepicker();
     // Выдвижения нужных полей
     // для аукциона
@@ -136,10 +159,6 @@ function handleDrag(tag, currPos, newPos) {
       $(auctionCheckInfoRef.current).slideUp();
     } else {
       $(auctionCheckInfoRef.current).slideDown();
-      if (fixPayChecked){
-        setFixPayChecked(false)
-        
-      }
     }
     // при фиксированной продаже
     if (!fixPayChecked) {
@@ -147,10 +166,7 @@ function handleDrag(tag, currPos, newPos) {
 
     } else {
       $(fixPayCheckInfoRef.current).slideDown(); 
-      if (auctionChecked){
-        setAuctionChecked(false)
-        
-      }
+
     }
     // при установке даты окончания
     if (!endDateChecked) {
@@ -158,7 +174,7 @@ function handleDrag(tag, currPos, newPos) {
     } else {
       $(endDateCheckInfoRef.current).slideDown(200);
     }
-  }, [auctionChecked, fixPayChecked, endDateChecked]);
+  }, [auctionChecked, fixPayChecked, endDateChecked]); */
   const isOwner = async (address) => {
     NFTSTORE.methods.admins(address).call({}, (err, res)=>{
       console.log(`it's owners address ${address} - ${res}`)
@@ -232,8 +248,8 @@ function handleDrag(tag, currPos, newPos) {
     const ipfsHash = response.data.result.IpfsHash
     const ipfsPdfHash = resPdf.data.result.IpfsHash
     console.log(ipfsHash)
-    console.log(data.dateRange)
-    let txData = NFT.methods.create(1, data.royalty, ipfsHash, ipfsPdfHash).encodeABI()
+    console.log(data)
+    let txData = NFT.methods.create(1, royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
         from: walletAddress,
@@ -286,10 +302,10 @@ function handleDrag(tag, currPos, newPos) {
                 const pure = event.data.slice(2)
                 const sth = pure.substring(0, 63)
                  if (createMany){
-                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+                     const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
   router.push(`/product/${res.data.resClient._id}`)
                  } else {
-                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+                  const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
                  router.push(`/product/${res.data.resClient._id}`) 
                  }
 
@@ -325,10 +341,10 @@ function handleDrag(tag, currPos, newPos) {
               console.log(parseInt(sth))
                         if (createMany){
                           
-                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
+                            const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
  router.push(`/product/${res.data.resClient._id}`)
                         } else {
-                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: data.royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
+                          const res = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
   router.push(`/product/${res.data.resClient._id}`) 
                         }
 
@@ -450,10 +466,14 @@ function handleDrag(tag, currPos, newPos) {
       </label>
       <div>{pdf ? pdf.name: null}</div>
       <div className="create_inputs">
-        <div className="create_input">
+        <div className="create_slider">
           <span>{lang.roalty}:</span>
-          <input type="number" name='royalty' {...register("royalty")} required/>
-          <span className="icon icon-persent" />
+{/*           <input type="number" name='royalty' {...register("royalty")} required/> */}
+<div style={{display: 'flex'}}>
+                <Slider value={royalty} onChange={handleRoyalty} defaultValue={25} step={5} min={0} max={50} aria-label="Temperature" valueLabelDisplay="auto"/>
+          <span className="icon icon-persent" style={{display: 'block'}}/>
+</div>
+
         </div>
         {createMany && (
           <div className="create_input">
@@ -488,7 +508,7 @@ function handleDrag(tag, currPos, newPos) {
               {approveLoader ? <CircularProgress /> : <DoneIcon/>}
             </div>
             <div>
-              <h2>Выкладка токена на площадку</h2>
+              <h2>Публикация токена</h2>
             </div>
             <div>
               {sellLoader ? <CircularProgress/> : <DoneIcon/>}

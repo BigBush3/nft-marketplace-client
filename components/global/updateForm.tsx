@@ -127,36 +127,23 @@ function handleDrag(tag, currPos, newPos) {
     setOpen(false);
   };
   useEffect(() => {
-    utils.$.setStylesDatepicker();
-    // Выдвижения нужных полей
-    // для аукциона
-    if (!auctionChecked) {
+    if (fixPayChecked){
       $(auctionCheckInfoRef.current).slideUp();
+      $(fixPayCheckInfoRef.current).slideDown();
+      setAuctionChecked(false)
     } else {
-      $(auctionCheckInfoRef.current).slideDown();
-      if (fixPayChecked){
-        setFixPayChecked(false)
-        
-      }
-    }
-    // при фиксированной продаже
-    if (!fixPayChecked) {
       $(fixPayCheckInfoRef.current).slideUp();
-
-    } else {
-      $(fixPayCheckInfoRef.current).slideDown(); 
-      if (auctionChecked){
-        setAuctionChecked(false)
-        
-      }
     }
-    // при установке даты окончания
-    if (!endDateChecked) {
-      $(endDateCheckInfoRef.current).slideUp(200);
+  }, [fixPayChecked])
+  useEffect(() => {
+    if (auctionChecked){
+      $(auctionCheckInfoRef.current).slideDown();
+      $(fixPayCheckInfoRef.current).slideUp();
+      setFixPayChecked(false)
     } else {
-      $(endDateCheckInfoRef.current).slideDown(200);
+      $(auctionCheckInfoRef.current).slideUp();
     }
-  }, [auctionChecked, fixPayChecked, endDateChecked]);
+  }, [auctionChecked])
   const isOwner = async (address) => {
     NFT.methods.admins(address).call({}, (err, res)=>{
       console.log(`it's owners address ${address} - ${res}`)
@@ -181,6 +168,8 @@ function handleDrag(tag, currPos, newPos) {
   }
   
   const onSubmit = async (data) => {
+    setOpen(true)
+    setApproveLoader(true)
     const price = data.price * 1e18
     const metamask = await connectMetaMask()
     const subscription = (contractAddress, topic)=>{
@@ -206,6 +195,8 @@ function handleDrag(tag, currPos, newPos) {
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
 );
+  setApproveLoader(false)
+  setCreateLoader(true)
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
@@ -375,16 +366,16 @@ function handleDrag(tag, currPos, newPos) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div>
-              <h2>Создание токена</h2>
-            </div>
-            <div>
-              {createLoader ? <CircularProgress /> : <DoneIcon/>}
-            </div>
-            <div>
               <h2>Approve токена</h2>
             </div>
             <div>
               {approveLoader ? <CircularProgress /> : <DoneIcon/>}
+            </div>
+            <div>
+              <h2>Публикация токена</h2>
+            </div>
+            <div>
+              {createLoader ? <CircularProgress /> : <DoneIcon/>}
             </div>
             
 

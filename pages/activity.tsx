@@ -12,6 +12,7 @@ import Theme from '../components/Theme';
 import Header from '../components/global/Header';
 import Link from 'next/link'
 import moment from 'moment'
+import router from 'next/router';
 
 interface AboutProps {
   data: Types.Article[];
@@ -38,13 +39,13 @@ function Activity(props): React.ReactElement {
         <div className="prescription">
             <p style={{color: 'gray', marginTop: '15px', textAlign: 'center'}}>System will update every 5 minutes</p>
         </div>
-        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column'}}>
-            {actions.map((item) => {
-                console.log(item)
+        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column', alignItems: 'center'}}>
+            {actions.map((item, index, array) => {
+              console.log(item)
                 return (
-                    <div className='action_item'>
+                    <div className='action_item' key={index}>
                         <div className='img_crop' style={{marginRight: '20px'}}>
-                            <img className='picture_square' src={item.nft.img} alt="" />
+                            <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
                         </div>
                         <div>
                             <p>{item.action}</p>
@@ -54,8 +55,10 @@ function Activity(props): React.ReactElement {
                                 <span>{moment(item.creationDate).fromNow()}</span>
                             </div>
                             <hr/>
+                            
                             <div className='sad_pepe button' style={{marginTop: '20px'}}>
-                              <button className='fill'><span>View item</span></button>
+                              <button className='fill' onClick={() => {router.push(`/product/${item._id}`)}}><span>View item</span></button>
+                             
                             </div>
                             
 

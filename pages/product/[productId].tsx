@@ -58,7 +58,7 @@ interface iMaxBid {
   user: any;
   value: any;
 }
-function Product({app, data}): React.ReactElement {
+function Product({app, data, user}): React.ReactElement {
   const { lang } = app;
   const [item, setItem] = useState();
   const [open, setOpen] = useState<boolean>(false);
@@ -91,7 +91,7 @@ function Product({app, data}): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    console.log(data.owner._id, cookie.get('id'))
+    console.log(user)
     setItem(data)
     const beach = async () => {
       await getBids()
@@ -234,10 +234,12 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
           }
       )		
     }
-    fee = await getGasFee(gasFee.returnFreeBalance)
-    txData = NFTSTORE.methods.returnFreeBalance().encodeABI()
+    
 /*  */
-    await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
+    if (maxBid.user){
+          await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
+
+    }
   }
   const historyHandler = async () => {
     if (openBids){
@@ -386,8 +388,8 @@ const el = []
           <aside className="aside author">
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
-              <div className="author__img" onClick={() => router.push(`/cabinet/${data.owner._id}`)}>
-                <img src={data.owner.imgUrl} alt="img" />
+              <div className="author__img" onClick={() => router.push(`/cabinet/${user ? user._id : data.owner._id}`)}>
+                <img src={user ? user.imgUrl : data.owner.imgUrl} alt="img" />
               </div>
               <div className="author__cover">
                 <div className="author__status">
@@ -409,7 +411,7 @@ const el = []
                     </div>
                   </div>
                 </div>
-                <div className="author__name">{data.owner.name}</div>
+                <div className="author__name">{user ? user.name : data.owner.name}</div>
                 <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
               </div>
             </div>
@@ -420,8 +422,8 @@ const el = []
               <span style={{display: 'flex'}}>Collection name: {data.collect}</span>
               <hr />
               <div></div>
-              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1>: [timeLeft.days === 0 ? <div className='timer_fill'><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
-        <div className='timer_fill'><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>]]}
+              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>Аукцион закончился</h1>: [timeLeft.days === 0 ? <div className='timer_fill' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'gray', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
+        <div className='timer_fill' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'gray', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>]]}
               
               <p>
                 {data.description}
@@ -505,8 +507,16 @@ const el = []
 }
 
 Product.getInitialProps = async ({req, res, query}) => {
+  let clear = []
   const response = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/${query.productId}`)
+  const history = await getTokenOwnHistory(response.data.tokenId)
+  if (history[0]){
+      clear.push(history[0].returnValues.addressFrom.toLowerCase())
+  const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: clear})
+  return {data: response.data, user: finalHistory[0]}}
   return {data: response.data}
+
+
 }
 
 export default Product;
