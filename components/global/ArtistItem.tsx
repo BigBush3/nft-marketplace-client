@@ -12,7 +12,6 @@ export default function ArtistItem(props): React.ReactElement {
   const { name, nfts } = props;
   const lR = useRef<any>();
   const [active, setActive] = useState<boolean>(false);
-  console.log(props)
   return (
     <li
       className={clsx('artist__item', active && 'active')}

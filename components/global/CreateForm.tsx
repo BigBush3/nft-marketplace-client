@@ -400,7 +400,7 @@ function handleDrag(tag, currPos, newPos) {
 
           <div className="create_input">
             <span>{lang.auction.startDate}:</span>
-            <TextField id="datetime-local" className={classes.textField}         InputLabelProps={{
+            <TextField style={{'fontWeight': 'lighter'}} id="datetime-local" className={classes.textField}         InputLabelProps={{
           shrink: true,
         }}
         type="datetime-local" {...register('startDate')}/>
@@ -411,7 +411,7 @@ function handleDrag(tag, currPos, newPos) {
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
             <div ref={auctionCheckInfoRef}>
-            <TextField id="datetime-local"
+            <TextField style={{'fontWeight': 'lighter'}} id="datetime-local"
         type="datetime-local" {...register('endDate')}/>
 {/*               <span className="icon icon-calendar" /> */}
             </div>
@@ -445,7 +445,8 @@ function handleDrag(tag, currPos, newPos) {
                     handleDelete={handleDelete}
                     handleAddition={handleAddition}
                     handleDrag={handleDrag}
-                    delimiters={delimiters} />
+                    delimiters={delimiters}
+                    placeholder='' />
         {/* <span className="icon icon-sharp" /> */}
 {/*        </div>  */}
       <div className="create_input">

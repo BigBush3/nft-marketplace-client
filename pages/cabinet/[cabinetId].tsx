@@ -41,6 +41,7 @@ import {
 	EVENTS_TOPICS
 } from '../../config/default.json'
 import moment from 'moment';
+import Link from 'next/link';
 
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
@@ -183,7 +184,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
-    }, 2000);
+    }, 500);
     $(document).on('click', '.cabinet_top_user_link', () => {
       const e = $(this),
         val = e.text(),
@@ -472,28 +473,24 @@ const getUpdatedBidByToken = async(userAddress)=>{
     onClose={handleCloseBids}
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
-  ><div className='popup' style={{maxWidth: '720px'}}>
+  ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
+    <div>
       {bidHistory.map((item) => {
         console.log(item)
         if (item){
            return (
-          <div style={{display: 'flex', justifyContent: 'space-between', flex: '0 1 33%'}}>
+          <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
             <div>
-              <img style={{width: '75px', height: '75px'}} src={item.nft.img} alt="" />
+              <img style={{width: '55px', height: '55px', borderRadius: '50%', paddingRight: '10px'}} src={item.nft.img} alt="" />
             </div>
-            <div>
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', fontSize: '12px'}}>
               <div>
-                {item.nft.title} made bid {Math.round(item.bid * 10000) / 10000} ETH
+                <Link href={`/product/${item.nft._id}`}>{item.nft.title}</Link> made bid {Math.round(item.bid * 10000) / 10000} ETH
               </div>
               <div>
               {moment.unix(item.time).format("MM/DD/YYYY, HH:mm")}
               </div>
-            </div>
-            <div className='button'>
-                <button className='fill buy' onClick={() => {router.push(`/product/${item.nft._id}`)}}>
-                  <span>View item</span>
-                </button>
             </div>
           </div>
         )
@@ -506,6 +503,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
         }
        
       })}
+    </div>
+      
     </div>
 </Modal>
       

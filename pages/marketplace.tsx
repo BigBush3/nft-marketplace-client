@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
@@ -29,12 +29,13 @@ function Marketplace(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
   const { lang } = app;
-  const [filterBy, setFilterBy] = useState<number>(1);
+  const [filterBy, setFilterBy] = useState('');
+  const ref = useRef()
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [fromEth, setFromEth] = useState(null)
-  const [toEth, setToEth] = useState(null)
+  const [fromEth, setFromEth] = useState(undefined)
+  const [toEth, setToEth] = useState(undefined)
   const [open, setOpen] = useState(false)
   const [priceList, setPriceList] = useState([0, 0])
 
@@ -86,7 +87,7 @@ function Marketplace(props): React.ReactElement {
           <main className="main marketplace">
             <div className="main__top">
               <div className="heading__sort main__sort">
-              <Button style={{backgroundColor: 'transparent', width: '170px', height: '57px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+              <Button style={{backgroundColor: 'transparent', width: '140px', height: '50px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Price range
       </Button> 
       <Select
@@ -125,16 +126,16 @@ function Marketplace(props): React.ReactElement {
         <div>
           <div style={{display: 'flex', marginTop: '20px', marginLeft: '15px', marginRight: '15px', marginBottom: '30px'}}>
             <div style={{marginRight:'10px'}}>
-              <TextField style={{width: '130px', height: '30px'}} type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
+              <TextField style={{width: '100px', height: '10px'}} type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
             </div>
             <div>
-              <TextField style={{width: '130px', height: '30px'}} type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
+              <TextField style={{width: '100px', height: '10px'}} type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
             </div>
           </div>
           <hr/>
           <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
             <div className='button'>
-            <button  style={{width: '100px', height: '40px'}} onClick={priceHandler}>
+            <button  style={{width: '100px', height: '40px'}} onClick={clickHandler}>
              <span>Clear</span>
               </button>
             </div>
