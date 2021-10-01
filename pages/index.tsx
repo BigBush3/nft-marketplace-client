@@ -128,7 +128,7 @@ function Home(props): React.ReactElement {
 }
 
 Home.getInitialProps = async ({req, res}) => {
-  const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/banner')
+  const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/banner')
   return {
     data: {
       banners: result.data,

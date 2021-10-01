@@ -44,11 +44,11 @@ function Token({app, data}): React.ReactElement {
 
   useEffect(() => {
    setItem(data)
-   /* axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id}) */
+   /* axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/views", {product: data._id}) */
   }, []);
   
   const historyHandler = async () => {
-    const responseHistory = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/history/${router.query.productId}`)
+    const responseHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history/${router.query.productId}`)
     console.log(responseHistory)
     console.log('something')
     if (openHistory){
@@ -167,7 +167,7 @@ function Token({app, data}): React.ReactElement {
 }
 
 Token.getInitialProps = async ({req, res, query}) => {
-  const response = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/${query.productId}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
   return {data: response.data}
 }
 

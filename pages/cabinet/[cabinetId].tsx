@@ -210,7 +210,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
          setSub(true)
     setFollowers(followers.push({name: cookie.get('name'), imgUrl: cookie.get('imgUrl'), _id: cookie.get('id')}))
     try {
-      await axios.post('https://desolate-inlet-76011.herokuapp.com/user/follow', {id: cookie.get('id'), user: router.query})
+      await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/follow', {id: cookie.get('id'), user: router.query})
     } catch (err) {
       console.log(err.message)
     }
@@ -233,7 +233,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
       tokenIds.push(item.returnValues.tokenId)
       clearHistory.push({nft: item.returnValues.tokenId, bid: web3.utils.fromWei(String(item.returnValues.value), 'ether'), time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
     }
-    const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/nftHistory', {history: tokenIds})
+    const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/nftHistory', {history: tokenIds})
     for (let i = 0; i < clearHistory.length; i++) {
       for (const item of finalHistory.data.result) {
         console.log(item.tokenId, clearHistory[i].nft)
@@ -258,7 +258,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
     const index = followers.indexOf(cookie.get('id'))
     setFollowers(followers.splice(index, 1))
     try {
-      await axios.post('https://desolate-inlet-76011.herokuapp.com/user/unfollow', {id:cookie.get('id'), user: router.query})
+      await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/unfollow', {id:cookie.get('id'), user: router.query})
     } catch (err) {
       console.log(err.message)
     }
@@ -528,7 +528,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
 }
 
 Cabinet.getInitialProps = async ({query}) => {
-  const response = await axios.get(`https://desolate-inlet-76011.herokuapp.com/user/${query.cabinetId}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${query.cabinetId}`)
   return {data: response.data}
 };
 

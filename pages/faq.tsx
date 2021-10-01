@@ -46,7 +46,7 @@ function FAQ(props: FAQProps): React.ReactElement {
   const onSubmit = async (data) => {
     setLoader(true)
     try {
-      const result = await axios.post('https://desolate-inlet-76011.herokuapp.com/question', {...data})
+      const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/question', {...data})
       console.log(result)
     } catch(err){
       console.log(err.message)

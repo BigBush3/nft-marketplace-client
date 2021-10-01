@@ -21,7 +21,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
   useEffect(() => {
     (async () => {
       if (artistList.length === 0) {
-        const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/artists')
+        const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/artists')
         setArtistList(result.data);
       }
     })();

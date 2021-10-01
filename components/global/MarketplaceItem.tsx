@@ -53,7 +53,7 @@ for (let i = 0; i < resHistory.length; i++) {
 el.push(resHistory[i].returnValues.addressTo.toLowerCase())
 
 }
-const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
 setHistoryItem(finalHistory.data.result)
 } else {
 console.log(data.owner)

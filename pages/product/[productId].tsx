@@ -97,7 +97,7 @@ function Product({app, data, user}): React.ReactElement {
       await getBids()
     }
     beach()
-    axios.post("https://desolate-inlet-76011.herokuapp.com/nft/views", {product: data._id})
+    axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/views", {product: data._id})
   }, []);
   useEffect(() => {
     const beach = async () => {
@@ -161,7 +161,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
         users.push(item.returnValues.user.toLowerCase())
         clearBids.push({event: item.event, bidIndex: item.returnValues.bidIndex, user: item.returnValues.user.toLowerCase(), tokenId: item.returnValues.tokenId, value: Web3.utils.fromWei(String(item.returnValues.value), 'ether', ), time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
       }
-      const resBids = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: users})
+      const resBids = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: users})
       for(let i = 0; i < clearBids.length; i++){
         for(let j = 0; j < resBids.data.result.length; j++){
             if (resBids.data.result[j].wallet === clearBids[i].user){
@@ -237,7 +237,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     
 /*  */
     if (maxBid.user){
-          await axios.post("https://desolate-inlet-76011.herokuapp.com/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
+          await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
 
     }
   }
@@ -276,7 +276,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       
       }
     }
-    const yourmom = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: oneList})
+    const yourmom = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: oneList})
     setWideHistory(allTokenHistory)
     for(let i = 0; i < clearList.length; i++){
       for(let j = 0; j < yourmom.data.result.length; j++){
@@ -320,7 +320,7 @@ const el = []
       el.push(resHistory[i].returnValues.addressTo.toLowerCase())
       
     }
-    const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: el})
+    const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
     setHistoryItem(finalHistory.data.result)
     } else {
       console.log(data.owner)
@@ -508,11 +508,11 @@ const el = []
 
 Product.getInitialProps = async ({req, res, query}) => {
   let clear = []
-  const response = await axios.get(`https://desolate-inlet-76011.herokuapp.com/nft/${query.productId}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
   const history = await getTokenOwnHistory(response.data.tokenId)
   if (history[0]){
       clear.push(history[0].returnValues.addressFrom.toLowerCase())
-  const finalHistory = await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/history', {history: clear})
+  const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: clear})
   return {data: response.data, user: finalHistory[0]}}
   return {data: response.data}
 

@@ -25,7 +25,7 @@ export default function Likes(props): React.ReactElement {
       role="button"
       onClick={async () => {
         if (cookie.get('id')){
-                  await axios.post('https://desolate-inlet-76011.herokuapp.com/nft/likes', {status: !like, product: product})
+                  await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/likes', {status: !like, product: product})
         setLike(!like);
         setNewLikes(like ? newLikes - 1 : newLikes + 1);
         } else {

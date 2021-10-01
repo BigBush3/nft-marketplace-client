@@ -28,7 +28,7 @@ export default function MarketplaceItems(props): React.ReactElement {
   const allMarketplaceItems = useRef([])
   const [state, setState] = useState({});
 /*   async function getMarketPlacePart(): Promise<void> {
-    const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
+    const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft'); 
     let auction = result.data
     auction = auction.filter((item) => item.location === 'marketplace' || item.status === 'soldOut')
     allMarketplaceItems.current = auction
@@ -119,7 +119,7 @@ export default function MarketplaceItems(props): React.ReactElement {
   //@ts-ignore
   useEffect(() => {
           (async () => {
-      const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft');
+      const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft');
       let auction = result.data
       auction = auction.filter((item) => item.location === 'marketplace' || item.status === 'soldOut')
       allMarketplaceItems.current = auction

@@ -29,7 +29,7 @@ export default function PopularItems(props: PopularItemsProps): React.ReactEleme
     }, 1000);
     (async () => {
       if (popularItems.length === 0) {
-        let popular = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft')
+        let popular = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         popular = popular.data.filter((item) => item.location !== 'collection')
         // @ts-ignore
         // @ts-ignore

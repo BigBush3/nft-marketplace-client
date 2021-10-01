@@ -27,7 +27,7 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
     }, 1000); */
     (async () => {
       if (artistList.length === 0) {
-        let resFineart = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft')
+        let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         const fineartItems = resFineart.data.filter((item) => item.location === 'FineArt')
         setArtistList(fineartItems);
       }

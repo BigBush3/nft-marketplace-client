@@ -73,7 +73,7 @@ function Settings({app,}): React.ReactElement {
       body: formData
     }
 
-    await fetch('https://desolate-inlet-76011.herokuapp.com/file/upload', requestOptionsFile)
+    await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/file/upload', requestOptionsFile)
   .then(response => response.text())
   .then(imageUrl => cookie.set('imgUrl', imageUrl))
     }
@@ -86,7 +86,7 @@ function Settings({app,}): React.ReactElement {
         method: 'POST',
         body: headerData
       }
-      await fetch('https://desolate-inlet-76011.herokuapp.com/file/upload', headerOptionsFile)
+      await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/file/upload', headerOptionsFile)
       .then(response => response.text())
       .then(headerImageUrl => cookie.set('headerUrl', headerImageUrl))
     }
@@ -95,7 +95,7 @@ function Settings({app,}): React.ReactElement {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl'), headerUrl: cookie.get('headerUrl')})
     }
-    await fetch('https://desolate-inlet-76011.herokuapp.com/user/register', requestOptions)
+    await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/register', requestOptions)
     .then(response => response.json())
     .then(data => {
     console.log(data)

@@ -24,7 +24,7 @@ export default function Favorite(props): React.ReactElement {
       role="button"
       onClick={async () => {
         if (cookie.get('id')){
-                  await axios.post('https://desolate-inlet-76011.herokuapp.com/user/favorite', {status: !favorite, id: cookie.get('id'), product: product})
+                  await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/favorite', {status: !favorite, id: cookie.get('id'), product: product})
         setFavorite(!favorite);
         } else {
           // @ts-ignoreß

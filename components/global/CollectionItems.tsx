@@ -26,7 +26,7 @@ export default function CollectionItems(props): React.ReactElement {
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   const [allMarketplaceItems, setAllMarketplaceItems] = useState([])
   async function getMarketPlacePart(): Promise<void> {
-    const result = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft'); 
+    const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft'); 
     console.log(result)
     let auction = result.data
     auction = auction.filter((item) => item.location === 'marketplace')

@@ -74,7 +74,7 @@ function Activity(props): React.ReactElement {
 }
 
 Activity.getInitialProps = async ({req, res, query}) => {
-    const response = await axios.get('https://desolate-inlet-76011.herokuapp.com/nft/actions')
+    const response = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/actions')
     return {actions: response.data}
   }
   
