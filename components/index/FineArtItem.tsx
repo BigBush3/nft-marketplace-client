@@ -45,7 +45,7 @@ function FineArtItem(props): React.ReactElement {
       <div className="products__item-img">
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-            <img style={{ cursor: 'pointer' }} src={data.img} alt="img" />
+            <img style={{ cursor: 'pointer', borderRadius: '50%' }} src={data.img} alt="img" />
           </Link>
         </div>
         {mark && (
