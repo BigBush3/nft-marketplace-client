@@ -30,6 +30,7 @@ export default interface Language {
   bids: string;
   shareModalText: string
   auction: {
+    auctionEnded: string;
     title: string;
     firstBid: string;
     startDate: string;

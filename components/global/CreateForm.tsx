@@ -472,7 +472,7 @@ function handleDrag(tag, currPos, newPos) {
 {/*           <input type="number" name='royalty' {...register("royalty")} required/> */}
 <div style={{display: 'flex'}}>
                 <Slider value={royalty} onChange={handleRoyalty} defaultValue={25} step={5} min={0} max={50} aria-label="Temperature" valueLabelDisplay="auto"/>
-          <span className="icon icon-persent" style={{display: 'block'}}/>
+          <span className="icon icon-persent" style={{display: 'block', marginLeft: '10px'}}/>
 </div>
 
         </div>

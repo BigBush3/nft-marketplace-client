@@ -125,11 +125,11 @@ function Marketplace(props): React.ReactElement {
       >
         <div>
           <div style={{display: 'flex', marginTop: '20px', marginLeft: '15px', marginRight: '15px', marginBottom: '30px'}}>
-            <div style={{marginRight:'10px'}}>
-              <TextField style={{width: '100px', height: '10px'}} type="number" label="From ETH" variant="outlined" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
+            <div style={{marginRight:'10px', height: '10px'}}>
+              <TextField style={{width: 100, height: 10}} type="number" label="From ETH" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
             </div>
             <div>
-              <TextField style={{width: '100px', height: '10px'}} type="number" label="To ETH" variant="outlined" value={toEth} onChange={(e) => setToEth(e.target.value)}/>
+              <TextField style={{width: '100px', height: '10px'}} type="number" label="To ETH"  value={toEth} onChange={(e) => setToEth(e.target.value)}/>
             </div>
           </div>
           <hr/>

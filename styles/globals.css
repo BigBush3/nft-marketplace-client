@@ -262,7 +262,7 @@ textarea {
 }
 .auction_end {
   color: red;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .button .fill {
@@ -1764,7 +1764,7 @@ textarea {
 }
 
 .products__item-img .item-img__cover img {
-  width: 300px !important;
+  width: 250px !important;
   height: 250px !important;
   -o-object-fit: cover;
   object-fit: cover;
@@ -2742,17 +2742,13 @@ textarea {
   }
   .picture_square{
     margin-left: 27%;
-    height: 180px;
     width: 180px;
   }
   .sad_pepe{
     margin-top: 20px;
-
     font-size: 10px;
-    width: 100px;
-  }
-  .img_crop{
-    height: 200px;
+    display: flex;
+    justify-content: center;
   }
   .crop_text{
     margin-right: 15px;
@@ -4231,7 +4227,7 @@ textarea {
   font-weight: lighter !important;
 }
 .MuiInput-underline:before{
-  border-bottom: none !important;
+  border-bottom: none ;
 }
 
 .faq_chat {
@@ -4674,6 +4670,7 @@ input::-webkit-inner-spin-button {
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: 300;
+  font-size: 15px;
 }
 
 .create_form > .create_check {
@@ -8018,6 +8015,9 @@ a.ui-button:active,
     width: 40px;
   }
 
+  .MuiFormControl-root {
+    vertical-align:middle !important;
+  }
   .footer__logo {
     width: calc(20.833333333333336% - 31px);
   }
@@ -8050,6 +8050,9 @@ a.ui-button:active,
   }
   .MuiOutlinedInput-input {
     height: 10px !important;
+  }
+  .MuiOutlinedInput-root{
+    height: 50px !important;
   }
 
   .footer__subscribe-form {

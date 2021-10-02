@@ -42,7 +42,7 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
             <Link key={`GalleryItem-${key}`} href={`/product/${firstChild._id}`}>
               <a title={firstChild.title} href="?">
                 <div className="gallery__item">
-                  <img src={firstChild?.img} alt="img" />
+                  <img src={firstChild?.img} style={{width: '90px', height: '100px', borderRadius: '5px'}}alt="img" />
                 </div>
                 {firstChild?.mark && (
                   <div className="gallery__item-mark">

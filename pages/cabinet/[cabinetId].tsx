@@ -325,10 +325,10 @@ const getUpdatedBidByToken = async(userAddress)=>{
           {cookie.get('id') === data._id ?
           (<div className="cabinet_top_btns button">
             <a href="#" onClick={asHandler} className="btn btn_black fill">
-              <span>{lang.cabinet.auctionBallance}</span>
+              <span>History of bids</span>
             </a>
             <a href="#" onClick={returnBalance} className="btn btn_black fill">
-              <span>Auction balanace</span>
+              <span>Return balance</span>
             </a>
             {data.verified &&             <a href="/create" className="btn btn_black fill">
               <span>+ Create NFT</span>

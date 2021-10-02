@@ -29,6 +29,7 @@ const lang: Language = {
   bids: 'Ставки',
   shareModalText: 'Поделится этим NFT',
   auction: {
+    auctionEnded: 'Аукцион закончился',
     title: 'Аукцион',
     firstBid: 'Начальная ставка',
     startDate: 'Дата начала аукциона',

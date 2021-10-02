@@ -5,6 +5,7 @@ import type * as Types from '../../types/index.d';
 import OwnerDropdownItem from '../global/OwnerDropdownItem';
 import Likes from '../global/Likes';
 import Favorite from '../global/Favorite';
+import Link from 'next/link';
 
 interface FineArtItemProps {
   item: Types.ItemProps;
@@ -66,9 +67,10 @@ export default function FineArtItem(props): React.ReactElement {
         { type === 'timedAuction' ? <a href="#" className="rate btn_blank">
           <span>{lang.placeBid}</span>
         </a>:
-        <a href="#" className="buy fill btn_fill">
+        <a href={`/product/${_id}`} className="buy fill btn_fill">
           <span>{lang.buy}</span>
-        </a>}
+        </a>
+}
       </div>
     </div>
   );
