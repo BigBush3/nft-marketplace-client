@@ -73,9 +73,9 @@ function Settings({app,}): React.ReactElement {
       body: formData
     }
 
-    await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/file/upload', requestOptionsFile)
-  .then(response => response.text())
-  .then(imageUrl => cookie.set('imgUrl', imageUrl))
+    await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/upload', requestOptionsFile)
+  .then(response => response.json())
+  .then(imageUrl => cookie.set('imgUrl', imageUrl.result[0].location))
     }
     if (headerCopy){
       const headerData = new FormData();
@@ -86,9 +86,9 @@ function Settings({app,}): React.ReactElement {
         method: 'POST',
         body: headerData
       }
-      await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/file/upload', headerOptionsFile)
-      .then(response => response.text())
-      .then(headerImageUrl => cookie.set('headerUrl', headerImageUrl))
+      await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/upload', headerOptionsFile)
+      .then(response => response.json())
+      .then(headerImageUrl => cookie.set('headerUrl', headerImageUrl.result[0].location))
     }
     const requestOptions = {
       method: 'POST',

@@ -83,6 +83,8 @@ const lang: Language = {
     manyDesc: 'Если вы хотите продать NFT-токен <br />несколько раз',
   },
   cabinet: {
+    returnBalance: 'Вернуть ставку',
+    bidHistory: 'История ставок',
     auctionBallance: 'Баланс аукциона',
     walletBallance: 'Баланс кошелька',
     created: 'Созданные',

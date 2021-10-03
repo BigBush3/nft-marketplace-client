@@ -21,6 +21,7 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import TextField from '@material-ui/core/TextField';
 import { WithContext as ReactTags } from 'react-tag-input';
+import fs from 'fs'
 
 import {
 	NFT_ABI, 
@@ -76,10 +77,11 @@ const TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRES
 const SIMPLEAUCTION = new web3.eth.Contract(SIMPLEAUCTION_ABI, SIMPLEAUCTION_ADDRESS)
 const {register, handleSubmit} = useForm()
   const auctionCheckInfoRef = useRef();
-  const [royalty, setRoyalty] = useState()
+  const [royalty, setRoyalty] = useState(25)
   const [open, setOpen] = React.useState(false);
   const fixPayCheckInfoRef = useRef();
   const endDateCheckInfoRef = useRef();
+  const video = useRef(false)
   const [createLoader, setCreateLoader] = useState(false)
   const [approveLoader, setApproveLoader] = useState(false)
   const [sellLoader, setSellLoader] = useState(false)
@@ -151,38 +153,17 @@ function handleDrag(tag, currPos, newPos) {
       $(auctionCheckInfoRef.current).slideUp();
     }
   }, [auctionChecked])
-  /* useEffect(() => {
-    utils.$.setStylesDatepicker();
-    // Выдвижения нужных полей
-    // для аукциона
-    if (!auctionChecked) {
-      $(auctionCheckInfoRef.current).slideUp();
-    } else {
-      $(auctionCheckInfoRef.current).slideDown();
-    }
-    // при фиксированной продаже
-    if (!fixPayChecked) {
-      $(fixPayCheckInfoRef.current).slideUp();
-
-    } else {
-      $(fixPayCheckInfoRef.current).slideDown(); 
-
-    }
-    // при установке даты окончания
-    if (!endDateChecked) {
-      $(endDateCheckInfoRef.current).slideUp(200);
-    } else {
-      $(endDateCheckInfoRef.current).slideDown(200);
-    }
-  }, [auctionChecked, fixPayChecked, endDateChecked]); */
   const isOwner = async (address) => {
     NFTSTORE.methods.admins(address).call({}, (err, res)=>{
       console.log(`it's owners address ${address} - ${res}`)
     })
   }
   function handleChange(event){
-    console.log('hi!!!!')
     setFileCopy(event.target.files[0])
+    console.log(event.target.files[0])
+    if (event.target.files[0].type === 'video/mp4'){
+      video.current = true
+    }
     const img = URL.createObjectURL(event.target.files[0])
     setFile(img)
   }
@@ -242,13 +223,49 @@ function handleDrag(tag, currPos, newPos) {
       'file',
       pdf
     )
+    const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
 
-    const response = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/upload', formData)
-    const resPdf = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/upload', pdfData)
-    const ipfsHash = response.data.result.IpfsHash
-    const ipfsPdfHash = resPdf.data.result.IpfsHash
-    console.log(ipfsHash)
-    console.log(data)
+    //we gather a local file for this example, but any valid readStream source will work here.
+    let sheesh = new FormData();
+    sheesh.append('file', fileCopy);
+
+    //You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
+    //metadata is optional
+    const metadata = JSON.stringify({
+        name: 'testname',
+    });
+    sheesh.append('pinataMetadata', metadata);
+
+    //pinataOptions are optional
+    const pinataOptions = JSON.stringify({
+        cidVersion: 0,
+    });
+    sheesh.append('pinataOptions', pinataOptions);
+
+    const response =  await axios
+        .post(url, sheesh, {
+          //@ts-ignore
+            maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
+            headers: {
+              //@ts-ignore
+                'Content-Type': `multipart/form-data; boundary=${sheesh._boundary}`,
+                pinata_api_key: 'cb10e48b8d541b88d58a',
+                pinata_secret_api_key: '90cdc703305e1085e06dfb8062fc5958dcc0985fba2b1180c3cdb59cc67dd573'
+            }
+        })
+    const resPdf = await axios
+    .post(url, sheesh, {
+      //@ts-ignore
+        maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
+        headers: {
+          //@ts-ignore
+            'Content-Type': `multipart/form-data; boundary=${sheesh._boundary}`,
+            pinata_api_key: 'cb10e48b8d541b88d58a',
+            pinata_secret_api_key: '90cdc703305e1085e06dfb8062fc5958dcc0985fba2b1180c3cdb59cc67dd573'
+        }
+    })
+    const ipfsHash = response.data.IpfsHash
+    const ipfsPdfHash = resPdf.data.IpfsHash
     let txData = NFT.methods.create(1, royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,
@@ -302,10 +319,10 @@ function handleDrag(tag, currPos, newPos) {
                 const pure = event.data.slice(2)
                 const sth = pure.substring(0, 63)
                  if (createMany){
-                     const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+                     const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: [video.current ? 'video': 'image']})
   router.push(`/product/${res.data.resClient._id}`)
                  } else {
-                  const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid}`})
+                  const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: [video.current ? 'video': 'image']})
                  router.push(`/product/${res.data.resClient._id}`) 
                  }
 
@@ -341,10 +358,10 @@ function handleDrag(tag, currPos, newPos) {
               console.log(parseInt(sth))
                         if (createMany){
                           
-                            const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
+                            const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: [video.current ? 'video': 'image']})
  router.push(`/product/${res.data.resClient._id}`)
                         } else {
-                          const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'),hashtags: tags, img: response.data.url, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: resPdf.data.url, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price}`})
+                          const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: [video.current ? 'video': 'image']})
   router.push(`/product/${res.data.resClient._id}`) 
                         }
 
@@ -372,7 +389,8 @@ function handleDrag(tag, currPos, newPos) {
         <span>{lang.uploadFile}</span>
       </label>
       <span>{lang.fileFormats}</span>
-      {file ? <img src={file} alt="" /> : null}
+      {file ? [video.current ? <video src={file} width="450" height="300" controls>
+     </video>: <img src={file} alt="" />] : null}
       
 {/*       <label htmlFor="download_2" className="create_download_canvas icon icon-file">
         <input type="file" id="download_2" />
