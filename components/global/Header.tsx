@@ -173,6 +173,8 @@ function Header(props): React.ReactElement {
      * Прослушиватель нажатия на Метамаск
      */
     async function connectToMetamask() {
+      //@ts-ignore
+      document.querySelector('.header__burger').click();
       let accounts;
       const { ethereum }: any = window;
       // Если подключение к расширению браузера

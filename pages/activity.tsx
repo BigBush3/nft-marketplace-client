@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
 import Slider from 'react-slick';
@@ -23,6 +23,7 @@ interface AboutProps {
 function Activity(props): React.ReactElement {
   const { data, app, actions } = props;
   const { lang } = app;
+  const lastItemRef = useRef<any>();
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
@@ -42,9 +43,34 @@ function Activity(props): React.ReactElement {
         </div>
         <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column', alignItems: 'center'}}>
             {actions.map((item, index, array) => {
-              console.log(item)
                 return (
-                    <ActivityItem item={item} index={index} key={`PopularItem-${item._id}`}/>
+                  <div className='action_item' key={`fuck-you-${index}`}>
+                  <Link href={`/product/${item._id}`}><div className='img_crop' style={{marginRight: '20px'}}>
+                  
+                      <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
+                  </div>
+                  </Link>
+                  
+                  <div>
+                      <p>{item.action}</p>
+                      
+                  </div>
+                  <div className="crop_text" style={{width: '140px', marginLeft: '20px'}}>                            <div>
+                          <span>{moment(item.creationDate).fromNow()}</span>
+                      </div>
+                      <hr/>
+                      
+                      <div className='sad_pepe button' style={{marginTop: '20px'}}>
+                          <Link href={`/product/${item._id}`}>
+                              <a className='fill'><span>View item</span></a>
+                          </Link>
+                        
+                       
+                      </div>
+                      
+
+                  </div>
+              </div>
                 )
             })}
         </div>
