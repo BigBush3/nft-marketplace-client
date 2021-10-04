@@ -28,6 +28,10 @@ function Activity(props): React.ReactElement {
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
+  const routeHandler = (id) => {
+    //@ts-ignore
+    window.location.href = `/product/${id}`
+  }
   return (
     <Theme>
       <Header app={app} />
@@ -61,10 +65,9 @@ function Activity(props): React.ReactElement {
                       <hr/>
                       
                       <div className='sad_pepe button' style={{marginTop: '20px'}}>
-                          <Link href={`/product/${item._id}`}>
-                              <a className='fill'><span>View item</span></a>
-                          </Link>
-                        
+                         
+                              <button onClick={() => routeHandler(item._id)} className='fill'><span>View item</span></button>
+                                             
                        
                       </div>
                       
