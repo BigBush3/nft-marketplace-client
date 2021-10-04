@@ -72,7 +72,7 @@ function Cabinet(props): React.ReactElement {
   const router = useRouter()
   const { app, data } = props;
   const { lang } = app;
-  const [active, setActive] = useState<number>(0);
+  const [active, setActive] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
   const [sub, setSub] = useState(false)
   const [open, setOpen] = useState(false)

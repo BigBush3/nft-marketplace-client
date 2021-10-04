@@ -107,7 +107,7 @@ function Home(props): React.ReactElement {
               />
             </div>
           </div>
-          <PopularItems app={app} />
+          <PopularItems app={app} filterBy={filterBy}/>
         </section>
         {/** Секция Маркетплейс */}
         <section className="marketplace section">

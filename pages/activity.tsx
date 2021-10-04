@@ -13,6 +13,7 @@ import Header from '../components/global/Header';
 import Link from 'next/link'
 import moment from 'moment'
 import router from 'next/router';
+import ActivityItem from '../components/global/ActivityItem'
 
 interface AboutProps {
   data: Types.Article[];
@@ -43,27 +44,7 @@ function Activity(props): React.ReactElement {
             {actions.map((item, index, array) => {
               console.log(item)
                 return (
-                    <div className='action_item' key={index}>
-                        <div className='img_crop' style={{marginRight: '20px'}}>
-                            <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
-                        </div>
-                        <div>
-                            <p>{item.action}</p>
-                            
-                        </div>
-                        <div className="crop_text" style={{width: '140px', marginLeft: '20px'}}>                            <div>
-                                <span>{moment(item.creationDate).fromNow()}</span>
-                            </div>
-                            <hr/>
-                            
-                            <div className='sad_pepe button' style={{marginTop: '20px'}}>
-                              <button className='fill' onClick={() => {router.push(`/product/${item._id}`)}}><span>View item</span></button>
-                             
-                            </div>
-                            
-
-                        </div>
-                    </div>
+                    <ActivityItem item={item} index={index} key={`PopularItem-${item._id}`}/>
                 )
             })}
         </div>

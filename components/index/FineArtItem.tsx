@@ -6,6 +6,8 @@ import type * as Types from '../../types/index.d';
 import OwnerDropdownItem from '../global/OwnerDropdownItem';
 import Likes from '../global/Likes';
 import Favorite from '../global/Favorite';
+import axios from 'axios'
+import { getTokenOwnHistory } from '../../utils/blockchain';
 
 interface FineArtItemsProps {
   app?: Types.AppProps;
@@ -20,27 +22,46 @@ interface FineArtItemsProps {
  */
 function FineArtItem(props): React.ReactElement {
   const { app, data } = props;
-  const { mark, owners, _id, title, author, likeMe, price, views, file, favoriteMe, likes } = data;
+  const { mark, owners, _id, title, owner, likeMe, price, views, file, favoriteMe, likes } = data;
   const { lang } = app;
   const [open, setOpen] = useState<boolean>(false);
+  const [historyItem, setHistoryItem] = useState([])
+  const ownerHandler = async () => {
+    if (!open){
+    const el = []
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    if (resHistory[0]){
+      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+  for (let i = 0; i < resHistory.length; i++) {
+  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+  
+  }
+  const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+  setHistoryItem(finalHistory.data.result)
+  } else {
+  console.log(data.owner)
+  el.push(data.owner)
+  setHistoryItem(el)
+  }
+    }
+    setOpen(!open)
+  }
   return (
-    <div className="fineart__item products__item round">
+    <div className="fineart__item products__item round" style={{maxWidth: '250px'}}>
       <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
 
-{/*         <div className={clsx('item-info__dropdown', open && 'active')}>
-          {owners.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${id}_${index}`} {...owner} />;
-          })}
-        </div> */}
+        <div className={clsx('item-info__dropdown', open && 'active')}>
+        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+        </div>
       </div>
       <div className="products__item-img">
       <div className='products__item-type'>
@@ -58,7 +79,7 @@ function FineArtItem(props): React.ReactElement {
         )}
       </div>
       <div className="products__item-title">{title}</div>
-      <div className="products__item-name">{author}</div>
+      <div className="products__item-name">{owner.name}</div>
       <div className="products__item-stats">
         <div className="item-stats__views">
           <i className="flaticon-eye" /> <span>{views}</span>

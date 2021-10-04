@@ -71,7 +71,7 @@ setHistoryItem(finalHistory.data.result)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" controls autoPlay loop>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop>
      </video> : <img src={data.img} alt="img" />}
           </Link>
         </div>
@@ -92,7 +92,7 @@ setHistoryItem(finalHistory.data.result)
       </div>
       <div className="products__item-price">ETH {price ? price: currentBid}</div>
       <div className="products__item-buy">
-        <Link href={`/product/${_id}`}>{lang.buyBid}</Link>
+        <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
       </div>
     </div>
   );

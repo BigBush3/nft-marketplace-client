@@ -9,6 +9,7 @@ const { SLIDER_PRODUCTS_PART } = utils.c;
 
 interface PopularItemsProps {
   app?: Types.AppProps;
+  filterBy: any;
 }
 
 /**
@@ -17,10 +18,11 @@ interface PopularItemsProps {
  * @returns
  */
 export default function PopularItems(props: PopularItemsProps): React.ReactElement {
-  const { app } = props;
+  const { app, filterBy } = props;
   const sliderRef = useRef<any>();
   const [popularItems, setPopularItems] = useState<Types.ItemProps[]>([]);
   const settings = utils.$.sliderSettings;
+  const allPopularItems = useRef([])
   useEffect(() => {
     setTimeout(() => {
       if (sliderRef.current){
@@ -34,13 +36,17 @@ export default function PopularItems(props: PopularItemsProps): React.ReactEleme
         // @ts-ignore
         // @ts-ignore
         const sortedPopular = popular.sort(function (a, b) {
-          return b.currentBid - a.currentBid || a.likes - b.likes;
+          return b.likes - a.likes || a.views - b.views;
       });
       const _popularItems = sortedPopular.slice(0, 10);
+      allPopularItems.current = _popularItems
         setPopularItems(_popularItems);
       }
     })();
   }, [popularItems]);
+  useEffect(() => {
+
+  }, [filterBy])
   return (
     <Slider ref={sliderRef} {...settings} className="popular__items slider__products">
       {popularItems.map((item) => {
