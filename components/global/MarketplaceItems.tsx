@@ -26,7 +26,7 @@ export default function MarketplaceItems(props): React.ReactElement {
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   const allMarketplaceItems = useRef([])
-  const [state, setState] = useState({});
+  const [state, setState] = useState(false);
 /*   async function getMarketPlacePart(): Promise<void> {
     const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft'); 
     let auction = result.data
@@ -58,12 +58,7 @@ export default function MarketplaceItems(props): React.ReactElement {
   }, [priceRange])
   //@ts-ignore
   useEffect(() => {
-    let cleanUp = false
-    if (!cleanUp){
-      console.log('filtering...')
-    }
-    
-    if (Number(filterBy) === 1){
+    if (Number(filterBy) === 2){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
           
           if (a.type === 'orderSell' && b.type === 'orderSell'){
@@ -77,7 +72,7 @@ export default function MarketplaceItems(props): React.ReactElement {
           }
         
       }))
-    } else if (Number(filterBy) === 2){
+    } else if (Number(filterBy) === 1){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
         if (a.type === 'orderSell' && b.type === 'orderSell'){
           return Number(b.price) - Number(a.price)
@@ -114,8 +109,11 @@ export default function MarketplaceItems(props): React.ReactElement {
         }
       }))
     }
-    return () => cleanUp = true
+    setState(!state)
   }, [filterBy])
+  useEffect(() => {
+    console.log('hi')
+  }, [state])
   //@ts-ignore
   useEffect(() => {
           (async () => {

@@ -43,6 +43,9 @@ function FineArtItem(props): React.ReactElement {
         </div> */}
       </div>
       <div className="products__item-img">
+      <div className='products__item-type'>
+{data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
+        </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
             <img style={{ cursor: 'pointer', borderRadius: '50%' }} src={data.img} alt="img" />

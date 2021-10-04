@@ -83,7 +83,6 @@ const lang: Language = {
     manyDesc: 'If you want to sell the NFT token <br /> multiple times',
   },
   cabinet: {
-    createNFT: '+ Create NFT',
     bidHistory: 'History of bids',
     returnBalance: 'Return balance',
     auctionBallance: 'Auction Balance',

@@ -83,7 +83,6 @@ export default interface Language {
     manyDesc: string;
   };
   cabinet: {
-    createNFT: string;
     returnBalance: string;
     bidHistory: string;
     auctionBallance: string;

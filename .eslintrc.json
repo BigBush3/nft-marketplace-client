@@ -82,7 +82,8 @@
       "no-restricted-syntax": 0,
       "react/jsx-curly-brace-presence": 0,
       "prefer-template": 0,
-      "no-return-assign": 0
+      "no-return-assign": 0,
+      "jsx-a11y/media-has-caption": 0
     },
     "settings": {
       "import/resolver": {

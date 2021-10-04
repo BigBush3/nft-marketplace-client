@@ -31,7 +31,7 @@ function Marketplace(props): React.ReactElement {
   const { lang } = app;
   const [filterBy, setFilterBy] = useState('');
   const ref = useRef()
-  const [searchBy, setSearchBy] = useState('')
+  const [searchBy, setSearchBy] = useState(1)
   const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [fromEth, setFromEth] = useState(undefined)
