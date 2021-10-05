@@ -2800,6 +2800,11 @@ video{
     min-width: 100px !important;
     height: 42px !important;
   }
+  .makeStyles-select-1 {
+    margin-left: 115px !important;
+    min-width: 100px !important;
+    height: 42px !important;
+  }
 }
 
 .img_crop{

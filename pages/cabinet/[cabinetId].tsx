@@ -277,7 +277,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
     
   }
    function checkAvailability(arr, val) {
-    if (arr){
+    if (arr && arr != 1){
       console.log(arr)
           return arr.some(function(arrVal) {
       return val === arrVal._id;
@@ -444,7 +444,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
             {//@ts-ignore
-            followers ? [followers.map((item) => {
+            followers && followers !== 1 ? [followers?.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
