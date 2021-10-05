@@ -85,7 +85,8 @@
       "no-return-assign": 0,
       "jsx-a11y/media-has-caption": 0,
       "react/no-unused-prop-types": 0,
-      "import/first": 0
+      "import/first": 0,
+      "no-inner-declarations": 0
     },
     "settings": {
       "import/resolver": {
