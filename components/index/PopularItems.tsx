@@ -4,6 +4,7 @@ import PopularItem from './PopularItem';
 import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
+import moment from 'moment'
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
 
@@ -20,9 +21,18 @@ interface PopularItemsProps {
 export default function PopularItems(props: PopularItemsProps): React.ReactElement {
   const { app, filterBy } = props;
   const sliderRef = useRef<any>();
-  const [popularItems, setPopularItems] = useState<Types.ItemProps[]>([]);
+  const [popularItems, setPopularItems] = useState([]);
   const settings = utils.$.sliderSettings;
   const allPopularItems = useRef([])
+  const [state, setState] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (sliderRef.current){
+        sliderRef?.current.slickGoTo(0);
+      }
+    }, 1000);
+  }, [popularItems])
   useEffect(() => {
     setTimeout(() => {
       if (sliderRef.current){
@@ -30,23 +40,42 @@ export default function PopularItems(props: PopularItemsProps): React.ReactEleme
       }
     }, 1000);
     (async () => {
-      if (popularItems.length === 0) {
         let popular = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         popular = popular.data.filter((item) => item.location !== 'collection')
         // @ts-ignore
         // @ts-ignore
         const sortedPopular = popular.sort(function (a, b) {
-          return b.likes - a.likes || a.views - b.views;
+          return b.likes - a.likes || b.views - a.views;
       });
       const _popularItems = sortedPopular.slice(0, 10);
       allPopularItems.current = _popularItems
         setPopularItems(_popularItems);
-      }
     })();
-  }, [popularItems]);
-  useEffect(() => {
+  }, []);
+    //@ts-ignore
+    useEffect(() => {
+      if (Number(filterBy) === 1){
+        setPopularItems(allPopularItems.current.filter((a) => {
+            return moment(a.creationDate).isAfter(moment().subtract(1, 'day'))
+            
+          
+        }))
+      } else if (Number(filterBy) === 2){
+        setPopularItems(allPopularItems.current.filter((a) => {
+          return moment(a.creationDate).isAfter(moment().subtract(1, 'week'))
 
-  }, [filterBy])
+        }))
+      }else if (Number(filterBy) === 3){
+        setPopularItems(allPopularItems.current.filter((a) => {
+          return moment(a.creationDate).isAfter(moment().subtract(1, 'month'))
+
+        }))
+      }
+      setState(!state)
+    }, [filterBy])
+    useEffect(() => {
+      console.log('hi')
+    }, [state])
   return (
     <Slider ref={sliderRef} {...settings} className="popular__items slider__products">
       {popularItems.map((item) => {

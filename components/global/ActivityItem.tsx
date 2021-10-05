@@ -19,9 +19,10 @@ interface MarketplaceItem {
  */
 const ActivityItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactElement => {
   const { item, index } = props;
+
   return (
-    <div className='action_item'>
-                        <Link href={`/product/${item._id}`}><div className='img_crop' style={{marginRight: '20px'}}>
+    <div className='action_item' ref={ref}>
+                        <Link href={`/product/${item.nft._id}`}><div className='img_crop' style={{marginRight: '20px'}}>
                         
                             <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
                         </div>
@@ -37,9 +38,9 @@ const ActivityItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactE
                             <hr/>
                             
                             <div className='sad_pepe button' style={{marginTop: '20px'}}>
-                                <Link href={`/product/${item._id}`}>
-                                    <a className='fill'><span>View item</span></a>
+                                <Link href={`/product/${item.nft._id}`}><a className='fill'><span>View item</span></a>
                                 </Link>
+                                    
                               
                              
                             </div>

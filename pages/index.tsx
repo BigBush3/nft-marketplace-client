@@ -49,7 +49,7 @@ function Home(props): React.ReactElement {
 
   const classes = useStyles();
   console.log(app)
-  const [filterBy, setFilterBy] = useState<number>(1);
+  const [filterBy, setFilterBy] = useState('');
   useEffect(() => {
     const getHistory = async () => {
       const resHistory = await getTokenOwnHistory(1)

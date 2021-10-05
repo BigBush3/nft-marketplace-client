@@ -1651,6 +1651,7 @@ textarea {
 
 .products__item-info .item-info__icon i {
   font-size: 25px;
+  
   color: #1cc9cf;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1775,7 +1776,7 @@ textarea {
   height: 35px;
   position: absolute;
   left: 0%;
-  top: -14%;
+  top: -15%;
 }
 
 video{

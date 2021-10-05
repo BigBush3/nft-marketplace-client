@@ -8,6 +8,7 @@ import Banner from '../components/global/Banner';
 import ArtistsList from '../components/global/ArtistsList';
 import StyledSelect from '../components/UI/StyledSelect';
 import Popover from '@material-ui/core/Popover';
+import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -17,8 +18,36 @@ import type * as Types from '../types/index.d';
 import * as utils from '../utils';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles, styled } from '@material-ui/core/styles';
+
+const { CYAN_COLOR } = utils.c;
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
 
 
+const ExpandMoreRoundedIconStyled = styled(ExpandMoreRoundedIcon)({
+  color: CYAN_COLOR,
+});
+
+const useStyles = makeStyles((theme) => ({
+  select: {
+    color: theme.palette.primary.main,
+    minWidth: '150px',
+    marginRight: '1em',
+    fontFamily: 'OpenSans',
+    [theme.breakpoints.down('sm')]: {
+      minWidth: '20px',
+    },
+  },
+  option: {
+    '&:hover': {
+      color: theme.palette.primary.light,
+    },
+  },
+  svg: {
+    marginRight: '0.5em',
+    transform: 'rotate(90deg)',
+  },
+}));
 
 /**
  * Страница Marketplace
@@ -39,6 +68,7 @@ function Marketplace(props): React.ReactElement {
   const [open, setOpen] = useState(false)
   const [priceList, setPriceList] = useState([0, 0])
 
+  const classes = useStyles('outlined');
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true)
@@ -90,25 +120,31 @@ function Marketplace(props): React.ReactElement {
               <Button style={{backgroundColor: 'transparent', width: '140px', height: '50px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Price range
       </Button> 
-      <Select
-        title='Filter'
-        labelId="search-filter"
-        value={filterBy}
-        //@ts-ignore
-        onChange={(e) => setFilterBy(e.target.value)}>
-            <MenuItem key={`Select-Highestprice`}  value='1'>
-              <p dangerouslySetInnerHTML={{__html: 'Highest price'}} />
-            </MenuItem>
-            <MenuItem key={`Select-LowestPrice`}  value='2'>
-              <p dangerouslySetInnerHTML={{__html: 'Lowest price'}} />
-            </MenuItem>
-            <MenuItem key={`Select-Newest`}  value='3'>
-              <p dangerouslySetInnerHTML={{__html: 'Newest'}} />
-            </MenuItem>
-            <MenuItem key={`Select-Popular`}  value='4'>
-              <p dangerouslySetInnerHTML={{__html: 'Popular'}} />
-            </MenuItem>
-      </Select>
+      <StyledSelect
+                variant="outlined"
+                value={filterBy}
+                onChange={(e: any) => {
+                  setFilterBy(e.target.value);
+                }}
+                options={[
+                  {
+                    value: 1,
+                    text: "Highest price",
+                  },
+                  {
+                    value: 2,
+                    text: "Lowest price",
+                  },
+                  {
+                    value: 3,
+                    text: "Newest",
+                  },
+                  {
+                    value: 4,
+                    text: "Popular",
+                  }
+                ]}
+              />
                       <Popover
         id={id}
         open={open}

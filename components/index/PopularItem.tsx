@@ -27,7 +27,6 @@ function PopularItem(props): React.ReactElement {
   const { lang } = app;
   const [historyItem, setHistoryItem] = useState([])
   const [open, setOpen] = useState<boolean>(false);
-  console.log(data)
   const ownerHandler = async () => {
     if (!open){
     const el = []
@@ -41,7 +40,6 @@ for (let i = 0; i < resHistory.length; i++) {
 const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
 setHistoryItem(finalHistory.data.result)
 } else {
-  console.log(data.owner)
   el.push(data.owner)
   setHistoryItem(el)
 }
@@ -77,7 +75,7 @@ setHistoryItem(finalHistory.data.result)
         </div>
         {verified && (
           <div className="products__item-mark">
-            <img src="/img/mark.png" alt="mark" />
+            <img src="/img/verified-gold.png" alt="mark" />
           </div>
         )}
       </div>

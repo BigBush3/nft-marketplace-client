@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { GetServerSidePropsContext } from 'next';
 import Slider from 'react-slick';
@@ -14,24 +14,28 @@ import Link from 'next/link'
 import moment from 'moment'
 import router from 'next/router';
 import ActivityItem from '../components/global/ActivityItem'
+import { loadGetInitialProps } from 'next/dist/next-server/lib/utils';
+import MarketplaceItem from '../components/global/CollectionItem';
 
 interface AboutProps {
   data: Types.Article[];
   app?: Types.AppProps;
 }
+/**
+ * Страница создания нескольких екземпляров
+ * @param props
+ * @returns
+ */
 
 function Activity(props): React.ReactElement {
   const { data, app, actions } = props;
   const { lang } = app;
+
   const lastItemRef = useRef<any>();
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
-  const routeHandler = (id) => {
-    //@ts-ignore
-    window.location.href = `/product/${id}`
-  }
   return (
     <Theme>
       <Header app={app} />
@@ -47,9 +51,28 @@ function Activity(props): React.ReactElement {
         </div>
         <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column', alignItems: 'center'}}>
             {actions.map((item, index, array) => {
+              const lastRef = !array[index + 1] ? lastItemRef : undefined;
                 return (
-                  <div className='action_item' key={`fuck-you-${index}`}>
-                  <Link href={`/product/${item._id}`}><div className='img_crop' style={{marginRight: '20px'}}>
+                  <div className="marketplace__items">
+                    <ActivityItem
+                        ref={lastRef}
+                        app={app}
+                        index={index}
+                        key={`MarketplaceItem-${item._id}-${Math.random()}`}
+                        item={item}
+                      />
+                </div>
+ 
+                )
+            })}
+        </div>
+        <Footer {...app} />
+      </div>
+    </Theme>
+  );
+}
+                 {/* <div className='action_item' key={`you-${index}`}>
+                  <Link href={`/product/${item._id}`} ><div className='img_crop' style={{marginRight: '20px'}}>
                   
                       <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
                   </div>
@@ -65,24 +88,16 @@ function Activity(props): React.ReactElement {
                       <hr/>
                       
                       <div className='sad_pepe button' style={{marginTop: '20px'}}>
-                         
-                              <button onClick={() => routeHandler(item._id)} className='fill'><span>View item</span></button>
+                         <Link href={`/product/${item._id}`} prefetch={false}><a className='fill'><span>View item</span></a>
+                         </Link>
+                              
                                              
                        
                       </div>
                       
 
                   </div>
-              </div>
-                )
-            })}
-        </div>
-        <Footer {...app} />
-      </div>
-    </Theme>
-  );
-}
-
+              </div> */}
 Activity.getInitialProps = async ({req, res, query}) => {
     const response = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/actions')
     return {actions: response.data}
