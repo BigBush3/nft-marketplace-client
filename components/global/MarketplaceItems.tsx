@@ -56,6 +56,14 @@ export default function MarketplaceItems(props): React.ReactElement {
  
     
   }, [priceRange])
+  useEffect(() => {
+    if (Number(filterBy) === 4){
+      setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
+        return b.likes - a.likes || b.views - a.views;
+      }))
+    }
+    setState(!state)
+  })
   //@ts-ignore
   useEffect(() => {
     if (Number(filterBy) === 2){
@@ -98,15 +106,7 @@ export default function MarketplaceItems(props): React.ReactElement {
       }))
     }else if (Number(filterBy) === 4){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
-        if (a.type === 'orderSell' && b.type === 'orderSell'){
-          return new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
-        } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
-          return new Date(a.startDate).getTime() < new Date(b.creationDate).getTime() ? -1: 1
-        } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
-          return new Date(a.creationDate).getTime() < new Date(b.startDate).getTime() ? -1: 1
-        } else {
-          return new Date(a.startDate).getTime() < new Date(b.startDate).getTime() ? -1: 1
-        }
+        return b.likes - a.likes || b.views - a.views;
       }))
     }
     setState(!state)

@@ -58,7 +58,7 @@ function Marketplace(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
   const { lang } = app;
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState(4);
   const ref = useRef()
   const [searchBy, setSearchBy] = useState(1)
   const [search, setSearch] = useState('')
@@ -123,6 +123,7 @@ function Marketplace(props): React.ReactElement {
       <StyledSelect
                 variant="outlined"
                 value={filterBy}
+                app={lang}
                 onChange={(e: any) => {
                   setFilterBy(e.target.value);
                 }}

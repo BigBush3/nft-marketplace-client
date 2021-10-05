@@ -56,15 +56,17 @@ interface StyledSelectProps {
  * @param props
  * @returns
  */
-export default function StyledSelect(props: StyledSelectProps): React.ReactElement {
-  const { options, value, onChange, variant, title } = props;
+export default function StyledSelect(props): React.ReactElement {
+  const { options, value, onChange, variant, title, app } = props;
   const classes = useStyles(variant);
   let body;
   if (typeof window !== 'undefined') {
     body = window.document.body;
   }
-  return (
+  if (app){
+      return (
     <>
+    
       <Select
         title={title}
         labelId="search-filter"
@@ -74,7 +76,8 @@ export default function StyledSelect(props: StyledSelectProps): React.ReactEleme
         value={typeof variant === 'string' ? value : body?.clientWidth < 600 ? 1 : value}
         variant={variant}
         className={clsx(classes.select)}
-        onChange={onChange}>
+        onChange={onChange}
+        >
         <MenuItem style={{ display: 'none' }} value={1}>
           <Image className={classes.svg} alt="search filter" src={SearchFilterIcon} />
         </MenuItem>
@@ -88,5 +91,8 @@ export default function StyledSelect(props: StyledSelectProps): React.ReactEleme
       </Select>
     </>
   );
+  }
+  return null
+
 }
 // ⩥

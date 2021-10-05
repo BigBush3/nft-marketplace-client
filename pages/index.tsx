@@ -49,7 +49,7 @@ function Home(props): React.ReactElement {
 
   const classes = useStyles();
   console.log(app)
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState(3);
   useEffect(() => {
     const getHistory = async () => {
       const resHistory = await getTokenOwnHistory(1)
@@ -87,6 +87,7 @@ function Home(props): React.ReactElement {
               <StyledSelect
                 variant="outlined"
                 value={filterBy}
+                app={app}
                 onChange={(e: any) => {
                   setFilterBy(e.target.value);
                 }}

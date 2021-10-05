@@ -12,6 +12,7 @@ export default interface Language {
   chat: string;
   date: string;
   price: string;
+  filter: string;
   language: string;
   upload: string;
   save: string;

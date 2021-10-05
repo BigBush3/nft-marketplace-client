@@ -7,6 +7,7 @@ const lang: Language = {
   more: 'Подробнее',
   placeBid: 'Сделать ставку',
   buy: 'Купить',
+  filter: 'Фильтр',
   send: 'Отправить',
   chat: 'Чат',
   date: 'Дата',
