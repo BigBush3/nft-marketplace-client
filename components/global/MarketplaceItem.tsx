@@ -98,7 +98,7 @@ setHistoryItem(el)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" loop webkit-playsinline playsInline>
      </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
           </Link>
         </div>
@@ -151,7 +151,7 @@ setHistoryItem(el)
         
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop webkit-playsinline playsInline>
      </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
           </Link>
         </div>

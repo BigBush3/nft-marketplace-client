@@ -305,9 +305,12 @@ function Header(props): React.ReactElement {
       <div className="wrapper">
         <div className="header__top">
           <div className="header__logo">
-            <a href="index.html">
+            <Link href='/'>
+            <a>
               <Image src={LogoImage} alt="logo" />
             </a>
+            </Link>
+            
           </div>
           <div className="header__block-wrap">
             <div className="header__block">

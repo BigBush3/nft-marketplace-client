@@ -330,7 +330,6 @@ const el = []
     }
     setOpen(!open)
   }
-  console.log(data)
   return (
     <Theme>
       <Header app={app} />
@@ -343,7 +342,7 @@ const el = []
 
             <div className="product__block">
               <div className="product__image">
-                {data.nftType === 'video' ? <video src={data.img} width="450" height="300" controls>
+                {data.nftType === 'video' ? <video src={data.img} width="450" height="300" controls webkit-playsinline playsInline>
      </video> : <img src={data.img} alt="img" />}
                 
                 <div className='verified__gold'>
