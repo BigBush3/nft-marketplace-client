@@ -59,6 +59,7 @@ function Marketplace(props): React.ReactElement {
   const { banners } = data;
   const { lang } = app;
   const [filterBy, setFilterBy] = useState(4);
+  const [width, setWidth] = useState<number>(window.innerWidth);
   const ref = useRef()
   const [searchBy, setSearchBy] = useState(1)
   const [search, setSearch] = useState('')

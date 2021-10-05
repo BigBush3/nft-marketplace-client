@@ -63,7 +63,7 @@ export default function MarketplaceItems(props): React.ReactElement {
       }))
     }
     setState(!state)
-  })
+  }, [])
   //@ts-ignore
   useEffect(() => {
     if (Number(filterBy) === 2){

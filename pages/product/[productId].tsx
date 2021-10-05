@@ -237,7 +237,10 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     
 /*  */
     if (maxBid.user){
-          await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId})
+          await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
+
+    } else {
+      await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: cookie.get('id'), tokenId: router.query.productId, action: `${cookie.get('name')} end auction`})
 
     }
   }
@@ -307,7 +310,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     setOpenHistory(!openHistory)
   }
   const endHandler = async () => {
-
+    await finishAuction(data.tokenId, data.orderIndex)
   }
   const ownerHandler = async () => {
     if (!open){
