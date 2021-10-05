@@ -381,9 +381,9 @@ const el = []
 
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
-                  [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> : 
+                  [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
                    <button className='fill buy' onClick={endHandler}><span>Завершить Аукцион</span></button>] 
-                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>Купить</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>Сделать ставку</span></button>]]}
+                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
               </div>
@@ -416,7 +416,9 @@ const el = []
                     </div>
                   </div>
                 </div>
-                <div className="author__name">{user ? user.name : data.owner.name}</div>
+                {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${user._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
+                }
+                
                 <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
               </div>
             </div>
@@ -435,7 +437,7 @@ const el = []
               </p>
             </div>
             <div className="author__buttons button">
-            <button className='fill buy' onClick={async () => {await historyHandler()}}><span>история токена</span></button>
+            <button className='fill buy' onClick={async () => {await historyHandler()}}><span>{lang.tokenHistory}</span></button>
             {data.type === 'timedAuction' ? <button className='fill buy' onClick={async () => {await bidHandler()}}><span>история ставок</span></button> : null}
             </div>
             {historySpinner && <CircularProgress/>}

@@ -29,8 +29,10 @@ const lang: Language = {
   filter: 'Filter',
   bids: 'Bids',
   shareModalText: 'Share this NFT',
-  
+  tokenHistory: 'Token history',
   auction: {
+    makeBid: 'Make bid',
+    purchase: 'Purchase',
     auctionEnded: 'Auction ended',
     title: 'Auction',
     firstBid: 'Initial bid',

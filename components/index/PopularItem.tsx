@@ -64,7 +64,7 @@ setHistoryItem(finalHistory.data.result)
         </div>
       </div>
       <div className="products__item-img">
-      <div className='products__item-type'>
+      <div className='products__item-type' style={{minHeight: '230px'}}>
 {data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
         </div>
         <div className="item-img__cover">

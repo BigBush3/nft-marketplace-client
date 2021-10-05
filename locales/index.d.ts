@@ -29,8 +29,11 @@ export default interface Language {
   highestBid: string;
   history: string;
   bids: string;
-  shareModalText: string
+  shareModalText: string;
+  tokenHistory: string;
   auction: {
+    makeBid: string;
+    purchase: string;
     auctionEnded: string;
     title: string;
     firstBid: string;

@@ -2786,7 +2786,17 @@ video{
 }
 @media screen and (max-width: 400px) {
   .makeStyles-select-4{
-    margin-left: 115px;
+    margin-left: 115px !important;
+    min-width: 100px !important;
+    height: 42px !important;
+  }
+  .jss1{
+    margin-left: 115px !important;
+    min-width: 100px !important;
+    height: 42px !important;
+  }
+  .makeStyles-select-2{
+    margin-left: 115px !important;
     min-width: 100px !important;
     height: 42px !important;
   }

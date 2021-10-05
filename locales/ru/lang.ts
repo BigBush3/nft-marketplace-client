@@ -29,7 +29,10 @@ const lang: Language = {
   history: 'История',
   bids: 'Ставки',
   shareModalText: 'Поделится этим NFT',
+  tokenHistory: 'История токена',
   auction: {
+    purchase: 'Купить',
+    makeBid: 'Сделать ставку',
     auctionEnded: 'Аукцион закончился',
     title: 'Аукцион',
     firstBid: 'Начальная ставка',

@@ -74,7 +74,7 @@ function Cabinet(props): React.ReactElement {
   const { lang } = app;
   const [active, setActive] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
-  const [sub, setSub] = useState(false)
+  
   const [open, setOpen] = useState(false)
   const [openBids, setOpenBids] = useState(false)
   const [progress, setProgress] = useState(false)
@@ -88,6 +88,7 @@ function Cabinet(props): React.ReactElement {
     t.place === thing.place && t.name === thing.name
   ))
 ))
+  const [sub, setSub] = useState(checkAvailability(followers, cookie.get('id')))
   const [openSnack, setOpenSnack] = React.useState(false);
   const [bidHistory, setBidHistory] = useState([])
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
@@ -275,7 +276,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
 
     
   }
-/*   function checkAvailability(arr, val) {
+   function checkAvailability(arr, val) {
     if (arr){
       console.log(arr)
           return arr.some(function(arrVal) {
@@ -285,7 +286,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
       return false
     }
 
-  } */
+  } 
   return (
     <Theme>
       <Header app={app}/>
