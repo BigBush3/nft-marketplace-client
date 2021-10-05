@@ -64,12 +64,12 @@ setHistoryItem(finalHistory.data.result)
         </div>
       </div>
       <div className="products__item-img">
-      <div className='products__item-type' style={{minHeight: '230px'}}>
+      <div className='products__item-type' >
 {data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop webkit-playsinline playsInline>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay loop webkit-playsinline playsInline style={{minHeight: '230px'}}>
      </video> : <img src={data.img} alt="img" />}
           </Link>
         </div>
