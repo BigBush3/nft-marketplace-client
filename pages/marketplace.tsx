@@ -59,8 +59,12 @@ function Marketplace(props): React.ReactElement {
   const { banners } = data;
   const { lang } = app;
   const [filterBy, setFilterBy] = useState(4);
-  const [width, setWidth] = useState<number>(window.innerWidth);
+  const [width, setWidth] = useState<number>(null);  
+
+  
+  
   const ref = useRef()
+  const size = useWindowSize()
   const [searchBy, setSearchBy] = useState(1)
   const [search, setSearch] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -68,8 +72,11 @@ function Marketplace(props): React.ReactElement {
   const [toEth, setToEth] = useState(undefined)
   const [open, setOpen] = useState(false)
   const [priceList, setPriceList] = useState([0, 0])
-
   const classes = useStyles('outlined');
+  useEffect(() => {
+    setWidth(window.innerWidth)
+
+  }, [])
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true)
@@ -116,7 +123,7 @@ function Marketplace(props): React.ReactElement {
         <div className="content marketplace">
           <ArtistsList app={app} />
           <main className="main marketplace">
-            <div className="main__top">
+            {size.width > 400 ?  <div className="main__top">
               <div className="heading__sort main__sort">
               <Button style={{backgroundColor: 'transparent', width: '140px', height: '50px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Price range
@@ -186,7 +193,78 @@ function Marketplace(props): React.ReactElement {
         </div>
       </Popover>
               </div>
+            </div>: <div className="main__top"><StyledSelect
+            
+                variant="outlined"
+                value={filterBy}
+                app={lang}
+                onChange={(e: any) => {
+                  setFilterBy(e.target.value);
+                }}
+                options={[
+                  {
+                    value: 1,
+                    text: "Highest price",
+                  },
+                  {
+                    value: 2,
+                    text: "Lowest price",
+                  },
+                  {
+                    value: 3,
+                    text: "Newest",
+                  },
+                  {
+                    value: 4,
+                    text: "Popular",
+                  }
+                ]}
+              />
+              <div className="heading__sort main__sort" style={{display: 'flex'}}>
+              <Button style={{backgroundColor: 'transparent', height: '40px', marginLeft: '-12px', width: '100px', fontSize: '10px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+        Price range
+      </Button> 
+      
+                      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <div>
+          <div style={{display: 'flex', marginTop: '20px', marginLeft: '15px', marginRight: '15px', marginBottom: '30px'}}>
+            <div style={{marginRight:'10px', height: '10px'}}>
+              <TextField style={{width: 100, height: 10}} type="number" label="From ETH" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
             </div>
+            <div>
+              <TextField style={{width: '100px', height: '10px'}} type="number" label="To ETH"  value={toEth} onChange={(e) => setToEth(e.target.value)}/>
+            </div>
+          </div>
+          <hr/>
+          <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
+            <div className='button'>
+            <button  style={{width: '100px', height: '40px'}} onClick={clickHandler}>
+             <span>Clear</span>
+              </button>
+            </div>
+            <div className='button'>
+              <button className='fill' style={{width: '100px', height: '40px'}} onClick={priceHandler}>
+             <span>Apply</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Popover>
+              </div>
+            </div>}
             <MarketplaceItems app={app} search={search} searchBy={searchBy} filterBy={filterBy} priceRange={priceList}/>
           </main>
         </div>
@@ -194,6 +272,40 @@ function Marketplace(props): React.ReactElement {
       </div>
     </Theme>
   );
+}
+
+function useWindowSize() {
+  // Initialize state with undefined width/height so server and client renders match
+  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    // only execute all the code below in client side
+    if (typeof window !== 'undefined') {
+      // Handler to call on window resize
+      //@ts-ignore
+      function handleResize() {
+        // Set window width/height to state
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      }
+    
+      // Add event listener
+      window.addEventListener("resize", handleResize);
+     
+      // Call handler right away so state gets updated with initial window size
+      handleResize();
+    
+      // Remove event listener on cleanup
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []); // Empty array ensures that effect is only run on mount
+  return windowSize;
 }
 
 Marketplace.getInitialProps = async ({req, res}) => {

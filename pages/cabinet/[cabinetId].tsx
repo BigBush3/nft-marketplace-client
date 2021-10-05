@@ -78,8 +78,16 @@ function Cabinet(props): React.ReactElement {
   const [open, setOpen] = useState(false)
   const [openBids, setOpenBids] = useState(false)
   const [progress, setProgress] = useState(false)
-  const [followers, setFollowers] = useState(data.followers)
-  const [followings, setFollowings] = useState(data.followings)
+  const [followers, setFollowers] = useState(data.followers.filter((thing, index, self) =>
+  index === self.findIndex((t) => (
+    t.place === thing.place && t.name === thing.name
+  ))
+))
+  const [followings, setFollowings] = useState(data.followings.filter((thing, index, self) =>
+  index === self.findIndex((t) => (
+    t.place === thing.place && t.name === thing.name
+  ))
+))
   const [openSnack, setOpenSnack] = React.useState(false);
   const [bidHistory, setBidHistory] = useState([])
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
@@ -408,33 +416,34 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>
         {data.verified === true && <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
-       {data.nfts.filter((item) => item.location !== 'collection').map((item) => {
+       {data?.nfts?.filter((item) => item.location !== 'collection').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
         </div>}
         <div className="cabinet_block" hidden={active !== 1}>
         <div className="marketplace__items">
-       {data.nfts.filter((item) => item.location !== 'collection').map((item) => {
+       {data?.nfts?.filter((item) => item.location !== 'collection').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
-          {data.nfts.filter((item) => item.location === 'collection').map((item) => {
+          {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item) => {
             return <CollectionItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
           })}
         </div>
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">
-       {data.favouriteNfts ? [data.favouriteNfts.map((item) => {
+       {data?.favouriteNfts ? [data.favouriteNfts.map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })] : <div>you dont have any favourite nft tokens</div>}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
-{/*             {followers ? [data.followers.map((item) => {
+            {//@ts-ignore
+            followers ? [followers.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
@@ -448,12 +457,12 @@ const getUpdatedBidByToken = async(userAddress)=>{
               <span className="cabinet_sub_name">{item.name}</span>
             </a>
               )
-            })] : <span>You don't have followers yet</span>} */}
+            })] : <span>You don't have followers yet</span>}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 5}>
           <div className="cabinet_subs">
-          {data.followings ? [data.followings.map((item) => {
+          {followings ? [followings.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
@@ -490,9 +499,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
     aria-describedby="simple-modal-description"
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
     <div>
-      {bidHistory.map((item) => {
-        console.log(item)
-        if (item){
+      {bidHistory === [] ? [bidHistory.map((item) => {
+        console.log(bidHistory)
            return (
           <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
@@ -509,15 +517,14 @@ const getUpdatedBidByToken = async(userAddress)=>{
             </div>
           </div>
         )
-        } else {
-          return (
-            <div>
-              Нет истории ставок
-            </div>
-          )
-        }
+
        
-      })}
+      })] :            <div>
+        <p>
+          Нет истории ставок
+        </p>
+              
+            </div>}
     </div>
       
     </div>
