@@ -134,6 +134,27 @@ function Cabinet(props): React.ReactElement {
     })
     return result;
   }
+  const addOwner = async ()=> {
+    let metamask = await connectMetaMask()
+	const walletAddress = metamask.userAddress
+	const wallet = metamask.web3
+    if(!walletAddress && !wallet){
+      alert('you have to connect cryptowallet')
+    } else {
+      let txData = NFTSTORE.methods.addOwner('0x1417c27c173a0e6d9d768220bc8651b12ea1621b').encodeABI()
+      wallet.eth.sendTransaction({
+              to: NFT_ADDRESS,
+              from: walletAddress,
+              data: txData
+          },
+          function(error, res){
+              console.log(error);
+              console.log(res);
+          }
+      )		
+    }
+  }
+  
   const returnFreeBalance = async ()=> {
     const metamask = await connectMetaMask()
     const walletAddress = metamask.userAddress
@@ -217,7 +238,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
     setProgress(true)
     if (cookie.get('id')){
          setSub(true)
-    setFollowers(followers.push({name: cookie.get('name'), imgUrl: cookie.get('imgUrl'), _id: cookie.get('id')}))
+    setFollowers([...followers, {name: cookie.get('name'), imgUrl: cookie.get('imgUrl'), _id: cookie.get('id')}])
     try {
       await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/follow', {id: cookie.get('id'), user: router.query})
     } catch (err) {
@@ -277,16 +298,22 @@ const getUpdatedBidByToken = async(userAddress)=>{
     
   }
    function checkAvailability(arr, val) {
-    if (arr && arr != 1){
+    if (arr && arr == Number(arr)){
       console.log(arr)
-          return arr.some(function(arrVal) {
+      try{
+                  return arr.some(function(arrVal) {
       return val === arrVal._id;
     });
+      } catch(err){
+        return false
+      }
+
     } else {
       return false
     }
 
   } 
+  console.log(followers, 'followers')
   return (
     <Theme>
       <Header app={app}/>
@@ -336,7 +363,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             <a href="#" onClick={asHandler} className="btn btn_black fill">
               <span>{lang.cabinet.bidHistory}</span>
             </a>
-            <a href="#" onClick={returnBalance} className="btn btn_black fill">
+            <a href="#" onClick={addOwner} className="btn btn_black fill">
               <span>{lang.cabinet.returnBalance}</span>
             </a>
             {data.verified &&             <a href="/create" className="btn btn_black fill">
@@ -444,7 +471,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
         <div className="cabinet_block" hidden={active !== 4}>
           <div className="cabinet_subs">
             {//@ts-ignore
-            followers && followers !== 1 ? [followers?.map((item) => {
+            followers ? [followers?.map((item) => {
               return (
                             <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">

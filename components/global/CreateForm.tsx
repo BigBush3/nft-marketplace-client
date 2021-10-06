@@ -239,7 +239,7 @@ function handleDrag(tag, currPos, newPos) {
     //You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
     //metadata is optional
     const metadata = JSON.stringify({
-        name: 'testname',
+        name: `testname-${new Date().getTime()}`,
     });
     sheesh.append('pinataMetadata', metadata);
 
