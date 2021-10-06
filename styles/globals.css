@@ -2785,30 +2785,13 @@ video{
   transition: all ease-in .3s;
 }
 @media screen and (max-width: 400px) {
-  .makeStyles-select-4{
+  .MuiOutlinedInput-root{
     margin-left: 115px !important;
     min-width: 100px !important;
     height: 42px !important;
   }
-  .jss1{
-    margin-left: 115px !important;
-    min-width: 100px !important;
-    height: 42px !important;
-  }
-  .makeStyles-select-2{
-    margin-left: 115px !important;
-    min-width: 100px !important;
-    height: 42px !important;
-  }
-  .makeStyles-select-1 {
-    margin-left: 115px !important;
-    min-width: 100px !important;
-    height: 42px !important;
-  }
-  .main-sort .MuiOutlinedInput-root{
-    margin-left: 115px !important;
-    min-width: 100px !important;
-    height: 42px !important;
+  .heading__sort .MuiOutlinedInput-root{
+    margin-left: 0px !important;
   }
 }
 

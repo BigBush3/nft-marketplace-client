@@ -182,17 +182,7 @@ function Header(props): React.ReactElement {
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       } else {
         // Если подключение к мобильному устройству
-        const provider = new WalletConnectProvider({
-          rpc: {
-            1: providerUrl,
-          },
-          qrcodeModalOptions: {
-            mobileLinks: [
-              "metamask",
-            ],
-          }
-        });
-        accounts = await provider?.enable();
+        router.push('https://metamask.app.link/dapp/nft-marketplace-client-fmc53.ondigitalocean.app/')
       }
       /*
        TODO ...
