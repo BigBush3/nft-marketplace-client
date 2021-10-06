@@ -194,7 +194,7 @@ function Marketplace(props): React.ReactElement {
       </Popover>
               </div>
             </div>: <div className="main__top"><StyledSelect
-            
+                width='mobile'
                 variant="outlined"
                 value={filterBy}
                 app={lang}

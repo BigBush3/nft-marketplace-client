@@ -57,7 +57,7 @@ interface StyledSelectProps {
  * @returns
  */
 export default function StyledSelect(props): React.ReactElement {
-  const { options, value, onChange, variant, title, app } = props;
+  const { options, value, onChange, variant, title, app, mobile } = props;
   const classes = useStyles(variant);
   let body;
   if (typeof window !== 'undefined') {
@@ -66,7 +66,32 @@ export default function StyledSelect(props): React.ReactElement {
   if (app){
       return (
     <>
-    
+      {mobile ? 
+            <Select
+            title={title}
+            labelId="search-filter"
+            style={{marginLeft: '115px',     minWidth: '100px',
+            height: '42px'}}
+            IconComponent={variant ? ExpandMoreRoundedIcon : ExpandMoreRoundedIconStyled}
+            disableUnderline={typeof variant !== 'string'}
+            autoWidth={true}
+            value={typeof variant === 'string' ? value : body?.clientWidth < 600 ? 1 : value}
+            variant={variant}
+            className={clsx(classes.select)}
+            onChange={onChange}
+            >
+            <MenuItem style={{ display: 'none' }} value={1}>
+              <Image className={classes.svg} alt="search filter" src={SearchFilterIcon} />
+            </MenuItem>
+            {options.map((item) => {
+              return (
+                <MenuItem key={`Select-${item.value}`} className={classes.option} value={item.value}>
+                  <p dangerouslySetInnerHTML={{__html: item.text}} />
+                </MenuItem>
+              );
+            })}
+          </Select> : 
+      
       <Select
         title={title}
         labelId="search-filter"
@@ -88,7 +113,7 @@ export default function StyledSelect(props): React.ReactElement {
             </MenuItem>
           );
         })}
-      </Select>
+      </Select>}
     </>
   );
   }

@@ -8095,9 +8095,6 @@ a.ui-button:active,
   .MuiOutlinedInput-input {
     height: 10px !important;
   }
-  .MuiOutlinedInput-root{
-    height: 50px !important;
-  }
 
   .footer__subscribe-form {
     width: 100%;
