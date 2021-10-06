@@ -88,7 +88,7 @@ function FineArtItem(props): React.ReactElement {
         <Likes likeMe={likeMe} likes={likes} app={app} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">$ {price}</div>
+      <div className="products__item-price">ETH {price}</div>
       <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{lang.buy}</Link>
       </div>
