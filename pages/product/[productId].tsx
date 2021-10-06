@@ -105,11 +105,13 @@ function Product({app, data, user}): React.ReactElement {
     }
     beach()
   }, [bids])
-  const handleClose = () => {
-    console.log('somethinghappens')
+  const handleClose = async () => {
+    await getBids()
+    await getMaxBid()
     setOpenBid(false);
   };
   const handleCloseCheckout = () => {
+    
     setOpenModal(false)
   }
   const handleCloseShare = () => {
@@ -222,7 +224,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     if(!wallet){
       alert('you have to connect cryptowallet')
     } else {
-      wallet.eth.sendTransaction({
+      await wallet.eth.sendTransaction({
               to: TIMEDAUCTION_ADDRESS,
               from: walletAddress,
               value: web3.utils.toWei(String(fee/1e18)),

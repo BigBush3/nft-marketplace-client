@@ -26,6 +26,7 @@ import {
 	EVENTS_TOPICS
 } from '../../config/default.json'
 import Web3 from 'web3'
+import router from 'next/router';
 
 interface CheckoutModalProps {
   app: Types.AppProps;
@@ -111,7 +112,7 @@ export default function CheckoutModal(props): React.ReactElement {
     console.log(err.message)
   }
   setProceed(false)
-  handleClose()
+  router.push(`/token/${data._id}`)
     }
     
   }

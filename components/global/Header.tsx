@@ -251,7 +251,10 @@ function Header(props): React.ReactElement {
      * очищаем все прослушиватели
      */
     function closeConnectDialog() {
-      mfpClose.removeEventListener('click', closeConnectDialog);
+      if (mfpClose){
+mfpClose.removeEventListener('click', closeConnectDialog);
+      }
+      
       metamask.removeEventListener('click', connectToMetamask);
       mew.removeEventListener('click', connectToMew);
       coinbase.removeEventListener('click', connectToCoinBase);
