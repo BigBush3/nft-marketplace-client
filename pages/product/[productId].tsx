@@ -311,6 +311,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   }
   const endHandler = async () => {
     await finishAuction(data.tokenId, data.orderIndex)
+    router.push(`/cabinet/${cookie.get('id')}`)
   }
   const ownerHandler = async () => {
     if (!open){

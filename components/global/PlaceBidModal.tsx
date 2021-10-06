@@ -190,6 +190,7 @@ useEffect(() => {
       document.querySelector('.open_connect').click();
       handleClose()
     } else {
+      setProceed(true)
       //@ts-ignore
       if (myBid.user){
         //@ts-ignore
@@ -200,7 +201,7 @@ useEffect(() => {
       
     }
 
-    
+    setProceed(false)
     handleClose()
   }
   return (

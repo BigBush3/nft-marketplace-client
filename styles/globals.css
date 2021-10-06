@@ -2805,7 +2805,7 @@ video{
     min-width: 100px !important;
     height: 42px !important;
   }
-  .MuiOutlinedInput-root{
+  .main-sort .MuiOutlinedInput-root{
     margin-left: 115px !important;
     min-width: 100px !important;
     height: 42px !important;

@@ -105,7 +105,7 @@ export default function CheckoutModal(props): React.ReactElement {
 		)
 	}
   try{
-      const result = await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data.tokenId, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
+      const result = await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
 
   } catch(err){
     console.log(err.message)
