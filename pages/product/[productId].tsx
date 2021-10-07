@@ -86,6 +86,8 @@ function Product({app, data, user}): React.ReactElement {
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
   let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
+  //@ts-ignore
+  let NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS)
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
@@ -220,29 +222,31 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     const walletAddress = metamask.userAddress
     const wallet = metamask.web3
     let fee = await getGasFee(gasFee.finishAuction)
-    let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, tokenId, auctionIndex).encodeABI()
     if(!wallet){
       alert('you have to connect cryptowallet')
     } else {
-      await wallet.eth.sendTransaction({
-              to: TIMEDAUCTION_ADDRESS,
-              from: walletAddress,
-              value: web3.utils.toWei(String(fee/1e18)),
-              data: txData
-          },
-          function(error, res){
-              console.log(error);
-              console.log(res);
-          }
-      )		
+      let txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
+    await wallet.eth.sendTransaction({
+      to: NFT_ADDRESS,
+      from: walletAddress,
+      data: txData
+  },
+  function(error, res){
+      console.log(error);
+      console.log(res);
+      subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
+  }
+);
     }
     
 /*  */
     if (maxBid.user){
           await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
+          router.push(`/cabinet/${maxBid.user._id}`)
 
     } else {
       await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: cookie.get('id'), tokenId: router.query.productId, action: `${cookie.get('name')} end auction`})
+      router.push(`/cabinet/${cookie.get('id')}`)
 
     }
   }
@@ -519,7 +523,8 @@ const el = []
 Product.getInitialProps = async ({req, res, query}) => {
   let clear = []
   const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
-  const history = await getTokenOwnHistory(response.data.tokenId)
+  const history = await getTokenOwnHistory(47)
+  console.log(history)
   if (history[0]){
       clear.push(history[0].returnValues.addressFrom.toLowerCase())
   const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: clear})

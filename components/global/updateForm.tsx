@@ -219,8 +219,15 @@ function handleDrag(tag, currPos, newPos) {
                 const pure = event.data.slice(2)
                 const sth = pure.substring(0, 63)
                 console.log(parseInt(sth))
-                     const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
-  router.push(`/product/${res.data._id}`)
+                try{
+                                       const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
+
+               router.push(`/cabinet/${cookie.get('id')}`)
+              } catch(err){
+                  console.log(err.message)
+                  router.push(`/cabinet/${cookie.get('id')}`)
+                }
+                
                  
 
 
