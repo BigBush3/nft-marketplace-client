@@ -31,6 +31,8 @@ export default interface Language {
   bids: string;
   shareModalText: string;
   tokenHistory: string;
+  subscribe: string;
+  unsubscribe: string;
   auction: {
     makeBid: string;
     purchase: string;

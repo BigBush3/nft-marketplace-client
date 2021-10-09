@@ -28,6 +28,8 @@ const lang: Language = {
   highestBid: 'Максимальная ставка',
   history: 'История',
   bids: 'Ставки',
+  subscribe: 'Подписаться',
+  unsubscribe: 'Отписаться',
   shareModalText: 'Поделится этим NFT',
   tokenHistory: 'История токена',
   auction: {

@@ -28,6 +28,8 @@ const lang: Language = {
   history: 'History',
   filter: 'Filter',
   bids: 'Bids',
+  subscribe: "Subscribe",
+  unsubscribe: 'Unsubscribe',
   shareModalText: 'Share this NFT',
   tokenHistory: 'Token history',
   auction: {

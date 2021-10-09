@@ -467,6 +467,7 @@ function handleDrag(tag, currPos, newPos) {
 {/*        <div className="create_input" style={{position: 'static'}}> */}
         <span>{lang.auction.createHashTag}:</span>
         <ReactTags  className="create_input" tags={tags}
+                    autofocus={false}
                     handleDelete={handleDelete}
                     handleAddition={handleAddition}
                     handleDrag={handleDrag}
@@ -514,27 +515,26 @@ function handleDrag(tag, currPos, newPos) {
     </form>
     <Dialog
         open={open}
-        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Создание NFT</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Create NFT</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div>
-              <h2>Создание токена</h2>
+              <h2>Creating NFT</h2>
             </div>
             <div>
               {createLoader ? <CircularProgress /> : <DoneIcon/>}
             </div>
             <div>
-              <h2>Approve токена</h2>
+              <h2>Approving NFT</h2>
             </div>
             <div>
               {approveLoader ? <CircularProgress /> : <DoneIcon/>}
             </div>
             <div>
-              <h2>Публикация токена</h2>
+              <h2>Publicating NFT.</h2>
             </div>
             <div>
               {sellLoader ? <CircularProgress/> : <DoneIcon/>}

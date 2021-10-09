@@ -369,17 +369,17 @@ function handleDrag(tag, currPos, newPos) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Создание NFT</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Resell NFT</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div>
-              <h2>Approve токена</h2>
+              <h2>Approving NFT</h2>
             </div>
             <div>
               {approveLoader ? <CircularProgress /> : <DoneIcon/>}
             </div>
             <div>
-              <h2>Публикация токена</h2>
+              <h2> Publicating NFT</h2>
             </div>
             <div>
               {createLoader ? <CircularProgress /> : <DoneIcon/>}

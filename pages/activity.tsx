@@ -49,7 +49,7 @@ function Activity(props): React.ReactElement {
         <div className="prescription">
             <p style={{color: 'gray', marginTop: '15px', textAlign: 'center'}}>System will update every 5 minutes</p>
         </div>
-        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column', alignItems: 'center'}}>
+        <div style={{display: 'flex', justifyContent: 'center', flex: '1 1 auto', flexDirection: 'column', alignItems: 'center', marginTop:'15px'}}>
             {actions.map((item, index, array) => {
               const lastRef = !array[index + 1] ? lastItemRef : undefined;
                 return (

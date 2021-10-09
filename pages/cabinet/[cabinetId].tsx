@@ -78,16 +78,8 @@ function Cabinet(props): React.ReactElement {
   const [open, setOpen] = useState(false)
   const [openBids, setOpenBids] = useState(false)
   const [progress, setProgress] = useState(false)
-  const [followers, setFollowers] = useState(data.followers.filter((thing, index, self) =>
-  index === self.findIndex((t) => (
-    t.place === thing.place && t.name === thing.name
-  ))
-))
-  const [followings, setFollowings] = useState(data.followings.filter((thing, index, self) =>
-  index === self.findIndex((t) => (
-    t.place === thing.place && t.name === thing.name
-  ))
-))
+  const [followers, setFollowers] = useState(data.followers)
+  const [followings, setFollowings] = useState(data.followings)
   const [sub, setSub] = useState(checkAvailability(followers, cookie.get('id')))
   const [openSnack, setOpenSnack] = React.useState(false);
   const [bidHistory, setBidHistory] = useState([])
@@ -282,11 +274,24 @@ const getUpdatedBidByToken = async(userAddress)=>{
   const returnBalance = async() => {
 
   }
+  const isFollowed = (element, index, array) => {
+    if (element._id === cookie.get('id')){
+      return index
+    }
+    return false
+  }
   async function unSubscribeHandler(){
     setSub(false)
     setProgress(true)
-    const index = followers.indexOf(cookie.get('id'))
-    setFollowers(followers.splice(index, 1))
+    let clear = []
+    for (const item of followers) {
+      if (item._id === cookie.get('id')){
+
+      } else {
+        clear.push(item)
+      }
+    }
+    setFollowers(clear)
     try {
       await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/unfollow', {id:cookie.get('id'), user: router.query})
     } catch (err) {
@@ -298,22 +303,17 @@ const getUpdatedBidByToken = async(userAddress)=>{
     
   }
    function checkAvailability(arr, val) {
-    if (arr && arr == Number(arr)){
-      console.log(arr)
-      try{
-                  return arr.some(function(arrVal) {
+    if (arr){
+    return arr.some(function(arrVal) {
+      console.log(val === arrVal._id)
       return val === arrVal._id;
     });
-      } catch(err){
-        return false
-      }
 
     } else {
       return false
     }
 
   } 
-  console.log(followers, 'followers')
   return (
     <Theme>
       <Header app={app}/>
@@ -371,11 +371,11 @@ const getUpdatedBidByToken = async(userAddress)=>{
             </a>}
           </div>): [ sub ? [progress ? <CircularProgress style={{display: 'flex', margin: 'auto'}}/> : <div className="cabinet_top_btns button">
             <button className="btn btn_black fill" onClick={unSubscribeHandler}>
-              <span>Отписаться</span>
+              <span>{lang.unsubscribe}</span>
             </button>
           </div>] : [progress ? <CircularProgress style={{display: 'flex', margin: 'auto'}}/> :  <div className="cabinet_top_btns button">
             <button className="btn btn_black fill" onClick={subscribeHandler}>
-              <span>Подписаться</span>
+              <span>{lang.subscribe}</span>
             </button>
           </div>]]}
         </div>
@@ -464,7 +464,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">
        {data?.favouriteNfts ? [data.favouriteNfts.map((item) => {
-              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+         console.log(item)
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item?._id}`} data={item} />;
             })] : <div>you dont have any favourite nft tokens</div>}
           </div>
         </div>
@@ -528,7 +529,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
     <div>
       {bidHistory === [] ? [bidHistory.map((item) => {
-        console.log(bidHistory)
            return (
           <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
@@ -549,7 +549,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
        
       })] :            <div>
         <p>
-          Нет истории ставок
+          You don't have any bids
         </p>
               
             </div>}
