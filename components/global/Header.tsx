@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
@@ -65,10 +65,14 @@ interface HeaderProps {
 function Header(props): React.ReactElement {    
   const [verified, setVerified] = useState(false)
   const router = useRouter();
-  const { app, data, onChange} = props;
+  const { app, data} = props;
   const { lang } = app;
   const [searchBy, setSearchBy] = useState<'title' | 'author' | 'collection'>('title');
-
+  const [searchData, setSearchData] = useState([])
+  const [filteredData, setFilteredData] = useState([]);
+  const [wordEntered, setWordEntered] = useState("");
+  const wrapperRef = useRef(null)
+  const [focused, setFocused] = useState(false)
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false)
   let scrollPos = 0;
@@ -76,7 +80,39 @@ function Header(props): React.ReactElement {
   const [checked2, setChecked2] = useState(false);
   const [some, setSome] = useState(false)
 
+  useEffect(() => {
+    (async () => {
+      setWordEntered("")
+      setFilteredData([])
+      let searchDat
+      if (searchBy === 'title'){
+        searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
+        console.log(searchDat)
+        setSearchData(searchDat.data)
+      } else if(searchBy === 'author'){
+        searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/users')
+        setSearchData(searchDat.data)
+      }
+    })()
+  }, [searchBy])
+  const handleFilter = (event) => {
+    const searchWord = event.target.value;
+    setWordEntered(searchWord);
+    const newFilter = searchData.filter((value) => {
+      if (value?.title){
+        return value.title.toLowerCase().includes(searchWord.toLowerCase());
+      } 
+      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      
+    });
 
+    if (searchWord === "") {
+      setFilteredData([]);
+    } else {
+      console.log(searchData)
+      setFilteredData(newFilter);
+    }
+  };
   const handleChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked1(event.target.checked);
   };
@@ -269,16 +305,22 @@ mfpClose.removeEventListener('click', closeConnectDialog);
     // прослушивает нажатие кнопки coinbase
     coinbase.addEventListener('click', connectToCoinBase);
   }
+  function handleClickOutside(event) {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setFocused(false)
+    }
+}
   useEffect(() => {
-
     if (cookie.get('verified')){
       setSome(true)
     }
     utils.$.setStylesHeader();
     window.addEventListener('scroll', windowScrollHandler);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       // Удаление прослушивателя прокрутки при размонтировании
       window.removeEventListener('scroll', windowScrollHandler);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   function disconnectHandler(){
@@ -488,15 +530,12 @@ mfpClose.removeEventListener('click', closeConnectDialog);
             <input
               type="text"
               name="search"
+              value={wordEntered}
+              onChange={handleFilter}
               placeholder={`${lang.searchBy.name} ${lang.searchBy[searchBy]}`}
-              onChange={(e) => onChange(e.target.value, searchBy)}
+              autoComplete='off'
+              onFocus={() => setFocused(true)}
             />
-          </div>
-          <div className="header__search-button">
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="submit" onClick={findHandler}>
-              <i className="flaticon-search" />
-            </button>
           </div>
         </div>
       </div>
@@ -544,6 +583,47 @@ mfpClose.removeEventListener('click', closeConnectDialog);
 
         </DialogContent>
       </Dialog>
+      {focused && [filteredData.length != 0 && (
+        <div className="dataResult" ref={wrapperRef}>
+          {filteredData.slice(0, 15).map((value, key) => {
+            if (value?.title){
+                          return (
+              <div className='dataItem'>
+                <Link href={`/product/${value._id}`}>
+                <a style={{display: 'flex', alignItems: 'center', color: 'black', marginBottom: '10px'}}>
+                  {value.nftType === 'video' ? <video style={{ width: '50px', maxHeight: '50px'}} width='50' height='50' src={value.img} autoPlay muted/> : <img src={value.img} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />}
+                
+                <div>
+                  <p>{value.title} </p>
+                  <p style={{color: 'gray', fontSize: '10px'}}>{value.currentBid ? value.currentBid : value.price} ETH</p> 
+                </div>
+               
+                </a>
+                </Link>
+              </div>
+
+            );
+            }
+            return (
+              <div className='dataItem'>
+                <Link href={`/cabinet/${value._id}`}>
+                <a style={{display: 'flex', alignItems: 'center', color: 'black', marginBottom: '10px'}}>
+                <img src={value.imgUrl} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />
+                <div>
+                  <p>{value.name} </p>
+                </div>
+               
+                </a>
+                </Link>
+              </div>
+
+            );
+
+          })}
+        </div>
+      )]
+      }
+
     </>
   );
 }

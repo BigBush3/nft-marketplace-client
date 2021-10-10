@@ -25,7 +25,6 @@ export default function Favorite(props): React.ReactElement {
           (async() => {
       const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
       setFavNfts(response.data.favouriteNfts)
-      console.log(userExists(data._id, response.data.favouriteNfts))
       setFavorite(userExists(data?._id, response.data.favouriteNfts))
     })()
     }
@@ -43,7 +42,6 @@ export default function Favorite(props): React.ReactElement {
   function userExists(username, arr) {
     if (arr){
       return arr.some(function(el) {
-        console.log(el)
   if (el?._id){
    return el?._id === username; 
   } else {

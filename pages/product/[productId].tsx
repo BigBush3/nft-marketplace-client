@@ -442,7 +442,7 @@ const el = []
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
-                   <button className='fill buy' onClick={endHandler}><span>Завершить Аукцион</span></button>] 
+                   <button className='fill buy' onClick={endHandler}><span>{lang.auction.endAuction}</span></button>] 
                    : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
@@ -498,7 +498,7 @@ const el = []
             </div>
             <div className="author__buttons button">
             <button className='fill buy' onClick={async () => {await historyHandler()}}><span>{lang.tokenHistory}</span></button>
-            {data.type === 'timedAuction' ? <button className='fill buy' onClick={async () => {await bidHandler()}}><span>история ставок</span></button> : null}
+            {data.type === 'timedAuction' ? <button className='fill buy' onClick={async () => {await bidHandler()}}><span>{lang.auction.historyOfBids}</span></button> : null}
             </div>
             {historySpinner && <CircularProgress/>}
             {openHistory ? [wideHistory.map((item, index, array) => {

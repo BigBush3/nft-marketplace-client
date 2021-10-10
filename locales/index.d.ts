@@ -34,6 +34,8 @@ export default interface Language {
   subscribe: string;
   unsubscribe: string;
   auction: {
+    historyOfBids: string;
+    endAuction: string;
     makeBid: string;
     purchase: string;
     auctionEnded: string;

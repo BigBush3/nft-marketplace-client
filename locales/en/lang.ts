@@ -33,6 +33,8 @@ const lang: Language = {
   shareModalText: 'Share this NFT',
   tokenHistory: 'Token history',
   auction: {
+    historyOfBids: 'History of bids',
+    endAuction: 'End auction',
     makeBid: 'Make bid',
     purchase: 'Purchase',
     auctionEnded: 'Auction ended',

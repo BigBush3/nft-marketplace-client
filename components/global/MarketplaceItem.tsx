@@ -132,7 +132,7 @@ setHistoryItem(el)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" muted loop webkit-playsinline playsInline style={{'minWidth': '230px'}}>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" preload='auto' no-fastclick muted loop playsInline style={{'minWidth': '230px'}}>
      </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
           </Link>
         </div>
@@ -185,7 +185,7 @@ setHistoryItem(el)
         
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" muted autoPlay loop webkit-playsinline playsInline style={{'minHeight': '230px'}}>
+          {data.nftType === 'video' ? <video src={data.img} preload="auto" width="450" height="300" no-fastclick muted autoPlay loop playsInline style={{'minHeight': '230px'}}>
      </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
           </Link>
         </div>

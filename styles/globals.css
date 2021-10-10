@@ -8308,3 +8308,26 @@ a.ui-button:active,
     margin-left: 20px;
   }
 }
+.dataResult{
+  position: absolute;
+  left: 15%;
+  background-color: white;
+  z-index: 9999;
+  text-decoration: none;
+  color: black;
+  width: 80%;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-top: 10px;
+  border-radius: 15px;
+  box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.15);
+}
+.dataItem:hover{
+  background: lightgray;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.17);
+}
+.dataItem video{
+  width: 50px !important;
+  margin-right: 10px;
+}

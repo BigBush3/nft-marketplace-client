@@ -103,7 +103,7 @@ setHistoryItem(finalHistory.data.result)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" muted autoPlay loop webkit-playsinline playsInline style={{minHeight: '230px'}}>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" preload='auto' muted autoPlay loop playsInline no-fastclick style={{minHeight: '230px'}}>
      </video> : <img src={data.img} alt="img" />}
           </Link>
         </div>
