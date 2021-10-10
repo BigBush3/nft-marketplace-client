@@ -1747,8 +1747,8 @@ textarea {
 
 .products__item-img {
   display: block;
-  position: relative;
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
 }
@@ -2795,6 +2795,9 @@ video{
     margin-left: 115px !important;
     min-width: 100px !important;
     height: 42px !important;
+  }
+  .products__item-img{
+    position: static;
   }
   .fineart{
     top: 10px;
@@ -7692,7 +7695,11 @@ a.ui-button:active,
   }
 
   .marketplace__item {
+    position: relative;
     width: calc(100% - 31px);
+  }
+  .products__item-type img {
+    top: -1%
   }
 
   .marketplace__item {

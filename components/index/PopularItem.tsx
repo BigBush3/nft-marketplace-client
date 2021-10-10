@@ -76,13 +76,9 @@ setHistoryItem(finalHistory.data.result)
     
     
   }, [])
-  if (data.startDate){
-    if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){
-      return null
-    }}
   return (
     <div className="popular__item products__item">
-      <div className="products__item-info">
+      <div className="products__item-info" style={{position: 'relative'}}>
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
@@ -103,7 +99,7 @@ setHistoryItem(finalHistory.data.result)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" preload='auto' muted autoPlay loop playsInline no-fastclick style={{minHeight: '230px'}}>
+          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" muted autoPlay loop playsInline style={{minHeight: '230px'}}>
      </video> : <img src={data.img} alt="img" />}
           </Link>
         </div>
