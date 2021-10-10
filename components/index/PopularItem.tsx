@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/link-passhref */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import type * as Types from '../../types/index.d';
@@ -8,6 +8,7 @@ import Likes from '../global/Likes';
 import Favorite from '../global/Favorite';
 import axios from 'axios'
 import { getTokenOwnHistory } from '../../utils/blockchain';
+import cookie from 'js-cookie'
 
 
 interface PopularIntemProps {
@@ -22,11 +23,29 @@ interface PopularIntemProps {
  * @returns
  */
 function PopularItem(props): React.ReactElement {
-  const { app, data } = props;
+  const { app, data, userData } = props;
   const { mark, owners, _id, title, likeMe, likes, price, views, favoriteMe, img, verified , currentBid} = data;
   const { lang } = app;
   const [historyItem, setHistoryItem] = useState([])
   const [open, setOpen] = useState<boolean>(false);
+  const [favNfts, setFavNfts] = useState(userData?.favouriteNfts)
+  function userExists(username) {
+    if (favNfts){
+      return favNfts.some(function(el) {
+  if (el?._id){
+   return el?._id === username; 
+  } else {
+    return false
+  }
+  
+}); }
+
+  }
+  function deleteFav(){
+    const removeIndex = favNfts.findIndex( item => item._id === data._id );
+// remove object
+favNfts.splice( removeIndex, 1 );
+  }
   const ownerHandler = async () => {
     if (!open){
     const el = []
@@ -46,6 +65,21 @@ setHistoryItem(finalHistory.data.result)
     }
     setOpen(!open)
   }
+  useEffect(() => {
+    const handler = async () => {
+     const userHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
+     setFavNfts(userHistory.data.favouriteNfts)
+    }
+    if (cookie.get('id')){
+     handler() 
+    }
+    
+    
+  }, [])
+  if (data.startDate){
+    if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){
+      return null
+    }}
   return (
     <div className="popular__item products__item">
       <div className="products__item-info">
@@ -84,8 +118,8 @@ setHistoryItem(finalHistory.data.result)
         <div className="item-stats__views">
           <i className="flaticon-eye" /> <span>{views}</span>
         </div>
-        <Favorite favoriteMe={favoriteMe} app={app} />
-        <Likes likeMe={likeMe} likes={likes} app={app} />
+        <Favorite  data={data}/>
+        <Likes data={data} />
         <div className="item-stats__count">1/1</div>
       </div>
       <div className="products__item-price">ETH {price ? price: currentBid}</div>

@@ -23,7 +23,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import cookie from 'js-cookie'
-import axios from 'axios';import StyledSelect from '../UI/StyledSelect';
+import axios from 'axios';
+import StyledSelect from '../UI/StyledSelect';
 import LogoImage from '../../public/img/logo.png';
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
@@ -439,7 +440,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
         </div>
         <div className="header__search">
           <div className="header__search-sort">
-            <StyledSelect
+{/*             <StyledSelect
               title={lang.searchBy.name}
               options={[
                 {
@@ -459,7 +460,29 @@ mfpClose.removeEventListener('click', closeConnectDialog);
               onChange={(e: any) => {
                 setSearchBy(e.target.value);
               }}
-            />
+            /> */}
+                  <StyledSelect
+                value={searchBy}
+                title={lang.searchBy.name}
+                app={lang}
+                onChange={(e: any) => {
+                  setSearchBy(e.target.value);
+                }}
+                options={[
+                  {
+                    value: 'title',
+                    text: lang.searchBy.title,
+                  },
+                  {
+                    value: 'author',
+                    text: lang.searchBy.author,
+                  },
+                  {
+                    value: 'collection',
+                    text: lang.searchBy.collection,
+                  }
+                ]}
+              />
           </div>
           <div className="header__search-input">
             <input

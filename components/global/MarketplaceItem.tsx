@@ -9,10 +9,12 @@ import Likes from './Likes';
 import Favorite from './Favorite';
 import { getTokenOwnHistory } from '../../utils/blockchain';
 import axios from 'axios'
+import cookie from 'js-cookie'
 
 interface MarketplaceItem {
   app?: Types.AppProps;
   data: any;
+  userData?: any;
 }
 
 /**
@@ -21,13 +23,34 @@ interface MarketplaceItem {
  * @returns
  */
 const MarketplaceItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactElement => {
-  const { app, data } = props;
-  const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate, amount, initialAmount } = data;
+  const { app, data, userData } = props;
+  const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate, amount, initialAmount, likeMe, favoriteMe } = data;
   const { lang } = app;
   const [historyItem, setHistoryItem] = useState([])
+  const [state, setState] = useState(false)
 
   const [open, setOpen] = useState<boolean>(false);
+  const [favNfts, setFavNfts] = useState([])
+  function userExists(username) {
+    if (favNfts){
+          return favNfts.some(function(el) {
+      if (el?._id){
+       return el?._id === username; 
+      } else {
+        return false
+      }
+      
+    });
+    }
+
+  }
+  function deleteFav(){
+    const removeIndex = favNfts.findIndex( item => item._id === data._id );
+// remove object
+favNfts.splice( removeIndex, 1 );
+  }
   const calculateTimeLeft = () => {
+
     let difference = +new Date(endDate) - +new Date();
     let timeLeft
 
@@ -71,6 +94,17 @@ setHistoryItem(el)
     // Clear timeout if the component is unmounted
     return () => clearTimeout(timer);
   });
+  useEffect(() => {
+/*     const handler = async () => {
+     const userHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
+     setFavNfts(userHistory.data.favouriteNfts)
+    }
+    if (cookie.get('id')){
+     handler() 
+    } */
+    
+    
+  }, [])
   if (data.startDate){
     if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){
       return null
@@ -115,8 +149,8 @@ setHistoryItem(el)
         <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>
         </div>
-{/*         <Favorite favoriteMe={favoriteMe} app={app} />
-        <Likes likeMe={likeMe} likes={likes} app={app} /> */}
+         <Favorite data={data} />
+        <Likes likeMe={likeMe} likes={likes} app={app}/>
         <div className="item-stats__count">{amount ? `${amount}/${initialAmount}` : '1/1'}</div>
       </div>
       <div className="products__item-price">ETH {currentBid}</div>
@@ -166,11 +200,11 @@ setHistoryItem(el)
         <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>
         </div>
-{/*         <Favorite favoriteMe={favoriteMe} app={app} />
-        <Likes likeMe={likeMe} likes={likes} app={app} /> */}
+        <Favorite data={data}/>
+        <Likes data={data} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">ETH {price}</div>
+      <div className="products__item-price">ETH {price ? price : currentBid}</div>
       <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
       </div>

@@ -42,7 +42,7 @@ interface HomeProps {
  * @returns
  */
 function Home(props): React.ReactElement {
-  const { data, app } = props;
+  const { data, app, userData } = props;
   const { lang } = app;
   const { banners } = data;
   console.log(banners)
@@ -74,7 +74,7 @@ function Home(props): React.ReactElement {
               </h3>
             </Link>
           </div>
-          <FineArtItems app={app} />
+          <FineArtItems app={app} userData={userData} />
         </section>
         {/** Секция Popular */}
         <section className="popular section">
@@ -108,7 +108,7 @@ function Home(props): React.ReactElement {
               />
             </div>
           </div>
-          <PopularItems app={app} filterBy={filterBy}/>
+          <PopularItems app={app} filterBy={filterBy} userData={userData}/>
         </section>
         {/** Секция Маркетплейс */}
         <section className="marketplace section">
@@ -120,7 +120,7 @@ function Home(props): React.ReactElement {
               </h3>
             </Link>
           </div>
-          <MarketplaceItems app={app} />
+          <MarketplaceItems app={app} userData={userData}/>
         </section>
         <Footer {...app} />
       </div>
@@ -130,10 +130,16 @@ function Home(props): React.ReactElement {
 
 Home.getInitialProps = async ({req, res}) => {
   const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/banner')
+  let userHistory
+  if (req?.cookies?.id){
+      userHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${req.cookies.id}`)
+  }
+
   return {
     data: {
       banners: result.data,
     },
+    userData: userHistory?.data
     
   };
 };

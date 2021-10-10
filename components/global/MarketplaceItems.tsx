@@ -22,7 +22,7 @@ let _count = 0;
  * @returns
  */
 export default function MarketplaceItems(props): React.ReactElement {
-  const { app, search, searchBy, filterBy, priceRange} = props;
+  const { app, search, searchBy, filterBy, priceRange, userData} = props;
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   const allMarketplaceItems = useRef([])
@@ -133,6 +133,7 @@ export default function MarketplaceItems(props): React.ReactElement {
         if (item.location === 'marketplace'){
                   return (
           <MarketplaceItem
+            userData={userData}
             ref={lastRef}
             app={app}
             key={`MarketplaceItem-${item.id}-${Math.random()}`}

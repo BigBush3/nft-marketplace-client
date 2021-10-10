@@ -18,8 +18,8 @@ interface PopularItemsProps {
  * @param props
  * @returns
  */
-export default function PopularItems(props: PopularItemsProps): React.ReactElement {
-  const { app, filterBy } = props;
+export default function PopularItems(props): React.ReactElement {
+  const { app, filterBy, userData } = props;
   const sliderRef = useRef<any>();
   const [popularItems, setPopularItems] = useState([]);
   const settings = utils.$.sliderSettings;
@@ -80,7 +80,7 @@ export default function PopularItems(props: PopularItemsProps): React.ReactEleme
     <Slider ref={sliderRef} {...settings} className="popular__items slider__products">
       {popularItems.map((item) => {
         return (
-          <PopularItem key={`PopularItem-${item.id}`} mark={item.mark} data={item} app={app} />
+          <PopularItem userData={userData} key={`PopularItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );
       })}
     </Slider>

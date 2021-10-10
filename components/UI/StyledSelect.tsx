@@ -70,8 +70,6 @@ export default function StyledSelect(props): React.ReactElement {
             <Select
             title={title}
             labelId="search-filter"
-            style={{marginLeft: '115px',     minWidth: '100px',
-            height: '42px'}}
             IconComponent={variant ? ExpandMoreRoundedIcon : ExpandMoreRoundedIconStyled}
             disableUnderline={typeof variant !== 'string'}
             autoWidth={true}

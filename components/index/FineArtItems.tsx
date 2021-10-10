@@ -16,8 +16,8 @@ interface FineArtItemsProps {
  * @param props
  * @returns
  */
-export default function FineArtItems(props: FineArtItemsProps): React.ReactElement {
-  const { app } = props;
+export default function FineArtItems(props): React.ReactElement {
+  const { app, userData} = props;
   const sliderRef = useRef<any>();
   const [fineArtItems, setFineArtItems] = useState<Types.ItemProps[]>([]);
   const settings = utils.$.sliderSettings;
@@ -40,7 +40,7 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     <Slider ref={sliderRef} className="fineart__items slider__products" {...settings}>
       {fineArtItems.map((item) => {
         return (
-          <FineArtItem key={`FineArtItem-${item.id}`} mark={item.mark} data={item} app={app} />
+          <FineArtItem userData={userData} key={`FineArtItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );
       })}
     </Slider>

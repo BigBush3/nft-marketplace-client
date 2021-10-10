@@ -58,14 +58,17 @@ interface iMaxBid {
   user: any;
   value: any;
 }
-function Product({app, data, user}): React.ReactElement {
+function Product({app, data, user, userData}): React.ReactElement {
   const { lang } = app;
   const [item, setItem] = useState();
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
   const [historySpinner, setHistorySpinner] = useState(false)
+  const [favNfts, setFavNfts] = useState(userData?.favouriteNfts)
+  const [likedNfts, setLikedNfts] = useState(userData?.AccLikes)
   const [openBid, setOpenBid] = useState(false)
   const [openHistory, setOpenHistory] = useState(false)
+  const [likes, setLikes] = useState(data.likes)
   const [openShare, setOpenShare] = useState(false)
   const [historyItem, setHistoryItem] = useState([])
   const [wideHistory, setWideHistory] = useState([])
@@ -83,6 +86,7 @@ function Product({app, data, user}): React.ReactElement {
     })
   } 
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  console.log(userData)
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
   let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
@@ -91,7 +95,45 @@ function Product({app, data, user}): React.ReactElement {
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
+  function userExists(username) {
+    if (favNfts){
+      return favNfts.some(function(el) {
+  if (el?._id){
+   return el?._id === username; 
+  } else {
+    return false
+  }
+  
+}); 
+}
 
+  }
+  function deleteFav(){
+    if (favNfts){
+          const removeIndex = favNfts.findIndex( item => item?._id === data._id );
+// remove object
+      favNfts.splice( removeIndex, 1 );
+    }
+
+  }
+  function likeExists(username){
+ 
+    if (likedNfts){
+      return likedNfts.some(function(el) {
+  if (el?._id){
+   return el?._id === username; 
+  } else {
+    return false
+  }
+  
+}); 
+}
+  }
+  function deleteLike(){
+    const removeIndex = likedNfts.findIndex( item => item._id === data._id );
+// remove object
+likedNfts.splice( removeIndex, 1 );
+  }
   useEffect(() => {
     console.log(user)
     setItem(data)
@@ -100,6 +142,16 @@ function Product({app, data, user}): React.ReactElement {
     }
     beach()
     axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/views", {product: data._id})
+      const handler = async () => {
+       const userHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
+       setFavNfts(userHistory.data.favouriteNfts)
+       setLikedNfts(userHistory.data.accLikes)
+      }
+      if (cookie.get('id')){
+       handler() 
+      }
+      
+      
   }, []);
   useEffect(() => {
     const beach = async () => {
@@ -371,8 +423,8 @@ const el = []
                 </div>
                 {item && (
                   <>
-                    <Favorite favoriteMe={data?.favoriteMe} app={app} product={data._id} owner={data.owner}/>
-                    <Likes likeMe={data?.likeMe} likes={data?.likes} app={app} product={data._id}/>
+                    <Favorite data={data}/>
+                    <Likes data={data}/>
                   </>
                 )}
                 <div className="product__share">
@@ -380,11 +432,12 @@ const el = []
                     <i className="flaticon-share" /> <span>{lang.share}</span>
                   </button>
                 </div>
-               <div className="product__doc">
+                {data.pdf && <div className="product__doc">
                   <a href={data.pdf} target="_blank" rel="noreferrer">
                     <i className="flaticon-file" /> <span>{lang.documents}</span>
                   </a>
-                </div>
+                </div>}
+
 
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
@@ -523,13 +576,17 @@ const el = []
 Product.getInitialProps = async ({req, res, query}) => {
   let clear = []
   const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
+  let userData
+  if (req?.cookies?.id){
+   userData = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${req.cookies.id}`) 
+  }
+  
   const history = await getTokenOwnHistory(47)
-  console.log(history)
   if (history[0]){
       clear.push(history[0].returnValues.addressFrom.toLowerCase())
   const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: clear})
   return {data: response.data, user: finalHistory[0]}}
-  return {data: response.data}
+  return {data: response.data, userData: userData?.data}
 
 
 }
