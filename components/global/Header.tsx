@@ -592,7 +592,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
       </Dialog>
       {focused && [filteredData.length != 0 && (
         <div className="dataResult" ref={wrapperRef}>
-          {filteredData.slice(0, 15).map((value, key) => {
+          {filteredData.slice(0, 8).map((value, key) => {
             if (value?.title){
                           return (
               <div className='dataItem'>
