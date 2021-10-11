@@ -591,7 +591,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
               <div className='dataItem'>
                 <Link href={`/product/${value._id}`}>
                 <a style={{display: 'flex', alignItems: 'center', color: 'black', marginBottom: '10px'}}>
-                  {value.nftType === 'video' ? <video style={{ width: '50px', maxHeight: '50px'}} width='50' height='50' src={value.img} autoPlay muted/> : <img src={value.img} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />}
+                  {value.nftType === 'video' ? <video style={{ width: '50px', maxHeight: '50px'}} width='50' height='50' src={value.img} autoPlay muted playsInline/> : <img src={value.img} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />}
                 
                 <div>
                   <p>{value.title} </p>
