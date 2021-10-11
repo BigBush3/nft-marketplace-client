@@ -65,7 +65,7 @@ interface HeaderProps {
 function Header(props): React.ReactElement {    
   const [verified, setVerified] = useState(false)
   const router = useRouter();
-  const { app, data} = props;
+  const { app, data, onChange} = props;
   const { lang } = app;
   const [searchBy, setSearchBy] = useState<'title' | 'author' | 'collection'>('title');
   const [searchData, setSearchData] = useState([])
@@ -531,10 +531,17 @@ mfpClose.removeEventListener('click', closeConnectDialog);
               type="text"
               name="search"
               value={wordEntered}
-              onChange={handleFilter}
+              onChange={(e) => {
+                if (router.pathname === '/marketplace'){
+                  onChange(e.target.value, searchBy)
+                  setWordEntered(e.target.value)
+                } else {
+                  handleFilter(e)
+                }
+              }}
               placeholder={`${lang.searchBy.name} ${lang.searchBy[searchBy]}`}
               autoComplete='off'
-              onFocus={() => setFocused(true)}
+              onFocus={() => {if(router.pathname !== '/marketplace') {setFocused(true)}}}
             />
           </div>
         </div>

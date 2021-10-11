@@ -97,6 +97,7 @@ function Marketplace(props): React.ReactElement {
     utils.$.setStylesArtistList();
   }, []);
   const onChangeSome = (e, search) => {
+    console.log('hi')
     setSearchBy(search)
     setSearch(e)
   }
