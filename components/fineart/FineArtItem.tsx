@@ -6,6 +6,8 @@ import OwnerDropdownItem from '../global/OwnerDropdownItem';
 import Likes from '../global/Likes';
 import Favorite from '../global/Favorite';
 import Link from 'next/link';
+import axios from 'axios'
+import { getTokenOwnHistory } from '../../utils/blockchain';
 
 interface FineArtItemProps {
   item: Types.ItemProps;
@@ -22,24 +24,42 @@ export default function FineArtItem(props): React.ReactElement {
   const { item, app } = props;
   const { lang } = app;
   const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type } = item;
+  const [historyItem, setHistoryItem] = useState([])
+  const ownerHandler = async () => {
+    if (!open){
+    const el = []
+    const resHistory = await getTokenOwnHistory(item.tokenId)
+    if (resHistory[0]){
+      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+for (let i = 0; i < resHistory.length; i++) {
+  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+  
+}
+const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+setHistoryItem(finalHistory.data.result)
+} else {
+  el.push(item.owner)
+  setHistoryItem(el)
+}
+    }
+    setOpen(!open)
+  }
   return (
     <div className="fineart__item products__item">
       <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
         {/** Всплывающий список владельцев */}
-{/*         <div className={clsx('item-info__dropdown', open && 'active')}>
-          {owners.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${title}_${index}`} {...owner} />;
-          })}
-        </div> */}
+         <div className={clsx('item-info__dropdown', open && 'active')}>
+         {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+        </div> 
       </div>
       <a href={`/product/${_id}`} className="products__item-img">
         <div className="item-img__cover">
@@ -57,8 +77,8 @@ export default function FineArtItem(props): React.ReactElement {
         <div className="item-stats__views">
           <i className="flaticon-eye" /> <span>{views}</span>
         </div>
-        <Favorite favoriteMe={favoriteMe} app={app} />
-        <Likes likeMe={likeMe} likes={likes} app={app} />
+        <Favorite data={item} />
+        <Likes data={item} />
         <div className="item-stats__count">1/1</div>
       </div>
       <div className="products__item-price">ETH {price}</div>

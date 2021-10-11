@@ -87,10 +87,17 @@ function Header(props): React.ReactElement {
       let searchDat
       if (searchBy === 'title'){
         searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
-        console.log(searchDat)
+        if (router.pathname === '/fineart'){
+          searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
+          return setSearchData(searchDat)
+        }
         setSearchData(searchDat.data)
       } else if(searchBy === 'author'){
         searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/users')
+        if (router.pathname === '/fineart'){
+          searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
+          return setSearchData(searchDat)
+        }
         setSearchData(searchDat.data)
       }
     })()
@@ -100,9 +107,9 @@ function Header(props): React.ReactElement {
     setWordEntered(searchWord);
     const newFilter = searchData.filter((value) => {
       if (value?.title){
-        return value.title.toLowerCase().includes(searchWord.toLowerCase());
+        return value.title.toLowerCase().startsWith(searchWord.toLowerCase());
       } 
-      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      return value.name.toLowerCase().startsWith(searchWord.toLowerCase())
       
     });
 

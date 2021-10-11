@@ -1276,7 +1276,6 @@ textarea {
   -ms-flex-positive: 1;
   flex-grow: 1;
   border-left: 1px solid #c6c6c6;
-  border-right: 1px solid #c6c6c6;
 }
 
 .header__search-input input {
@@ -1289,6 +1288,9 @@ textarea {
   border: none;
   background: none;
   padding: 0 26px;
+}
+.gallery .slick-track{
+  width: auto !important;
 }
 
 .header__search-input input::-webkit-input-placeholder {
