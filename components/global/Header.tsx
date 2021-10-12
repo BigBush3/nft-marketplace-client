@@ -90,12 +90,18 @@ function Header(props): React.ReactElement {
         if (router.pathname === '/fineart'){
           searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
           return setSearchData(searchDat)
+        } else if(router.pathname === '/marketplace'){
+          searchDat = searchDat.data.filter((item) => item.location === 'marketplace')
+          return setSearchData(searchDat)
         }
         setSearchData(searchDat.data)
       } else if(searchBy === 'author'){
         searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/users')
         if (router.pathname === '/fineart'){
           searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
+          return setSearchData(searchDat)
+        } else if(router.pathname === '/marketplace'){
+          searchDat = searchDat.data.filter((item) => item.location === 'marketplace')
           return setSearchData(searchDat)
         }
         setSearchData(searchDat.data)
@@ -539,16 +545,11 @@ mfpClose.removeEventListener('click', closeConnectDialog);
               name="search"
               value={wordEntered}
               onChange={(e) => {
-                if (router.pathname === '/marketplace'){
-                  onChange(e.target.value, searchBy)
-                  setWordEntered(e.target.value)
-                } else {
                   handleFilter(e)
-                }
               }}
               placeholder={`${lang.searchBy.name} ${lang.searchBy[searchBy]}`}
               autoComplete='off'
-              onFocus={() => {if(router.pathname !== '/marketplace') {setFocused(true)}}}
+              onFocus={() => {setFocused(true)}}
             />
           </div>
         </div>
