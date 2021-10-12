@@ -106,7 +106,7 @@ setHistoryItem(el)
     
   }, [])
   if (data.startDate){
-    if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){
+    if (new Date(data.startDate).getTime() > new Date().getTime()){
       return null
     } else {
       return (
@@ -141,8 +141,8 @@ setHistoryItem(el)
             <img src="/img/verified-gold.png" alt="mark" />
           </div>
         )}
-        {timeLeft.days === 0 ? <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
-        <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>}
+        {new Date(data.endDate).getTime() < new Date().getTime() ? <h1 style={{fontSize: '20px', color: 'red'}}>{lang.auction.auctionEnded}</h1> : [timeLeft?.days === 0 ? <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
+        <div className='timer_fill place_timer' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft?.days < 10? '0' + String(timeLeft.days): timeLeft?.days} : ${timeLeft?.hours < 10? '0' + String(timeLeft?.hours): timeLeft?.hours} : ${timeLeft?.minutes < 10? '0' + String(timeLeft?.minutes): timeLeft?.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>]}
       </div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
@@ -151,7 +151,7 @@ setHistoryItem(el)
         </div>
          <Favorite data={data} />
         <Likes likeMe={likeMe} likes={likes} app={app}/>
-        <div className="item-stats__count">{amount ? `${amount}/${initialAmount}` : '1/1'}</div>
+        <div className="item-stats__count">{amount ? `${amount}/${amount}` : '1/1'}</div>
       </div>
       <div className="products__item-price">ETH {currentBid}</div>
       <div className="products__item-buy">

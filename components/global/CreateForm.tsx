@@ -190,7 +190,9 @@ function handleDrag(tag, currPos, newPos) {
     const price = data.price * 1e18
     setOpen(true)
     setCreateLoader(true)
-    const metamask = await connectMetaMask()
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     const subscription = (contractAddress, topic)=>{
       console.log('start subscription')
       console.log('contractAddress: ', contractAddress)
@@ -200,25 +202,7 @@ function handleDrag(tag, currPos, newPos) {
           topics: [topic]
       })
     } 
-    const walletAddress = metamask.userAddress
-    const wallet = metamask.web3
     console.log(walletAddress)
-/*         let txData = NFTSTORE.methods.addOwner(walletAddress).encodeABI()
-        await wallet.eth.sendTransaction({
-                to: NFT_ADDRESS,
-                from: walletAddress,
-                data: txData
-            },
-            function(error, res){
-                console.log(error);
-                console.log(res);
-            }
-        )		 */
-    console.log('metamask connected')
-    console.log('NFT contract connected')
-    console.log(NFT)
-    console.log('walletAddress: ', walletAddress)
-    console.log('web3: ', web3)
     const formData = new FormData();
     // Update the formData object
     formData.append(
@@ -260,7 +244,21 @@ function handleDrag(tag, currPos, newPos) {
                 pinata_secret_api_key: '90cdc703305e1085e06dfb8062fc5958dcc0985fba2b1180c3cdb59cc67dd573'
             }
         })
-    const resPdf = await axios
+    const ipfsHash = response.data.IpfsHash
+    let ipfsPdfHash = ''
+    if (pdfCopy){
+      let pdfData = new FormData()
+      pdfData.append('file', pdfCopy)
+      const metadata = JSON.stringify({
+        name: `testname-pdf-${new Date().getTime()}-${pdfCopy.name}`,
+    });
+    pdfData.append('pinataMetadata', metadata);
+    //pinataOptions are optional
+    const pinataOptions = JSON.stringify({
+        cidVersion: 0,
+    });
+    pdfData.append('pinataOptions', pinataOptions);
+    const resPdf =  await axios
     .post(url, sheesh, {
       //@ts-ignore
         maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
@@ -271,8 +269,9 @@ function handleDrag(tag, currPos, newPos) {
             pinata_secret_api_key: '90cdc703305e1085e06dfb8062fc5958dcc0985fba2b1180c3cdb59cc67dd573'
         }
     })
-    const ipfsHash = response.data.IpfsHash
-    const ipfsPdfHash = resPdf.data.IpfsHash
+    ipfsPdfHash = resPdf.data.IpfsHash
+    }
+    
     let txData = NFT.methods.create(1, royalty, ipfsHash, ipfsPdfHash).encodeABI()
     await wallet.eth.sendTransaction({
         to: NFT_ADDRESS,

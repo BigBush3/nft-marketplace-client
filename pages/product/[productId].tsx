@@ -86,7 +86,6 @@ function Product({app, data, user, userData}): React.ReactElement {
     })
   } 
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
-  console.log(userData)
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
   let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
@@ -269,38 +268,40 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       realizeBid : 140500,
       cancelBid :58500
   }
-  const finishAuction = async (tokenId, auctionIndex)=> {
-    const metamask = await connectMetaMask()
-    const walletAddress = metamask.userAddress
-    const wallet = metamask.web3
+  const finishAuction = async ()=> {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
+    if (maxBid.user){
     let fee = await getGasFee(gasFee.finishAuction)
+    let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, data.tokenId, data.orderIndex).encodeABI()
     if(!wallet){
       alert('you have to connect cryptowallet')
     } else {
-      let txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
-    await wallet.eth.sendTransaction({
-      to: NFT_ADDRESS,
-      from: walletAddress,
-      data: txData
-  },
-  function(error, res){
-      console.log(error);
-      console.log(res);
-      subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
-  }
-);
+      await wallet.eth.sendTransaction({
+              from: walletAddress,
+              to: TIMEDAUCTION_ADDRESS,
+              
+              value: web3.utils.toWei(String(fee/1e18)),
+              data: txData
+          },
+          function(error, res){
+              console.log(error);
+              console.log(res);
+          }
+      )		
     }
-    
-/*  */
+    await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
+    router.push(`/cabinet/${maxBid.user._id}`)
+    }
+/* 
     if (maxBid.user){
-          await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
-          router.push(`/cabinet/${maxBid.user._id}`)
+
 
     } else {
       await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: cookie.get('id'), tokenId: router.query.productId, action: `${cookie.get('name')} end auction`})
       router.push(`/cabinet/${cookie.get('id')}`)
-
-    }
+    } */
   }
   const historyHandler = async () => {
     if (openBids){
@@ -368,8 +369,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     setOpenHistory(!openHistory)
   }
   const endHandler = async () => {
-    await finishAuction(data.tokenId, data.orderIndex)
-    router.push(`/cabinet/${cookie.get('id')}`)
+    await finishAuction()
   }
   const ownerHandler = async () => {
     if (!open){
@@ -432,7 +432,7 @@ const el = []
                     <i className="flaticon-share" /> <span>{lang.share}</span>
                   </button>
                 </div>
-                {data.pdf && <div className="product__doc">
+                {data.pdf !== 'https://inifty.mypinata.cloud/ipfs/' && <div className="product__doc">
                   <a href={data.pdf} target="_blank" rel="noreferrer">
                     <i className="flaticon-file" /> <span>{lang.documents}</span>
                   </a>
@@ -442,7 +442,7 @@ const el = []
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
-                   <button className='fill buy' onClick={endHandler}><span>{lang.auction.endAuction}</span></button>] 
+                   [new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{lang.auction.endAuction}</span></button>]] 
                    : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
@@ -479,7 +479,7 @@ const el = []
                 {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${user._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
                 }
                 
-                <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
+                <div className="author__count">{data.amount ? `${data.amount}/${data.amount}` : '1/1'}</div>
               </div>
             </div>
             <div className="author__text">
@@ -502,7 +502,6 @@ const el = []
             </div>
             {historySpinner && <CircularProgress/>}
             {openHistory ? [wideHistory.map((item, index, array) => {
-              console.log(item)
               return (
                 <div style={{display: 'flex', marginTop: '15px'}}>
                   <div className='history_img' style={{marginRight:'10px'}}>
