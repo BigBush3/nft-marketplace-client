@@ -30,13 +30,13 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
     <aside className="aside artist">
       <div className="aside__heading heading">
         <h3>
-          <i className="flaticon-businessman" /> {lang.authors}
+           {lang.authors}
         </h3>
       </div>
       <ul className="artist__list">
         <div className="artist__list-heading heading">
           <h3>
-            <i className="flaticon-businessman" /> {lang.authors}
+            {lang.authors}
           </h3>
           <div className="artist__list-close">
             <i className="flaticon-letter-x" />

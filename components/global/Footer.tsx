@@ -16,6 +16,7 @@ import Some from '@material-ui/icons/Clear'
 
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
+import router from 'next/router';
 
 
 
@@ -71,7 +72,7 @@ function Footer(props: Types.AppProps): React.ReactElement {
       <div className="footer__nav">
         <ul className="footer__nav-items">
           <li className="footer__nav-item">
-            <a href="#" className="footer__nav-link">
+            <a href='#' onClick={() => router.push('/about')} className="footer__nav-link">
               {lang.pageNames.about}
             </a>
           </li>
@@ -81,8 +82,8 @@ function Footer(props: Types.AppProps): React.ReactElement {
             </a>
           </li>
           <li className="footer__nav-item">
-            <a href="#" className="footer__nav-link open_terms">
-              {lang.footer.termsOfUse}
+            <a href="#" onClick={() => router.push('/faq')} className="footer__nav-link">
+              {lang.pageNames.support}
             </a>
           </li>
           <li className="footer__nav-item">

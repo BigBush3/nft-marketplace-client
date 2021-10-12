@@ -11,6 +11,7 @@ const { SLIDER_PRODUCTS_PART } = utils.c;
 
 interface FineArtItemsProps {
   app?: Types.AppProps;
+  ind: any;
 }
 
 let firstLoad = true;
@@ -21,9 +22,10 @@ let firstLoad = true;
  * @returns
  */
 export default function FineArtItems(props: FineArtItemsProps): React.ReactElement {
-  const { app } = props;
+  const { app, ind } = props;
   const { lang } = app;
   const mainRef = useRef<any>();
+  const sliderRef = useRef<any>()
   const [fineArtItems, setFineArtItems] = useState<Types.ItemProps[]>([]);
   const [collectionState, setCollectionState] = useState<Types.ItemProps[]>([]);
   const settings = utils.$.fineArtSliderSettings;
@@ -46,18 +48,20 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     }
   };
   useEffect(() => {
+    sliderRef.current.slickGoTo(ind)
+  }, [ind])
+  useEffect(() => {
     (async () => {
       if (fineArtItems.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         const fineartItems = resFineart.data.filter((item) => item.location === 'FineArt')
         setFineArtItems(fineartItems);
-        getDataPart(fineartItems)();
       }
     })();
     if (!firstLoad) {
       $(document).ready(() => {
         const rects = mainRef?.current?.getBoundingClientRect();
-        window.scrollTo({ top: window.pageYOffset + rects.y, behavior: 'smooth' });
+
       });
     }
     firstLoad = false;
@@ -73,9 +77,9 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     <main ref={mainRef} className="main fineart">
       <div className="fineart__overview">
         {/** элемент работы/коллекции */}
-        <Slider {...settings} className="fineart__overview-items overview__slider active">
+        <Slider ref={sliderRef} {...settings} className="fineart__overview-items overview__slider active">
           {/** элемент работы */}
-          {collectionState.map((item, key) => {
+          {fineArtItems.map((item, key) => {
             return <FineArtItem item={item} key={`ItemOfCollection-${key}`} app={app} />;
           })}
         </Slider>

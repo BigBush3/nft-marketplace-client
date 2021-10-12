@@ -394,8 +394,8 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const ownerHandler = async () => {
     if (!open){
 const el = []
-    
-    const resHistory = await getTokenOwnHistory(data.tokenId)
+    try {
+          const resHistory = await getTokenOwnHistory(data.tokenId)
     if (resHistory[0]){
           el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
     for (let i = 0; i < resHistory.length; i++) {
@@ -409,6 +409,10 @@ const el = []
       el.push(data.owner)
       setHistoryItem(el)
     }
+    } catch (err) {
+      console.log(err.message)
+    }
+
     }
     setOpen(!open)
   }
@@ -424,7 +428,7 @@ const el = []
 
             <div className="product__block">
               <div className="product__image">
-                {data.nftType === 'video' ? <video src={data.img} width="450" height="300" controls webkit-playsinline playsInline autoPlay loop muted>
+                {data.nftType === 'video' ? <video src={data.img} width="700" height="700" style={{width: '100%', height: '100%'}} controls webkit-playsinline playsInline autoPlay loop muted>
      </video> : <img src={data.img} alt="img" />}
                 
                 <div className='verified__gold'>

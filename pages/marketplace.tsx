@@ -117,7 +117,7 @@ function Marketplace(props): React.ReactElement {
       <div className="wrapper ">
         <div className="heading center">
           <h1>
-            <i className="flaticon-fire" /> {lang.pageNames.marketPlace}
+             {lang.pageNames.marketPlace}
           </h1>
         </div>
         <Banner {...app} banners={banners} />

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import axios from 'axios'
@@ -29,7 +29,10 @@ interface FineArtProps {
 function FineArt(props): React.ReactElement {
   const { app, data } = props;
   const { banners } = data;
-
+  const [ind, setInd] = useState(0)
+  const onClickGallery = (key) => {
+    setInd(key)
+  }
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
   }, []);
@@ -43,14 +46,14 @@ function FineArt(props): React.ReactElement {
       <div className="wrapper">
         <div className="heading center">
           <h1>
-            <i className="flaticon-fire" /> Fine Art
+             Fine Art
           </h1>
         </div>
         <Banner {...app} banners={banners} />
-        <Gallery app={app}/>
+        <Gallery app={app} onClickGallery={onClickGallery}/>
         <div className="content">
           <ArtistsList app={app}/>
-          <FineArtItems app={app}/>
+          <FineArtItems app={app} ind={ind}/>
         </div>
         <Footer {...app} />
       </div>

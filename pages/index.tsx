@@ -70,7 +70,7 @@ function Home(props): React.ReactElement {
           <div className="fineart__heading heading">
             <Link href="/fineart" passHref>
               <h3 className={classes.headerLink}>
-                <i className="flaticon-fire" /> {lang.pageNames.fineArt}
+                {lang.pageNames.fineArt}
               </h3>
             </Link>
           </div>
@@ -80,7 +80,6 @@ function Home(props): React.ReactElement {
         <section className="popular section">
           <div className="popular__heading heading">
             <h3>
-              <i className="flaticon-star" />
               {lang.popular}
             </h3>
             <div className="heading__sort sort">
@@ -115,7 +114,6 @@ function Home(props): React.ReactElement {
           <div className="marketplace__heading heading">
             <Link href="/marketplace" passHref>
               <h3 className={classes.headerLink}>
-                <i className="flaticon-gold-ingots" />
                 {lang.pageNames.marketPlace}
               </h3>
             </Link>

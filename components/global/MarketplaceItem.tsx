@@ -69,7 +69,13 @@ favNfts.splice( removeIndex, 1 );
 const ownerHandler = async () => {
   if (!open){
   const el = []
-  const resHistory = await getTokenOwnHistory(data.tokenId)
+  let resHistory
+  try {
+    let resHistory = await getTokenOwnHistory(data.tokenId)
+  } catch (err) {
+    console.log(err.message)
+  }
+  
   if (resHistory[0]){
     el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
 for (let i = 0; i < resHistory.length; i++) {
@@ -132,8 +138,8 @@ setHistoryItem(el)
         </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" autoPlay  muted loop playsInline style={{'minWidth': '230px'}}>
-     </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
+          {data.nftType === 'video' ? <video src={data.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', height: '250px', borderRadius: '20px', objectFit: 'cover'}}>
+     </video> : <img src={data.img} alt="img" style={{borderRadius: '20px', width: '250px', height: '250px', objectFit: 'cover'}}/>}
           </Link>
         </div>
         {verified && (
@@ -185,8 +191,8 @@ setHistoryItem(el)
         
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
-          {data.nftType === 'video' ? <video src={data.img} width="450" height="300" muted autoPlay loop playsInline style={{'minHeight': '230px'}}>
-     </video> : <img src={data.img} alt="img" style={{borderRadius: '20px'}}/>}
+          {data.nftType === 'video' ? <video src={data.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', height: '250px', borderRadius: '20px', objectFit: 'cover'}}>
+     </video> : <img src={data.img} alt="img" style={{borderRadius: '20px', width: '250px', height: '250px', objectFit: 'cover'}}/>}
           </Link>
         </div>
         {verified && (

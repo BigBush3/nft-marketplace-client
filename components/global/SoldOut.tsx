@@ -45,7 +45,8 @@ const SoldOutItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactEl
       <div className="products__item-img">
         <div className="item-img__cover">
           <Link href={`/token/${_id}`}>
-            <img style={{ cursor: 'pointer' }} src={img} alt="img" />
+          {data.nftType === 'video' ? <video src={data.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', borderRadius: '20px', height: '250px', objectFit: 'cover'}}>
+     </video> : <img src={data.img} alt="img" style={{borderRadius: '20px', width: '250px', height: '250px', objectFit: 'cover'}}/>}
           </Link>
         </div>
         {verified && (

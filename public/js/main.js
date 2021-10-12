@@ -237,14 +237,6 @@ $(document).ready(function(){
 			}
 		],
 	});
-	$('a.open_terms').magnificPopup({
-		items: [
-			{
-				src: '.popup__terms',
-				type: 'inline'
-			}
-		],
-	});
 	$('a.open_bid').magnificPopup({
 		items: [
 			{

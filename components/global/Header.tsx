@@ -386,7 +386,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
                       </a>
                     </Link>
                   </li>
-                  <li className="header__nav-item">
+{/*                   <li className="header__nav-item">
                     <Link href="/faq">
                       <a role="button" onClick={unHiddenHtml} className="header__nav-link">
                         {lang.pageNames.support}
@@ -399,7 +399,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
                         {lang.pageNames.about}
                       </a>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="header__nav-item">
                     <Link href="/activity">
                       <a role="button" onClick={unHiddenHtml} className="header__nav-link">

@@ -7,6 +7,7 @@ import type * as Types from '../../types/index.d';
 
 interface GalleryProps {
   app: Types.AppProps;
+  onClickGallery: any;
 }
 
 const settings = utils.$.galerySliderSettings;
@@ -17,7 +18,7 @@ const settings = utils.$.galerySliderSettings;
  * @returns
  */
 export default function Gallery(props: GalleryProps): React.ReactElement {
-  const { app } = props;
+  const { app, onClickGallery } = props;
   const { lang } = app;
   const sliderRef = useRef<any>();
   const [artistList, setArtistList] = useState([]);
@@ -39,18 +40,16 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
         {artistList.map((item, key) => {
           const firstChild = {...item};
           return (
-            <Link key={`GalleryItem-${key}`} href={`/product/${firstChild._id}`}>
-              <a title={firstChild.title} href="?">
+              <div title={firstChild.title} onClick={() => onClickGallery(key)}>
                 <div className="gallery__item">
-                  <img src={firstChild?.img} style={{width: '90px', height: '100px', borderRadius: '5px', objectFit: 'cover'}}alt="img" />
+                  <img src={firstChild?.img} style={{width: '134px', height: '196px', borderRadius: '5px', objectFit: 'cover'}}alt="img" />
                 </div>
                 {firstChild?.mark && (
                   <div className="gallery__item-mark">
                     <img src="/img/mark.png" alt="mark" />
                   </div>
                 )}
-              </a>
-            </Link>
+              </div>
           );
         })}
       </Slider>
