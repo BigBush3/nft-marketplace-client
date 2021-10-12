@@ -70,7 +70,8 @@ function Token({app, data}): React.ReactElement {
 
             <div className="product__block">
               <div className="product__image">
-                <img src={data.img} alt="img" />
+              {data.nftType === 'video' ? <video src={data.img} width="700" height="700" style={{width: '100%', height: '100%'}} controls webkit-playsinline playsInline autoPlay loop muted>
+     </video> : <img src={data.img} alt="img" />}
                 <div className='verified__gold'>
                   {data.verified ? <img src="/img/verified-gold.png" alt="" /> : null}
                  

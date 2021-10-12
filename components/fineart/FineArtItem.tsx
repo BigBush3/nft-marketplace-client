@@ -27,7 +27,8 @@ export default function FineArtItem(props): React.ReactElement {
   const [historyItem, setHistoryItem] = useState([])
   const ownerHandler = async () => {
     if (!open){
-    const el = []
+      try {
+            const el = []
     const resHistory = await getTokenOwnHistory(item.tokenId)
     if (resHistory[0]){
       el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
@@ -41,6 +42,10 @@ setHistoryItem(finalHistory.data.result)
   el.push(item.owner)
   setHistoryItem(el)
 }
+      } catch (err) {
+        console.log(err.message)
+      }
+
     }
     setOpen(!open)
   }
@@ -62,8 +67,8 @@ setHistoryItem(finalHistory.data.result)
         </div> 
       </div>
       <a href={`/product/${_id}`} className="products__item-img">
-        <div className="item-img__cover">
-          <img src={item?.img} alt="img" />
+        <div >
+          <img style={{width: '500px', height: '550px', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
         </div>
         {mark && (
           <div className="products__item-mark">
