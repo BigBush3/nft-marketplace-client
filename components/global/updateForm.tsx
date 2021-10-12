@@ -171,7 +171,6 @@ function handleDrag(tag, currPos, newPos) {
     setOpen(true)
     setApproveLoader(true)
     const price = data.price * 1e18
-    const metamask = await connectMetaMask()
     const subscription = (contractAddress, topic)=>{
       console.log('start subscription')
       console.log('contractAddress: ', contractAddress)
@@ -181,8 +180,9 @@ function handleDrag(tag, currPos, newPos) {
           topics: [topic]
       })
     } 
-    const walletAddress = metamask.userAddress
-    const wallet = metamask.web3
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     let txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
       to: NFT_ADDRESS,

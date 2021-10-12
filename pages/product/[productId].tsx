@@ -272,7 +272,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     const walletAddress = accounts[0];
     const wallet = await new Web3(window.ethereum);
-    if (maxBid.user){
+    if (maxBid?.user){
     let fee = await getGasFee(gasFee.finishAuction)
     let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, data.tokenId, data.orderIndex).encodeABI()
     if(!wallet){
@@ -293,6 +293,26 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     }
     await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
     router.push(`/cabinet/${maxBid.user._id}`)
+    } else {
+      let fee = await getGasFee(gasFee.cancelAuction)
+      let txData = TIMEDAUCTION.methods.cancelAuction(NFT_ADDRESS, data.tokenId, data.orderIndex).encodeABI()
+      if(!wallet){
+        alert('you have to connect cryptowallet')
+      } else {
+        await wallet.eth.sendTransaction({
+                to: TIMEDAUCTION_ADDRESS,
+                from: walletAddress,
+                value: web3.utils.toWei(String(fee/1e18)),
+                data: txData
+            },
+            function(error, res){
+                console.log(error);
+                console.log(res);
+            }
+        )		
+      }
+      await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: cookie.get('id'), tokenId: router.query.productId, action: `${cookie.get('name')} end this auction!`})
+      router.push(`/cabinet/${cookie.get('id')}`)
     }
 /* 
     if (maxBid.user){
