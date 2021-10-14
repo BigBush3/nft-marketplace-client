@@ -7334,6 +7334,9 @@ a.ui-button:active,
   .content.single-product {
     margin-top: 0;
   }
+  .reactEasyCrop_Container{
+    border-radius: 10px !important;
+  }
 
   .content.marketplace .aside__heading {
     width: calc(50% - 10px);

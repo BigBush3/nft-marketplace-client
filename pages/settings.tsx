@@ -12,6 +12,8 @@ import { getCroppedImg } from '../utils/canvasUtil'
 
 import type * as Types from '../types/index.d';
 import Modal from '@material-ui/core/Modal';
+import Some from '@material-ui/icons/Clear'
+import axios from 'axios';
 
 
 const { WALLET_LOCAL_STORAGE_NAME } = utils.c;
@@ -94,6 +96,14 @@ function Settings({app,}): React.ReactElement {
     }
   }, [header, croppedAreaPixels])
   useEffect(() => {
+    if (cookie.get('id')){
+      (async() => {
+        const resp = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
+        if (resp.data.headerUrl){
+          setHeader(resp.data.headerUrl)
+        }
+      })()
+    }
     if(cookie.get('name')){
       setName(cookie.get('name'))
     }
@@ -101,10 +111,10 @@ function Settings({app,}): React.ReactElement {
       setEmail(cookie.get('email'))
     }
     if (cookie.get('imgUrl')){
-      console.log(cookie.get('imgUrl'))
       setFile(cookie.get('imgUrl'))
     }
-      if (cookie.get('headerUrl')){
+    console.log(cookie.get('headerUrl'))
+    if (cookie.get('headerUrl')){
       setHeader(cookie.get('headerUrl'))
     }
   }, [])
@@ -257,8 +267,12 @@ function Settings({app,}): React.ReactElement {
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
-    <div style={{minWidth: '300px', minHeight: '400px'}}>
+          <Some className='close_cross' onClick={handleCloseAvatar} style={{cursor: 'pointer'}}/>
+    <div style={{minWidth: '300px', minHeight: '400px', borderRadius: '10px'}}>
+      
       <div style={{  position: 'absolute',
+      borderRadius: '10px',
+      overflow: 'hidden',
   top: '0',
   left: '0',
   right: '0',
@@ -285,7 +299,7 @@ function Settings({app,}): React.ReactElement {
                 display: 'flex',
                 alignItems: 'center'
               }}>
-                <img src="/img/325962_minus_close_delete_exit_remove_icon.svg" style={{width: '30px', height: '30px', marginRight: '10px'}} alt="" />
+                <img src="/img/325962_minus_close_delete_exit_remove_icon.svg" style={{width: '15px', height: '15px', marginRight: '10px'}} alt="" />
                 <Slider
                   value={zoom}
                   min={1}
@@ -295,7 +309,7 @@ function Settings({app,}): React.ReactElement {
                   
                   //@ts-ignore
                   onChange={(e, zoom) => setZoom(zoom)} />
-                  <img src="/img/325963_plus_add_new_icon.svg" style={{width: '30px', height: '30px', marginLeft: '10px'}} alt="" />
+                  <img src="/img/325963_plus_add_new_icon.svg" style={{width: '15px', height: '15px', marginLeft: '10px'}} alt="" />
                   <div className='button' style={{marginTop: '135px', position: 'absolute'}}>
                                      <button className='buy fill' onClick={showCroppedImage}>
                     <span>Save</span>
@@ -316,8 +330,11 @@ function Settings({app,}): React.ReactElement {
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
-    <div style={{minWidth: '300px', minHeight: '400px'}}>
+    <div style={{minWidth: '300px', minHeight: '400px', borderRadius: '10px'}}>
+    <Some className='close_cross' onClick={handleCloseHeader} style={{cursor: 'pointer'}}/>
       <div style={{  position: 'absolute',
+      borderRadius: '10px',
+      overflow: 'hidden',
   top: '0',
   left: '0',
   right: '0',
@@ -343,7 +360,7 @@ function Settings({app,}): React.ReactElement {
                 display: 'flex',
                 alignItems: 'center'
               }}>
-              <img src="/img/325962_minus_close_delete_exit_remove_icon.svg" style={{width: '30px', height: '30px', marginRight: '10px'}} alt="" />
+              <img src="/img/325962_minus_close_delete_exit_remove_icon.svg" style={{width: '15px', height: '15px', marginRight: '10px'}} alt="" />
                 <Slider
                   value={zoom}
                   min={1}
@@ -353,7 +370,7 @@ function Settings({app,}): React.ReactElement {
                   
                   //@ts-ignore
                   onChange={(e, zoom) => setZoom(zoom)} />
-                  <img src="/img/325963_plus_add_new_icon.svg" style={{width: '30px', height: '30px', marginLeft: '10px'}} alt="" />
+                  <img src="/img/325963_plus_add_new_icon.svg" style={{width: '15px', height: '15px', marginLeft: '10px'}} alt="" />
                   <div className='button' style={{marginTop: '135px', position: 'absolute'}}>
                                      <button className='buy fill' onClick={showCroppedHeader}>
                     <span>Save</span>
