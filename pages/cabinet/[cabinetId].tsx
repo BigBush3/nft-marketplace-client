@@ -528,7 +528,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
     aria-describedby="simple-modal-description"
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
     <div>
-      {bidHistory === [] ? [bidHistory.map((item) => {
+      {bidHistory.map((item) => {
            return (
           <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
@@ -547,12 +547,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
         )
 
        
-      })] :            <div>
-        <p>
-          You don't have any bids
-        </p>
-              
-            </div>}
+      })}
     </div>
       
     </div>
