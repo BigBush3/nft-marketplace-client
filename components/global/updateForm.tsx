@@ -43,6 +43,7 @@ import {
 interface CreateFormProps {
   app: Types.AppProps;
   createMany: boolean;
+  item: any;
 }
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function UpdateForm(props: CreateFormProps): React.ReactElement {
-  const { app, createMany } = props;
+  const { app, createMany, item } = props;
   const { lang } = app;
   const classes = useStyles();
   const KeyCodes = {
@@ -200,7 +201,7 @@ function handleDrag(tag, currPos, newPos) {
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
       
-      txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, router.query.tokenId, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
+      txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, item.tokenId, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
       } else {
@@ -221,7 +222,7 @@ function handleDrag(tag, currPos, newPos) {
                 const sth = event.data.slice(0, 66)
                 console.log(parseInt(sth))
                 try{
-                                       const res = await axios.post('http://localhost:8000/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
+                                       const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: item._id, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
 
                router.push(`/cabinet/${cookie.get('id')}`)
               } catch(err){
@@ -243,10 +244,10 @@ function handleDrag(tag, currPos, newPos) {
     
   } else {
   let fee = await getGasFee(gasFee.createOrderSell)
-  console.log(fee, NFT_ADDRESS, data.price, router.query.tokenId)
+  console.log(fee, NFT_ADDRESS, data.price, item.tokenId)
   
   // @ts-ignore
-	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, router.query.tokenId, 1, web3.utils.toWei(String(data.price))).encodeABI()
+	txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, item.tokenId, 1, web3.utils.toWei(String(data.price))).encodeABI()
 	if(!wallet){
 		alert('you have to connect cryptowallet')
 	} else {
@@ -265,9 +266,14 @@ function handleDrag(tag, currPos, newPos) {
                 console.log(event)
                 const sth = event.data.substring(0, 66)
                 console.log(parseInt(sth))
-                            const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.price} ETH`})
- router.push(`/product/${res.data._id}`)
+                try {
+                  const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {price: data.price, type: "orderSell", tokenId: item._id, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.price} ETH`})
+                            router.push(`/cabinet/${cookie.get('id')}`)
                         
+                } catch (err) {
+                  router.push(`/cabinet/${cookie.get('id')}`)
+                }
+                            
 
               })
 		        } else {

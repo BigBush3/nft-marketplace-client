@@ -351,7 +351,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       } else if(item.event === 'Deal'){
         oneList.push(item.returnValues.addressFrom.toLowerCase())
         oneList.push(item.returnValues.addressTo.toLowerCase())
-        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'Purchased for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.value), 'ether')})
+        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'Purchased for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
       } else if(item.event === 'AuctionOrder'){
         oneList.push(item.returnValues.seller.toLowerCase())
         clearList.push({user: item.returnValues.seller.toLowerCase(), event: 'Auctioned for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.minValue), 'ether')})

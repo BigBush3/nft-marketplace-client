@@ -53,7 +53,7 @@ export default function PlaceBidModal(props): React.ReactElement {
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   let bidIndex
   let subevent
-  const [myBid, setMyBid] = useState({value: 0})
+  const [myBid, setMyBid] = useState({})
   const [myValue, setMyValue] = useState(0)
   // @ts-ignore
   let NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS)// @ts-ignore
@@ -193,9 +193,11 @@ useEffect(() => {
       setProceed(true)
       //@ts-ignore
       if (myBid.user){
+        console.log('update')
         //@ts-ignore
         await updateBidAuction(data.tokenId, data.orderIndex, myBid.bidIndex, bid)
       } else {
+        console.log('create', data.tokenId, data.orderIndex, bid)
         await createBidAuction(data.tokenId, data.orderIndex, bid)
       }
       
