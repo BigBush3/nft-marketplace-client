@@ -457,9 +457,12 @@ const getUpdatedBidByToken = async(userAddress)=>{
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
-          {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item) => {
+          <div className="marketplace__items">
+                      {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item) => {
             return <CollectionItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
           })}
+          </div>
+
         </div>
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">
