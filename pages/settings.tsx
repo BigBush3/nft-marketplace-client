@@ -343,7 +343,7 @@ function Settings({app,}): React.ReactElement {
                 display: 'flex',
                 alignItems: 'center'
               }}>
-              
+              <img src="/img/325962_minus_close_delete_exit_remove_icon.svg" style={{width: '30px', height: '30px', marginRight: '10px'}} alt="" />
                 <Slider
                   value={zoom}
                   min={1}
@@ -353,6 +353,7 @@ function Settings({app,}): React.ReactElement {
                   
                   //@ts-ignore
                   onChange={(e, zoom) => setZoom(zoom)} />
+                  <img src="/img/325963_plus_add_new_icon.svg" style={{width: '30px', height: '30px', marginLeft: '10px'}} alt="" />
                   <div className='button' style={{marginTop: '135px', position: 'absolute'}}>
                                      <button className='buy fill' onClick={showCroppedHeader}>
                     <span>Save</span>
