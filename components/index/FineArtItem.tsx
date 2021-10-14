@@ -76,10 +76,6 @@ favNfts.splice( removeIndex, 1 );
     
     
   }, [])
-  if (data.startDate){
-    if (new Date(data.startDate).getTime() > new Date().getTime() || new Date(data.endDate).getTime() < new Date().getTime()){
-      return null
-    }}
   return (
     <div className="fineart__item products__item round" style={{maxWidth: '250px'}}>
       <div className="products__item-info">
