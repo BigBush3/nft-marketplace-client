@@ -435,7 +435,7 @@ function handleDrag(tag, currPos, newPos) {
               <span className="heading">{lang.auction.endDate}:</span>
             </label>
             <div ref={auctionCheckInfoRef}>
-            <TextField style={{'fontWeight': 'lighter'}} id="datetime-local"
+            <TextField style={{'fontWeight': 'lighter'}} id="datetime-local" 
         type="datetime-local" {...register('endDate')}/>
 {/*               <span className="icon icon-calendar" /> */}
             </div>
@@ -491,7 +491,7 @@ function handleDrag(tag, currPos, newPos) {
         <span>{lang.uploadDescription}</span>
       </label>
       <div>{pdf ? pdf.name: null}</div>
-      <div className="create_inputs">
+      <div className="create_inputs" style={{marginTop: '15px', fontSize: '15px', fontWeight: 'lighter'}}>
         <div className="create_slider">
           <span>{lang.roalty}:</span>
 {/*           <input type="number" name='royalty' {...register("royalty")} required/> */}

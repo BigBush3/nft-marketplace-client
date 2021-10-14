@@ -8,8 +8,6 @@ import { Select, MenuItem, Divider } from '@material-ui/core';
 import Web3 from 'web3';
 import WalletLink from 'walletlink';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -62,7 +60,8 @@ interface HeaderProps {
  * @param props
  * @returns
  */
-function Header(props): React.ReactElement {    
+function Header(props): React.ReactElement { 
+  const clickRef = useRef<any>()   
   const [verified, setVerified] = useState(false)
   const router = useRouter();
   const { app, data, onChange} = props;
@@ -350,7 +349,7 @@ mfpClose.removeEventListener('click', closeConnectDialog);
     router.push('/marketplace')
   }
   return (
-    <><header className="header top">
+    <><header className="header top" ref={clickRef}>
       <div className="wrapper">
         <div className="header__top">
           <div className="header__logo">
@@ -461,17 +460,22 @@ mfpClose.removeEventListener('click', closeConnectDialog);
                   </div>
                  ]}
                 <div className="header__lang">
-                  <Select
+                  <FormControl>
+                                     <Select
                     disableUnderline={true}
+                    variant='standard'
                     value={lang.value}
                     label={lang.language}
                     onChange={(e: any) => {
                       // Смена языка
                       Router.push(Router.asPath, Router.asPath, { locale: e.target.value });
+                      
                     }}>
                     <MenuItem value="ru">RU</MenuItem>
                     <MenuItem value="en">EN</MenuItem>
                   </Select>
+                  </FormControl>
+ 
                 </div>
               </div>
             </div>

@@ -16,7 +16,7 @@ const lang: Language = {
   upload: 'Загрузить',
   save: 'Сохранить',
   uploadFile: 'Загрузить файл',
-  fileFormats: 'Формат файла: png, gif, WEBp, MPEG4, MP3 (максимально до 30mb)',
+  fileFormats: 'Формат файла: png, gif, WEBp, MPEG4',
   description: 'Описание',
   uploadDescription: 'Загрузить описание',
   roalty: 'Роялти',

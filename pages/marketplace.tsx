@@ -126,7 +126,7 @@ function Marketplace(props): React.ReactElement {
           <main className="main marketplace">
             {size.width > 400 ?  <div className="main__top">
               <div className="heading__sort main__sort">
-              <Button style={{backgroundColor: 'transparent', width: '140px', height: '50px', marginRight:'20px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+              <Button style={{backgroundColor: 'transparent', width: '140px', height: '50px', marginRight:'20px', border: '1px solid lightgray', fontWeight: 'lighter', textTransform: 'capitalize', fontSize: '16px', padding: '26.5px 14px 26.5px 14px'}} aria-describedby={id} variant="outlined" color="primary" onClick={handleClick}>
         Price range
       </Button> 
       <StyledSelect
@@ -170,7 +170,7 @@ function Marketplace(props): React.ReactElement {
         }}
       >
         <div>
-          <div style={{display: 'flex', marginTop: '20px', marginLeft: '15px', marginRight: '15px', marginBottom: '30px'}}>
+          <div style={{display: 'flex', marginLeft: '15px', marginRight: '15px', marginBottom: '40px'}}>
             <div style={{marginRight:'10px', height: '10px'}}>
               <TextField style={{width: 100, height: 10}} type="number" label="From ETH" value={fromEth} onChange={(e) => setFromEth(e.target.value)}/>
             </div>
@@ -178,7 +178,6 @@ function Marketplace(props): React.ReactElement {
               <TextField style={{width: '100px', height: '10px'}} type="number" label="To ETH"  value={toEth} onChange={(e) => setToEth(e.target.value)}/>
             </div>
           </div>
-          <hr/>
           <div style={{display: 'flex', justifyContent: 'space-around', marginBottom: '20px'}}>
             <div className='button'>
             <button  style={{width: '100px', height: '40px'}} onClick={clickHandler}>

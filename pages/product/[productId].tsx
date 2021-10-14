@@ -21,7 +21,7 @@ import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import { getTokenOwnHistory, getAllTokenHistory, getAllBidHistory } from '../../utils/blockchain';
 import WideHistory from '../../components/global/WideHistory'
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Snackbar } from '@material-ui/core';
 import connectMetaMask from '../../components/global/metamask'
 import moment from 'moment'
 import {
@@ -61,6 +61,7 @@ interface iMaxBid {
 function Product({app, data, user, userData}): React.ReactElement {
   const { lang } = app;
   const [item, setItem] = useState();
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
   const [historySpinner, setHistorySpinner] = useState(false)
@@ -72,6 +73,7 @@ function Product({app, data, user, userData}): React.ReactElement {
   const [openShare, setOpenShare] = useState(false)
   const [historyItem, setHistoryItem] = useState([])
   const [wideHistory, setWideHistory] = useState([])
+  const [endSpinner, setEndSpinner] = useState(false)
   const [maxBid, setMaxBid] = useState<iMaxBid>()
   const [openBids, setOpenBids] = useState(false)
   const [bids, setBids] = useState([])
@@ -85,6 +87,9 @@ function Product({app, data, user, userData}): React.ReactElement {
         topics: [topic]
     })
   } 
+  const handleCloseSnack = () => {
+    setOpenSnackbar(false)
+  }
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
@@ -162,6 +167,7 @@ likedNfts.splice( removeIndex, 1 );
     await getBids()
     await getMaxBid()
     setOpenBid(false);
+    setOpenSnackbar(true)
   };
   const handleCloseCheckout = () => {
     
@@ -345,7 +351,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
       } else if(item.event === 'Deal'){
         oneList.push(item.returnValues.addressFrom.toLowerCase())
         oneList.push(item.returnValues.addressTo.toLowerCase())
-        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'Purchased for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.price), 'ether')})
+        clearList.push({userFrom: item.returnValues.addressFrom.toLowerCase(), userTo: item.returnValues.addressTo.toLowerCase(), event: 'Purchased for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.value), 'ether')})
       } else if(item.event === 'AuctionOrder'){
         oneList.push(item.returnValues.seller.toLowerCase())
         clearList.push({user: item.returnValues.seller.toLowerCase(), event: 'Auctioned for', time: (await web3.eth.getBlock(item.blockNumber)).timestamp, price: Web3.utils.fromWei(String(item.returnValues.minValue), 'ether')})
@@ -389,6 +395,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     setOpenHistory(!openHistory)
   }
   const endHandler = async () => {
+    setEndSpinner(true)
     await finishAuction()
   }
   const ownerHandler = async () => {
@@ -466,7 +473,7 @@ const el = []
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
-                   [new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{lang.auction.endAuction}</span></button>]] 
+                   [new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{endSpinner ? <CircularProgress/> : <p>{lang.auction.endAuction}</p>}</span></button>]] 
                    : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
@@ -483,22 +490,6 @@ const el = []
               <div className="author__cover">
                 <div className="author__status">
                   {lang.author}
-                  <div className="products__item-info info">
-                    <div
-                      role="button"
-                      className={clsx('item-info__icon', open && 'close')}
-                      onClick={ownerHandler}>
-                      <i className="flaticon-information" />
-                      <i className="flaticon-letter-x cross" />
-                    </div>
-                    <div className={clsx('item-info__dropdown', open && 'active')}>
-                        {historyItem.map((item, index, array) => {
-                          return <OwnerDropdownItem {...item} ind={index}/>
-                        })}
-                        
-                      
-                    </div>
-                  </div>
                 </div>
                 {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${user._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
                 }
@@ -527,10 +518,10 @@ const el = []
             {historySpinner && <CircularProgress/>}
             {openHistory ? [wideHistory.map((item, index, array) => {
               return (
-                <div style={{display: 'flex', marginTop: '15px'}}>
+                <div style={{display: 'flex', marginTop: '15px', fontSize: '14px'}}>
                   <div className='history_img' style={{marginRight:'10px'}}>
-                    {item.event === 'Purchased for' ? <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.userTo?.imgUrl ? item.userTo.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
-                    </Link>: <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.user?.imgUrl ? item.user.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
+                    {item.event === 'Purchased for' ? <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo?._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.userTo?.imgUrl ? item.userTo?.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
+                    </Link>: <Link href={item.user?._id ? `/cabinet/${item.user?._id}` : `/cabinet/${item.userTo?._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.user?.imgUrl ? item.user?.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
                     </Link>}
                     
                   </div>
@@ -549,7 +540,7 @@ const el = []
             {
               openBids ? [bids.map((item, index, array) => {
                 return (
-                  <div style={{display: 'flex', marginTop: '15px'}}>
+                  <div style={{display: 'flex', marginTop: '15px', fontSize: '14px'}}>
                     <div className='history_img' style={{marginRight:'10px'}}>
                       <Link href={`/cabinet/${item.user?._id}`}><img style={{width: '50px', height: '50px', borderRadius: '50%', cursor: 'pointer'}} src={item.user?.imgUrl !== '' ? item.user?.imgUrl : '/img/avatar_0.png'} alt="/img/avatar_0.png" />
                       </Link>
@@ -592,6 +583,16 @@ const el = []
         <ShareModal app={app} data={data} open={openShare} handleClose={handleCloseShare}/>
         <Footer {...app} />
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleCloseSnack}
+        message="Your bid proceed successfull!"
+      />
     </Theme>
   );
 }

@@ -107,21 +107,6 @@ function Token({app, data}): React.ReactElement {
               <div className="author__cover">
                 <div className="author__status">
                   {lang.author}
-                  <div className="products__item-info info">
-                    <div
-                      role="button"
-                      className={clsx('item-info__icon', open && 'close')}
-                      onClick={() => {
-                        setOpen(!open);
-                      }}>
-                      <i className="flaticon-information" />
-                      <i className="flaticon-letter-x cross" />
-                    </div>
-                    <div className={clsx('item-info__dropdown', open && 'active')}>
-                        <OwnerDropdownItem {...data.owner} />
-                      
-                    </div>
-                  </div>
                 </div>
                 <div className="author__name">{data.owner.name}</div>
                 <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>

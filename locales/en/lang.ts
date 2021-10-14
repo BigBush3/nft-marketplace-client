@@ -14,8 +14,8 @@ const lang: Language = {
   language: 'Language',
   upload: 'Upload',
   save: 'Save',
-  uploadFile: 'Upload file',
-  fileFormats: 'File format: png, gif, WEBp, MPEG4, MP3 (max 30mb)',
+  uploadFile: 'Choose File',
+  fileFormats: 'File format: png, gif, WEBp, MPEG4',
   description: 'Description',
   uploadDescription: 'Upload Description',
   roalty: 'Royalty',
@@ -70,7 +70,7 @@ const lang: Language = {
     createNFT: 'Create NFT',
     createOne: 'Create a single instance',
     createMany: 'Create multiple instances',
-    resell: 'Resell'
+    resell: 'Resale'
   },
   searchBy: {
     name: 'Search by',

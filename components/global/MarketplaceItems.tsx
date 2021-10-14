@@ -68,27 +68,33 @@ export default function MarketplaceItems(props): React.ReactElement {
   useEffect(() => {
     if (Number(filterBy) === 2){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
-          
-          if (a.type === 'orderSell' && b.type === 'orderSell'){
+          if (b.status === 'soldOut'){
+            return -1
+          }
+          else if (a.type === 'orderSell' && b.type === 'orderSell'){
             return Number(a.price) - Number(b.price)
           } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
             return Number(a.currentBid) - Number(b.price)
           } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
             return Number(a.price) - Number(b.currentBid)
-          } else {
+          }
+           else {
             return Number(a.currentBid) - Number(b.currentBid)
           }
         
       }))
     } else if (Number(filterBy) === 1){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
-        if (a.type === 'orderSell' && b.type === 'orderSell'){
+        if (b.status === 'soldOut'){
+          return -1
+        }
+        else if (a.type === 'orderSell' && b.type === 'orderSell'){
           return Number(b.price) - Number(a.price)
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
           return Number(b.currentBid) - Number(a.price)
         } else if (a.type === 'orderSell' && b.type === 'timedAuction'){
           return Number(b.price) - Number(a.currentBid)
-        } else {
+        }else {
           return Number(b.currentBid) - Number(a.currentBid)
         }
       }))

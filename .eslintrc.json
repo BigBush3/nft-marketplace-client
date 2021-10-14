@@ -87,7 +87,8 @@
       "react/no-unused-prop-types": 0,
       "import/first": 0,
       "no-inner-declarations": 0,
-      "jsx-a11y/no-noninteractive-element-interactions": 0
+      "jsx-a11y/no-noninteractive-element-interactions": 0,
+      "no-var": 0
     },
     "settings": {
       "import/resolver": {

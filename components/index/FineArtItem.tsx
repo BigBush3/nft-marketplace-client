@@ -98,9 +98,6 @@ favNfts.splice( removeIndex, 1 );
         </div>
       </div>
       <div className="products__item-img">
-      <div className='products__item-type' style={{position: 'relative', width: '35px', left: '-45%'}}>
-{data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
-        </div>
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
             <img style={{ cursor: 'pointer', borderRadius: '50%' }} src={data.img} alt="img" />

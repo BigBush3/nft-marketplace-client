@@ -117,7 +117,7 @@ setHistoryItem(el)
     } else {
       return (
         <div ref={ref} className="marketplace__item products__item">
-      <div className="products__item-info">
+            <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
@@ -125,17 +125,14 @@ setHistoryItem(el)
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
-        {/** Всплывающий список владельцев */}
+
         <div className={clsx('item-info__dropdown', open && 'active')}>
         {historyItem.map((item, index, array) => {
                           return <OwnerDropdownItem {...item} ind={index}/>
                         })}
         </div>
-      </div>
-      <div className="products__item-img">
-      <div className='products__item-type'>
-{data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
-        </div>
+      </div><div className="products__item-img">
+
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
           {data.nftType === 'video' ? <video src={data.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', height: '250px', borderRadius: '20px', objectFit: 'cover'}}>
@@ -156,7 +153,7 @@ setHistoryItem(el)
          <i className="flaticon-eye" /> <span>{views}</span>
         </div>
          <Favorite data={data} />
-        <Likes likeMe={likeMe} likes={likes} app={app}/>
+        <Likes data={data} />
         <div className="item-stats__count">{amount ? `${amount}/${amount}` : '1/1'}</div>
       </div>
       <div className="products__item-price">ETH {currentBid}</div>
@@ -169,7 +166,7 @@ setHistoryItem(el)
   }
   return (
     <div ref={ref} className="marketplace__item products__item">
-      <div className="products__item-info">
+            <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
@@ -177,7 +174,7 @@ setHistoryItem(el)
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
-        {/** Всплывающий список владельцев */}
+
         <div className={clsx('item-info__dropdown', open && 'active')}>
         {historyItem.map((item, index, array) => {
                           return <OwnerDropdownItem {...item} ind={index}/>
@@ -185,10 +182,6 @@ setHistoryItem(el)
         </div>
       </div>
       <div className="products__item-img">
-        <div className='products__item-type'>
-{data.nftType === 'gif' ? <img src='/img/icon-gif.svg'/>: [data.nftType === 'video' ? <img src='/img/icon-video.svg'/> : <img src='/img/icon-picture.svg'/>]}
-        </div>
-        
         <div className="item-img__cover">
           <Link href={`/product/${_id}`}>
           {data.nftType === 'video' ? <video src={data.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', height: '250px', borderRadius: '20px', objectFit: 'cover'}}>

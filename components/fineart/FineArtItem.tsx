@@ -51,20 +51,20 @@ setHistoryItem(finalHistory.data.result)
   }
   return (
     <div className="fineart__item products__item">
-      <div className="products__item-info">
+            <div className="products__item-info">
         <div
           role="button"
-          className={clsx('item-info__icon', open && 'close')}
+          className={clsx('item-info__icon', open && 'close', 'fineart')}
           onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
-        {/** Всплывающий список владельцев */}
-         <div className={clsx('item-info__dropdown', open && 'active')}>
-         {historyItem.map((item, index, array) => {
+
+        <div className={clsx('item-info__dropdown', open && 'active')}>
+        {historyItem.map((item, index, array) => {
                           return <OwnerDropdownItem {...item} ind={index}/>
                         })}
-        </div> 
+        </div>
       </div>
       <a href={`/product/${_id}`} className="products__item-img">
         <div >
@@ -89,7 +89,7 @@ setHistoryItem(finalHistory.data.result)
       <div className="products__item-price">ETH {price}</div>
       <div className="products__item-buy button">
 
-        { type === 'timedAuction' ? <a href="#" className="rate btn_blank">
+        { type === 'timedAuction' ? <a href={`/product/${_id}`} className="buy fill btn_fill">
           <span>{lang.placeBid}</span>
         </a>:
         <a href={`/product/${_id}`} className="buy fill btn_fill">

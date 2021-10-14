@@ -107,22 +107,21 @@ function handleDrag(tag, currPos, newPos) {
     setOpen(true);
   };
   const gasFee = {
-    createAuction: 180000,
+    createAuction: 180100,
     createOrderSell: 159000,
-    returnFreeBalance: 58000,
+    returnFreeBalance: 58100,
   
-    createBidAuction: 216300,
-    updateBidAuction: 76600,
-    finishAuction: 144600,
-    cancelAuction: 59600,
+    createBidAuction: 216400,
+    updateBidAuction: 76700,
+    finishAuction: 144800,
+    cancelAuction: 59700,
   
-    buyOrder :136400,
-      cancelOrderSell :63000,
-      createBidMarket : 219700,
-      realizeBid : 140400,
-      cancelBid :58400
+    buyOrder :136500,
+      cancelOrderSell :63100,
+      createBidMarket : 219800,
+      realizeBid : 140500,
+      cancelBid :58500
   }
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -200,6 +199,7 @@ function handleDrag(tag, currPos, newPos) {
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
       console.log("Gas Fee - ", fee)
+      
       txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, router.query.tokenId, web3.utils.toWei(String(data.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
@@ -216,11 +216,12 @@ function handleDrag(tag, currPos, newPos) {
                 let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
               subEvent.on('data', async event => {
+                console.log(event)
                 const pure = event.data.slice(2)
-                const sth = pure.substring(0, 63)
+                const sth = event.data.slice(0, 66)
                 console.log(parseInt(sth))
                 try{
-                                       const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
+                                       const res = await axios.post('http://localhost:8000/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: router.query.tokenId, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
 
                router.push(`/cabinet/${cookie.get('id')}`)
               } catch(err){
@@ -261,8 +262,8 @@ function handleDrag(tag, currPos, newPos) {
 		        if(price>0){
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
-                const pure = event.data.slice(2)
-                const sth = pure.substring(0, 63)
+                console.log(event)
+                const sth = event.data.substring(0, 66)
                 console.log(parseInt(sth))
                             const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {price: data.price, type: "orderSell", tokenId: router.query.tokenId, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.price} ETH`})
  router.push(`/product/${res.data._id}`)
@@ -365,7 +366,6 @@ function handleDrag(tag, currPos, newPos) {
     </form>
     <Dialog
         open={open}
-        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
