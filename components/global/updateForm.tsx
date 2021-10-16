@@ -260,7 +260,6 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-		        if(price>0){
 		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               subevent.on("data", async event => {
                 console.log(event)
@@ -276,9 +275,6 @@ function handleDrag(tag, currPos, newPos) {
                             
 
               })
-		        } else {
-			        subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.Simple_Auction_Created)
-		        }
 		    }
 		)		
 	}

@@ -12,7 +12,12 @@ app.prepare().then(() => {
   server.all('*', (req, res) => {
     return handle(req, res)
   })
-
+  server.get('/product/:productId', (req, res) => {
+    return app.render(req, res, '/product/productId', { // `pages/dashboard/item/id.js` is the name of the page in my directory
+      ...req.params,
+      ...req.query,
+    });
+  });
   server.listen(port, (err) => {
     if (err) throw err
     console.log(`> Ready on http://localhost:${port}`)
