@@ -81,13 +81,14 @@ favNfts.splice( removeIndex, 1 );
       <div className="products__item-info">
         <div
           role="button"
+          
           className={clsx('item-info__icon', open && 'close', 'fineart')}
           onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
 
-        <div className={clsx('item-info__dropdown', open && 'active')}>
+        <div style={{marginTop: '30px'}} className={clsx('item-info__dropdown', open && 'active')}>
         {historyItem.map((item, index, array) => {
                           return <OwnerDropdownItem {...item} ind={index}/>
                         })}

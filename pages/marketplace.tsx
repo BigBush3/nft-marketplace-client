@@ -221,7 +221,7 @@ function Marketplace(props): React.ReactElement {
                 ]}
               />
               <div className="heading__sort main__sort" style={{display: 'flex'}}>
-              <Button style={{backgroundColor: 'transparent', height: '40px', marginLeft: '-12px', width: '100px', fontSize: '10px'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+              <Button style={{backgroundColor: 'transparent', height: '40px', marginLeft: '-12px', width: '100px',border: '1px solid lightgray', fontWeight: 'lighter', textTransform: 'capitalize', fontSize: '10px', padding: '20.5px 14px 19px 14px', boxShadow: 'none', color: '#00BCD4'}} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
         Price range
       </Button> 
       

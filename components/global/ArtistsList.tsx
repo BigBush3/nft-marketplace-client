@@ -28,8 +28,8 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
   }, []);
   return (
     <aside className="aside artist">
-      <div className="aside__heading heading">
-        <h3>
+      <div className="aside__heading heading" style={{border: '1px solid lightgray', fontWeight: 'lighter', borderRadius: '4px', fontSize: '16px'}}>
+        <h3 style={{fontWeight: 'lighter', color: '#00BCD4', fontSize: '16px'}}>
            {lang.authors}
         </h3>
       </div>

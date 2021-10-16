@@ -443,7 +443,7 @@ const el = []
                  
                 </div>
                 
-                <a href={data.img} className="product__image-resize" style={{background: 'lightgray'}}>
+                <a href={data.img ? data.img : '/img/avatar_0.png'} className="product__image-resize" style={{background: 'lightgray'}}>
                   <span />
                 </a>
               

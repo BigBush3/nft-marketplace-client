@@ -68,7 +68,7 @@ setHistoryItem(finalHistory.data.result)
       </div>
       <a href={`/product/${_id}`} className="products__item-img">
         <div >
-          <img style={{width: '500px', height: '550px', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
+          <img style={{width: '60vh', height: '60vh', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
         </div>
         {mark && (
           <div className="products__item-mark">
