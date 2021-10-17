@@ -388,7 +388,7 @@ function handleDrag(tag, currPos, newPos) {
 {/*       <label htmlFor="download_2" className="create_download_canvas icon icon-file">
         <input type="file" id="download_2" />
       </label> */}
-      <div className={clsx('create_check', auctionChecked ? 'active' : 'inactive')}>
+      {!createMany && <div className={clsx('create_check', auctionChecked ? 'active' : 'inactive')}>
         <label htmlFor="check-23">
           <input
             type="radio"
@@ -428,7 +428,7 @@ function handleDrag(tag, currPos, newPos) {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
       <div className={clsx('create_check', fixPayChecked ? 'active' : 'inactive')}>
         <label htmlFor="check-31">
           <input

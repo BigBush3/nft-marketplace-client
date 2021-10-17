@@ -136,6 +136,11 @@ export default function MarketplaceItems(props): React.ReactElement {
       {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
         console.log('collectiong..')
+        if (new Date(item.endDate).getTime() < new Date().getTime()){
+          return (
+            <SoldOutItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
+          )
+        }
         if (item.location === 'marketplace'){
                   return (
           <MarketplaceItem
