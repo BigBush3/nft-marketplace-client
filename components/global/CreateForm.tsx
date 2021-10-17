@@ -357,21 +357,8 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-		        let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
-            subevent.on("data", async event => {
-              const pure = event.data.slice(2)
-              const sth = pure.substring(0, 63)
-              console.log(parseInt(sth))
-                        if (createMany){
-                          
-                            const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: type.current})
- router.push(`/product/${res.data.resClient._id}`)
-                        } else {
-                          const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, orderIndex: parseInt(sth), action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: type.current})
-  router.push(`/product/${res.data.resClient._id}`) 
-                        }
-
-              })
+            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: type.current})
+            router.push(`/product/${result.data.resClient._id}`)
 		    }
 		)		
 	}

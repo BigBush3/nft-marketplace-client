@@ -113,8 +113,8 @@ $('.gallery__items').slick({
 		{
 			breakpoint: 481,
 			settings: {
-				slidesToShow: 3,
-				slidesToScroll: 3,
+				slidesToShow: 2,
+				slidesToScroll: 2,
 			}
 		},
 		{

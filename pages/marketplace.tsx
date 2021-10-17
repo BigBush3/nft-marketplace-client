@@ -204,11 +204,11 @@ function Marketplace(props): React.ReactElement {
                 options={[
                   {
                     value: 1,
-                    text: "Highest price",
+                    text: "Highest",
                   },
                   {
                     value: 2,
-                    text: "Lowest price",
+                    text: "Lowest",
                   },
                   {
                     value: 3,
