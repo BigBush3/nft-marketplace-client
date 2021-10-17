@@ -79,6 +79,7 @@ export const galerySliderSettings: Settings = {
   slidesToShow: 11,
   slidesToScroll: 11,
   infinite: false,
+  centerMode: false,
   arrows: true,
   responsive: [
     {

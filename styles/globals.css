@@ -1293,9 +1293,7 @@ textarea {
   background: none;
   padding: 0 26px;
 }
-.gallery .slick-track{
-  width: auto !important;
-}
+
 
 .header__search-input input::-webkit-input-placeholder {
   color: #000;
@@ -1996,6 +1994,10 @@ video{
 .gallery__item-mark img {
   width: auto !important;
 }
+
+.slick-list> div {
+  margin-left:0 !important;
+  }
 
 .content {
   display: -webkit-box;

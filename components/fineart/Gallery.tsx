@@ -23,9 +23,9 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
   const sliderRef = useRef<any>();
   const [artistList, setArtistList] = useState([]);
   useEffect(() => {
-/*     setTimeout(() => {
+     setTimeout(() => {
       sliderRef?.current.slickGoTo(0);
-    }, 1000); */
+    }, 1000);
     (async () => {
       if (artistList.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
@@ -44,11 +44,6 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
                 <div className="gallery__item">
                   <img src={firstChild?.img} style={{width: '134px', height: '196px', borderRadius: '5px', objectFit: 'cover'}}alt="img" />
                 </div>
-                {firstChild?.mark && (
-                  <div className="gallery__item-mark">
-                    <img src="/img/mark.png" alt="mark" />
-                  </div>
-                )}
               </div>
           );
         })}
