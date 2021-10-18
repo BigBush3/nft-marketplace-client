@@ -127,9 +127,9 @@ function Cabinet(props): React.ReactElement {
     return result;
   }
   const addOwner = async ()=> {
-    let metamask = await connectMetaMask()
-	const walletAddress = metamask.userAddress
-	const wallet = metamask.web3
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     if(!walletAddress && !wallet){
       alert('you have to connect cryptowallet')
     } else {
@@ -148,9 +148,9 @@ function Cabinet(props): React.ReactElement {
   }
   
   const returnFreeBalance = async ()=> {
-    const metamask = await connectMetaMask()
-    const walletAddress = metamask.userAddress
-    const wallet = metamask.web3
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     let fee = await getGasFee(gasFee.returnFreeBalance)
     let txData = NFTSTORE.methods.returnFreeBalance().encodeABI()
     if(!wallet){

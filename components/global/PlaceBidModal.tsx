@@ -120,9 +120,9 @@ useEffect(() => {
     })
   } 
   const updateBidAuction = async (tokenId, auctionIndex, bidIndex, value)=> {
-    let metamask = await connectMetaMask()
-	let walletAddress = metamask.userAddress
-	let wallet = metamask.web3
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     let fee = await getGasFee(gasFee.updateBidAuction)
     let txData = TIMEDAUCTION.methods.updateBidAuction(NFT_ADDRESS, tokenId, auctionIndex, bidIndex).encodeABI()
     if(!wallet){
@@ -143,15 +143,9 @@ useEffect(() => {
   }
   const createBidAuction = async (tokenId, auctionIndex, value)=> {
     console.log(tokenId, auctionIndex, value)
-    let metamask = await connectMetaMask()
-	let walletAddress = metamask.userAddress
-	let wallet = metamask.web3
-	console.log('metamask connected')
-  // @ts-ignore
-	console.log('NFT contract connected')
-	console.log(NFT)
-	console.log('walletAddress: ', walletAddress)
-	console.log('web3: ', web3)
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
     let fee = await getGasFee(gasFee.createBidAuction)
     console.log(fee, value)
     let txData = TIMEDAUCTION.methods.createBidAuction(NFT_ADDRESS, tokenId, auctionIndex).encodeABI()

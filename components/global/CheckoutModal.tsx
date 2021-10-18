@@ -75,16 +75,9 @@ export default function CheckoutModal(props): React.ReactElement {
       handleClose()
     } else {
   setProceed(true)
-  let metamask = await connectMetaMask()
-	let walletAddress = metamask.userAddress
-	let wallet = metamask.web3
-	console.log('metamask connected')
-  // @ts-ignore
-	let NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS)
-	console.log('NFT contract connected')
-	console.log(NFT)
-	console.log('walletAddress: ', walletAddress)
-	console.log('web3: ', web3)
+  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const walletAddress = accounts[0];
+  const wallet = await new Web3(window.ethereum);
     let fee = await getGasFee(136400)
     console.log(data)
 	let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, data.orderIndex, 1).encodeABI()
