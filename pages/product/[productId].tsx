@@ -291,14 +291,15 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
               value: web3.utils.toWei(String(fee/1e18)),
               data: txData
           },
-          function(error, res){
-              console.log(error);
-              console.log(res);
+          async function(error, res){
+            await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
+            router.push(`/cabinet/${maxBid.user._id}`)
+            console.log(error);
+            console.log(res);
           }
       )		
     }
-    await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
-    router.push(`/cabinet/${maxBid.user._id}`)
+
     } else {
       let fee = await getGasFee(gasFee.cancelAuction)
       let txData = TIMEDAUCTION.methods.cancelAuction(NFT_ADDRESS, data.tokenId, data.orderIndex).encodeABI()

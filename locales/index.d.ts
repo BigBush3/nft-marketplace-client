@@ -60,7 +60,13 @@ export default interface Language {
     haveQuestions: string;
     text: string;
   };
+  collection: {
+    collectionName: string;
+    collectionDescription: string;
+    collectionLocation: string;
+  }
   pageNames: {
+    createCollection: string;
     home: string;
     fineArt: string;
     marketPlace: string;

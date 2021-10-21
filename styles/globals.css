@@ -4853,6 +4853,12 @@ input::-webkit-inner-spin-button {
   font-size: 15px;
   font-weight: 300;
 }
+.create_span {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 300;
+}
 
 .create_input input {
   margin-top: 5px;

@@ -60,7 +60,14 @@ const lang: Language = {
     haveQuestions: 'Остались вопросы?',
     text: 'Текст вопроса',
   },
+  collection: {
+  collectionName: 'Collection name',
+  collectionDescription: 'Description',
+  collectionLocation: 'Выбор местоположения:'
+  },
+
   pageNames: {
+    createCollection: 'Создать коллекцию',
     home: 'Главная',
     activity: 'Активность',
     fineArt: 'Fine Art',

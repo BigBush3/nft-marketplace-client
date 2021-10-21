@@ -33,6 +33,7 @@ const lang: Language = {
   shareModalText: 'Share this NFT',
   tokenHistory: 'Token history',
   auction: {
+
     historyOfBids: 'History of bids',
     endAuction: 'End auction',
     makeBid: 'Make bid',
@@ -59,7 +60,13 @@ const lang: Language = {
     haveQuestions: 'Still have questions?',
     text: 'Question text',
   },
+  collection: {
+    collectionName: 'Collection name',
+    collectionDescription: 'Description',
+    collectionLocation: 'Choose location:'
+  },
   pageNames: {
+    createCollection: 'Create collection',
     home: 'Home',
     fineArt: 'Fine Art',
     marketPlace: 'Marketplace',

@@ -93,6 +93,7 @@ const {register, handleSubmit} = useForm()
   const [auctionChecked, setAuctionChecked] = useState<boolean>(true);
   const [endDateChecked, setEndDateChecked] = useState<boolean>(false);
   const [fixPayChecked, setFixPayChecked] = useState<boolean>(false);
+  const [tokenId, setTokenId] = useState(0)
   function handleDelete(i) {
     setTag(
      tags.filter((tag, index) => index !== i),
@@ -279,12 +280,21 @@ function handleDrag(tag, currPos, newPos) {
         data: txData
     },
     function(error, res){
+      if (createMany){
+        axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created'})
+      } else {
+        axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created'})
+      }
         console.log(error);
         console.log(res);
         subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
     }
 );   setCreateLoader(false)
-    setApproveLoader(true)
+const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDRESS).call({}, (err, res)=>{
+  console.log(`isApprovedForAll - ${res}`)
+})
+    if (!approved){
+          setApproveLoader(true)
     
     txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
@@ -298,6 +308,8 @@ function handleDrag(tag, currPos, newPos) {
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
 ); setApproveLoader(false)
+    }
+
   const something = await NFT.methods.mapStringOfURI(ipfsHash).call({}, (err, res)=>{
     console.log(`tokenID of URI ${ipfsHash} - ${res}`)
   })
@@ -318,26 +330,9 @@ function handleDrag(tag, currPos, newPos) {
             async function (error, res){
                 console.log(error);
                 console.log(res);
-                let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
               
-              subEvent.on('data', async event => {
-                console.log(event)
-                const pure = event.data.slice(2)
-                const sth = pure.substring(0, 63)
-                 if (createMany){
-                     const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current})
-  router.push(`/product/${res.data.resClient._id}`)
-                 } else {
-                  const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current})
-                 router.push(`/product/${res.data.resClient._id}`) 
-                 }
-
-
-              })
-    
-            // subEvent.on('changed', changed => console.log(changed))
-            // subEvent.on('error', err => { throw err })
-            // subEvent.on('connected', nr => console.log(nr))
+                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: data._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something })
+                router.push(`/product/${result.data.resClient._id}`)
             }
         )		
       }
@@ -357,14 +352,14 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {userId: cookie.get('id'),hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, price: data.price, type: "orderSell", tokenId: something, contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.price} ETH`, nftType: type.current})
+            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: data._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something})
             router.push(`/product/${result.data.resClient._id}`)
 		    }
 		)		
 	}
   }
   
-  };
+  }
   const getGasFee = async(gasLimit)=>{
     let result = 0
     await NFTSTORE.methods.getGasFee(gasLimit).call({}, (err, res)=>{

@@ -21,7 +21,13 @@ import Modal from '@material-ui/core/Modal';
 import Snackbar from '@material-ui/core/Snackbar';
 import connectMetaMask from '../../components/global/metamask'
 import { getItems } from '../../utils/data';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { CircularProgress } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
 
 
 import {
@@ -78,7 +84,10 @@ function Cabinet(props): React.ReactElement {
   const [open, setOpen] = useState(false)
   const [openBids, setOpenBids] = useState(false)
   const [progress, setProgress] = useState(false)
+  const [endModal, setEndModal] = useState(false)
   const [followers, setFollowers] = useState(data.followers)
+  const [approveLoader, setApproveLoader] = useState(false)
+  const [sellLoader, setSellLoader] = useState(false)
   const [followings, setFollowings] = useState(data.followings)
   const [sub, setSub] = useState(checkAvailability(followers, cookie.get('id')))
   const [openSnack, setOpenSnack] = React.useState(false);
@@ -86,6 +95,11 @@ function Cabinet(props): React.ReactElement {
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)
+  //@ts-ignore
+  let NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS)
+  const handleCloseEnd = () => {
+    setEndModal(false)
+  }
   const handleCloseBids = () => {
     setOpenBids(false)
   }
@@ -250,12 +264,14 @@ const getUpdatedBidByToken = async(userAddress)=>{
     let tokenIds= []
     let history = await getAllUserAuctionBids(cookie.get('wallet'))
     const secHistory = await getUpdatedBidByToken(cookie.get('wallet'))
+    console.log(history)
     history = [...history, ...secHistory]
     for (const item of history) {
       tokenIds.push(item.returnValues.tokenId)
       clearHistory.push({nft: item.returnValues.tokenId, bid: web3.utils.fromWei(String(item.returnValues.value), 'ether'), time: (await web3.eth.getBlock(item.blockNumber)).timestamp})
     }
     const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/nftHistory', {history: tokenIds})
+    console.log(finalHistory)
     for (let i = 0; i < clearHistory.length; i++) {
       for (const item of finalHistory.data.result) {
         console.log(item.tokenId, clearHistory[i].nft)
@@ -305,7 +321,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
    function checkAvailability(arr, val) {
     if (arr){
     return arr.some(function(arrVal) {
-      console.log(val === arrVal._id)
       return val === arrVal._id;
     });
 
@@ -313,7 +328,93 @@ const getUpdatedBidByToken = async(userAddress)=>{
       return false
     }
 
-  } 
+  }
+  const endCreatingHandler = async(item) => {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const walletAddress = accounts[0];
+    const wallet = await new Web3(window.ethereum);
+    setEndModal(true)
+    const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDRESS).call({}, (err, res)=>{
+      console.log(`isApprovedForAll - ${res}`)
+    })
+    const subscription = (contractAddress, topic)=>{
+      console.log('start subscription')
+      console.log('contractAddress: ', contractAddress)
+      console.log('topic: ', topic)
+      return web3.eth.subscribe('logs', {
+          address: contractAddress,
+          topics: [topic]
+      })
+    } 
+    let txData
+    if (!approved){
+      setApproveLoader(true)
+      txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
+      await wallet.eth.sendTransaction({
+        to: NFT_ADDRESS,
+        from: walletAddress,
+        data: txData
+    },
+    function(error, res){
+        console.log(error);
+        console.log(res);
+        subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
+    }
+
+
+  );
+  setApproveLoader(false)
+    }
+    setSellLoader(true)
+    if (item.type === 'auction'){
+      let fee = await getGasFee(gasFee.createAuction)
+      console.log("Gas Fee - ", fee)
+      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, item.tokenId, web3.utils.toWei(String(item.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
+      if(!wallet){
+        alert('you have to connect cryptowallet')
+      } else {
+        await wallet.eth.sendTransaction({
+                to: NFTSTORE_ADDRESS,
+                from: walletAddress,
+                value: web3.utils.toWei(String(fee/1e18)),
+                data: txData
+            },
+            async function (error, res){
+                console.log(error);
+                console.log(res);
+                const something = await NFT.methods.mapStringOfURI(item.img.split('/')[-1]).call({}, (err, res)=>{
+                  console.log(`tokenID of URI - ${res}`)
+                })
+                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something })
+                router.push(`/product/${result.data.resClient._id}`)
+            }
+        )		
+      }
+    } else {
+      let fee = await getGasFee(gasFee.createOrderSell)
+      let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, item.tokenId, 1, web3.utils.toWei(String(item.price))).encodeABI()
+      if(!wallet){
+        alert('you have to connect cryptowallet')
+      } else {
+        await wallet.eth.sendTransaction({
+                to: NFTSTORE_ADDRESS,
+                from: walletAddress,
+                value: web3.utils.toWei(String(fee/1e18)),
+                data: txData
+            },
+            async function(error, res){
+                console.log(error);
+                console.log(res);
+                const something = await NFT.methods.mapStringOfURI(item.img.split('/')[-1]).call({}, (err, res)=>{
+                  console.log(`tokenID of URI - ${res}`)
+                })
+                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something})
+                router.push(`/product/${result.data.resClient._id}`)
+            }
+        )		
+      }
+    }
+  }
   return (
     <Theme>
       <Header app={app}/>
@@ -444,7 +545,35 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>
         {data.verified === true && <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
-       {data?.nfts?.filter((item) => item.location !== 'collection').map((item) => {
+       {data?.nfts?.filter((item) => item.location !== 'collection' || item.status === 'created').map((item) => {
+              
+              if (item.status === 'created'){
+                return (
+                  <div className="marketplace__item products__item">
+                  <div className="products__item-info">
+                  <div
+          role="button"
+          className={clsx('item-info__icon', open && 'close')}
+          onClick={() => {
+            setOpen(!open);
+          }}>
+          <i className="flaticon-information" />
+          <i className="flaticon-letter-x cross" />
+        </div>
+                  </div>
+                  <div className="products__item-img">
+                    <div className="item-img__cover">
+                      {item.nftType === 'video' ? <video src={item.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', borderRadius: '20px', height: '250px', objectFit: 'cover'}}>
+                 </video> : <img src={item.img} alt="img" style={{borderRadius: '20px', width: '250px', height: '250px', objectFit: 'cover'}}/>}
+                    </div>
+                  </div>
+                  <div className="products__item-name">{item.title}</div>
+                  <div style={{display: 'flex', justifyContent: 'center', marginTop: '15px'}} className='button'>
+                    <button className='fill' onClick={() => endCreatingHandler(item)}><span>End Creating</span></button>
+                  </div>
+                </div>
+                )
+              }
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
@@ -467,7 +596,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">
        {data?.favouriteNfts ? [data.favouriteNfts.map((item) => {
-         console.log(item)
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item?._id}`} data={item} />;
             })] : <div>you dont have any favourite nft tokens</div>}
           </div>
@@ -531,7 +659,9 @@ const getUpdatedBidByToken = async(userAddress)=>{
     aria-describedby="simple-modal-description"
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
     <div>
-      {bidHistory.map((item) => {
+      {console.warn(bidHistory)}
+      {bidHistory !== [] ? bidHistory.map((item) => {
+        console.log(item, 'sldfjsdflksjfslkdfjsdlkfsklj')
            return (
           <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
@@ -550,11 +680,38 @@ const getUpdatedBidByToken = async(userAddress)=>{
         )
 
        
-      })}
+      }) : <div>
+        <h1>You don't have bids yet</h1>
+        </div>}
     </div>
       
     </div>
 </Modal>
+<Dialog
+        open={endModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Create NFT</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <div>
+              <h2>Approving NFT</h2>
+            </div>
+            <div>
+              {approveLoader ? <CircularProgress /> : <DoneIcon/>}
+            </div>
+            <div>
+              <h2>Publicating NFT</h2>
+            </div>
+            <div>
+              {sellLoader ? <CircularProgress/> : <DoneIcon/>}
+            </div>
+            
+
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
       
     </Theme>
   );

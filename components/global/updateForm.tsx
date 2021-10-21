@@ -169,7 +169,7 @@ function handleDrag(tag, currPos, newPos) {
   
   const onSubmit = async (data) => {
     setOpen(true)
-    setApproveLoader(true)
+    
     const price = data.price * 1e18
     const subscription = (contractAddress, topic)=>{
       console.log('start subscription')
@@ -183,7 +183,13 @@ function handleDrag(tag, currPos, newPos) {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     const walletAddress = accounts[0];
     const wallet = await new Web3(window.ethereum);
-    let txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
+    let txData
+    const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDRESS).call({}, (err, res)=>{
+      console.log(`isApprovedForAll - ${res}`)
+    })
+    if (!approved){
+      setApproveLoader(true)
+          txData = NFT.methods.setApprovalForAll(NFTSTORE_ADDRESS, true).encodeABI()
     await wallet.eth.sendTransaction({
       to: NFT_ADDRESS,
       from: walletAddress,
@@ -194,8 +200,10 @@ function handleDrag(tag, currPos, newPos) {
       console.log(res);
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
-);
-  setApproveLoader(false)
+);  setApproveLoader(false)
+    }
+
+
   setCreateLoader(true)
   if (auctionChecked){
       let fee = await getGasFee(gasFee.createAuction)
@@ -214,30 +222,8 @@ function handleDrag(tag, currPos, newPos) {
             async function (error, res){
                 console.log(error);
                 console.log(res);
-                let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
-              
-              subEvent.on('data', async event => {
-                console.log(event)
-                const pure = event.data.slice(2)
-                const sth = event.data.slice(0, 66)
-                console.log(parseInt(sth))
-                try{
-                                       const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: item._id, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
-
-               router.push(`/cabinet/${cookie.get('id')}`)
-              } catch(err){
-                  console.log(err.message)
-                  router.push(`/cabinet/${cookie.get('id')}`)
-                }
-                
-                 
-
-
-              })
-    
-            // subEvent.on('changed', changed => console.log(changed))
-            // subEvent.on('error', err => { throw err })
-            // subEvent.on('connected', nr => console.log(nr))
+                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, currentBid: data.firstBid, type: "timedAuction",startDate: data.startDate, endDate: data.endDate })
+                router.push(`/cabinet/${cookie.get('id')}`)
             }
         )		
       }
@@ -260,21 +246,9 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-		        	let subevent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
-              subevent.on("data", async event => {
-                console.log(event)
-                const sth = event.data.substring(0, 66)
-                console.log(parseInt(sth))
-                try {
-                  const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {price: data.price, type: "orderSell", tokenId: item._id, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.price} ETH`})
-                            router.push(`/cabinet/${cookie.get('id')}`)
-                        
-                } catch (err) {
-                  router.push(`/cabinet/${cookie.get('id')}`)
-                }
-                            
+            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'),contractAddress:SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED,price: data.price, type: "orderSell"})
+            router.push(`/cabinet/${cookie.get('id')}`)
 
-              })
 		    }
 		)		
 	}
