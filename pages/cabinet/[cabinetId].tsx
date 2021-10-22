@@ -368,8 +368,11 @@ const getUpdatedBidByToken = async(userAddress)=>{
     setSellLoader(true)
     if (item.type === 'auction'){
       let fee = await getGasFee(gasFee.createAuction)
+      const something = await NFT.methods.mapStringOfURI(item.img.split('/')[4]).call({}, (err, res)=>{
+                  console.log(`tokenID of URI - ${res}`)
+                })
       console.log("Gas Fee - ", fee)
-      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, item.tokenId, web3.utils.toWei(String(item.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
+      let txData = await NFTSTORE.methods.createAuction(NFT_ADDRESS, something, web3.utils.toWei(String(item.firstBid)), Math.round(new Date(data.startDate).getTime()/1000), Math.round(new Date(data.endDate).getTime()/1000)).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
       } else {
@@ -382,9 +385,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             async function (error, res){
                 console.log(error);
                 console.log(res);
-                const something = await NFT.methods.mapStringOfURI(item.img.split('/')[-1]).call({}, (err, res)=>{
-                  console.log(`tokenID of URI - ${res}`)
-                })
+
                 const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something })
                 router.push(`/product/${result.data.resClient._id}`)
             }
@@ -392,7 +393,10 @@ const getUpdatedBidByToken = async(userAddress)=>{
       }
     } else {
       let fee = await getGasFee(gasFee.createOrderSell)
-      let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, item.tokenId, 1, web3.utils.toWei(String(item.price))).encodeABI()
+      const something = await NFT.methods.mapStringOfURI(item.img.split('/')[4]).call({}, (err, res)=>{
+                  console.log(`tokenID of URI - ${res}`)
+                })
+      let txData = NFTSTORE.methods.createOrderSell(NFT_ADDRESS, something, 1, web3.utils.toWei(String(item.price))).encodeABI()
       if(!wallet){
         alert('you have to connect cryptowallet')
       } else {
@@ -405,9 +409,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             async function(error, res){
                 console.log(error);
                 console.log(res);
-                const something = await NFT.methods.mapStringOfURI(item.img.split('/')[-1]).call({}, (err, res)=>{
-                  console.log(`tokenID of URI - ${res}`)
-                })
+
                 const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something})
                 router.push(`/product/${result.data.resClient._id}`)
             }
@@ -580,7 +582,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>}
         <div className="cabinet_block" hidden={active !== 1}>
         <div className="marketplace__items">
-       {data?.nfts?.filter((item) => item.location !== 'collection').map((item) => {
+       {data?.nfts?.filter((item) => item.location !== 'collection' && item.status !== 'created').map((item) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
             })}
           </div>
