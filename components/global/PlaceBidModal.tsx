@@ -137,6 +137,9 @@ useEffect(() => {
           function(error, res){
               console.log(error);
               console.log(res);
+              if (!res){
+                alert('Reload the page, you canceled the transaction')
+              }
           }
       )		
     }
@@ -161,11 +164,16 @@ useEffect(() => {
           async function(error, res){
               console.log(error);
               console.log(res);
-              subevent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.AUCTION_BID)
+              if (res){
+                              subevent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.AUCTION_BID)
               subevent.on('data', async event => {
                 console.log(event)
                 bidIndex = parseInt(event.data)
               })
+              } else {
+                alert('Reload the page, you canceled the transaction')
+              }
+
           }
       )		
     }

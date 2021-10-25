@@ -93,9 +93,14 @@ export default function CheckoutModal(props): React.ReactElement {
 		        data: txData
 		    },
 		    function(error, res){
+          if (res){
             axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
-		        console.log(error);
-		        console.log(res);
+            
+          } else {
+ console.log(error);
+ alert('you canceled transaction, reload the page')
+          }
+		       
 		    }
 		)
 	}

@@ -198,6 +198,11 @@ function handleDrag(tag, currPos, newPos) {
   function(error, res){
       console.log(error);
       console.log(res);
+      if (res){
+
+      } else {
+        alert('Reload the page, you canceled the transactionk')
+      }
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
   }
 );  setApproveLoader(false)
@@ -222,8 +227,13 @@ function handleDrag(tag, currPos, newPos) {
             async function (error, res){
                 console.log(error);
                 console.log(res);
-                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, currentBid: data.firstBid, type: "timedAuction",startDate: data.startDate, endDate: data.endDate })
+                if (res){
+                                  const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, currentBid: data.firstBid, type: "timedAuction",startDate: data.startDate, endDate: data.endDate })
                 router.push(`/cabinet/${cookie.get('id')}`)
+                } else {
+                  alert('Reload the page, you canceled the transaction')
+                }
+
             }
         )		
       }
@@ -246,8 +256,13 @@ function handleDrag(tag, currPos, newPos) {
 		    async function(error, res){
 		        console.log(error);
 		        console.log(res);
-            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'),contractAddress:SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED,price: data.price, type: "orderSell"})
+            if (res){
+                          const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'),contractAddress:SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED,price: data.price, type: "orderSell"})
             router.push(`/cabinet/${cookie.get('id')}`)
+            } else {
+              alert('Reload the page, you canceled the transaction')
+            }
+
 
 		    }
 		)		

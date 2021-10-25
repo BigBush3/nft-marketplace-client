@@ -358,6 +358,9 @@ const getUpdatedBidByToken = async(userAddress)=>{
     function(error, res){
         console.log(error);
         console.log(res);
+        if (!res){
+          alert('reload the page, you canceled the transaction')
+        }
         subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
     }
 
@@ -385,9 +388,13 @@ const getUpdatedBidByToken = async(userAddress)=>{
             async function (error, res){
                 console.log(error);
                 console.log(res);
-
-                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something })
+              if (res){
+                 const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something })
                 router.push(`/product/${result.data.resClient._id}`)
+              } else {
+                alert('Relad the page, you canceled the transaction')
+              }
+               
             }
         )		
       }
@@ -409,9 +416,13 @@ const getUpdatedBidByToken = async(userAddress)=>{
             async function(error, res){
                 console.log(error);
                 console.log(res);
-
-                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something})
+              if (res){
+                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something})
                 router.push(`/product/${result.data.resClient._id}`)
+              } else {
+                alert('Reload the page, you canceled the transaction')
+              }
+
             }
         )		
       }

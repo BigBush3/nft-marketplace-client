@@ -280,15 +280,23 @@ function handleDrag(tag, currPos, newPos) {
         data: txData
     },
     async function(error, res){
-      if (createMany){
+      if (res) {
+              if (createMany){
         resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price})
       } else {
         resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price})
         console.log(response.data)
+        subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
       }
+      } else {
+        alert('Reload the page, you canceled the transaction')
+        console.log(error)
+        subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
+      }
+
         console.log(error);
         console.log(res);
-        subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
+        
     }
 );   setCreateLoader(false)
 const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDRESS).call({}, (err, res)=>{
@@ -304,9 +312,15 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
       data: txData
   },
   function(error, res){
-      console.log(error);
-      console.log(res);
+    if (res){
+            console.log(res);
       subscription(NFT_ADDRESS, EVENTS_TOPICS.APPROVE)
+    } else {
+      console.log(error);
+      alert('Reload the page, you canceled the transaction')
+    }
+      
+
   }
 ); setApproveLoader(false)
     }
@@ -331,9 +345,14 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
             async function (error, res){
                 console.log(error);
                 console.log(res);
-              
-                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something, type: 'timedAuction', status: 'active' })
+              if (res){
+                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something, type: 'timedAuction', status: 'active' })
                 router.push(`/product/${result.data.resClient._id}`)
+              } else {
+                console.log(error)
+                alert('Reload the page, you canceled the transaction')
+              }
+
             }
         )		
       }
@@ -354,9 +373,14 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
 		        console.log(error);
 		        console.log(res);
             console.log(resp.data.resClient._id)
-            const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
+            if (res){
+                          const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
             console.log(result.data)
             router.push(`/product/${result.data.resClient._id}`)
+            } else {
+              alert('Reload the page, the canceled the transaction')
+            }
+
 		    }
 		)		
 	}
