@@ -235,6 +235,7 @@ function handleDrag(tag, currPos, newPos) {
   const imgResponse = await (await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/upload', requestOptionsFile)).json()
   const collCreate = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/create', {img: imgResponse.result[0].location, location: filterBy, title: data.collection, description: data.description, user: cookie.get('id')})
   console.log(collCreate)
+  router.push(`/cabinet/${cookie.get('id')}`)
   
   }
   const getGasFee = async(gasLimit)=>{
