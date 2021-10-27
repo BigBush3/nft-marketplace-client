@@ -8,6 +8,8 @@ import ArtistItem from './ArtistItem';
 
 interface ArtistListProps {
   app?: Types.AppProps;
+  user?: any;
+  location?: any;
 }
 
 /**
@@ -15,7 +17,7 @@ interface ArtistListProps {
  * @returns
  */
 export default function ArtistsList(props: ArtistListProps): React.ReactElement {
-  const { app } = props;
+  const { app, user, location } = props;
   const { lang } = app;
   const [artistList, setArtistList] = useState([]);
   const size = useWindowSize()
@@ -23,7 +25,14 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
     (async () => {
       if (artistList.length === 0) {
         const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/artists')
-        setArtistList(result.data);
+        if (user){
+          setArtistList(result.data.filter((item) => item._id === user))
+        } else if (location === 'fineart'){
+        } 
+        else {
+          setArtistList(result.data);
+        }
+        
       }
     })();
   }, []);
@@ -49,7 +58,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
           </div>
         </div>
         {artistList.map((artist, key) => {
-          return <ArtistItem key={`ArtistParent-${key}`} {...artist} />;
+          return <ArtistItem key={`ArtistParent-${key}`} {...artist} location={location} />;
         })}
       </ul>
     </aside>

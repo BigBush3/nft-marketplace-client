@@ -7,7 +7,7 @@ import Theme from '../components/Theme';
 import Banner from '../components/global/Banner';
 import Gallery from '../components/fineart/Gallery';
 import ArtistsList from '../components/global/ArtistsList';
-import FineArtItems from '../components/fineart/FineArtItems';
+import FineArtItems from '../components/fineart/FineArtItemsGlobal';
 import Header from '../components/global/Header';
 
 import * as utils from '../utils';
@@ -50,9 +50,8 @@ function FineArt(props): React.ReactElement {
           </h1>
         </div>
         <Banner {...app} banners={banners} />
-        <Gallery app={app} onClickGallery={onClickGallery}/>
         <div className="content">
-          <ArtistsList app={app}/>
+          <ArtistsList app={app} location='fineart'/>
           <FineArtItems app={app} ind={ind}/>
         </div>
         <Footer {...app} />

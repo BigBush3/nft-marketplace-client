@@ -87,7 +87,7 @@ function Header(props): React.ReactElement {
       if (searchBy === 'title'){
         searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         if (router.pathname === '/fineart'){
-          searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
+          searchDat = searchDat.data.filter((item) => item.location === 'fineart')
           return setSearchData(searchDat)
         } else if(router.pathname === '/marketplace'){
           searchDat = searchDat.data.filter((item) => item.location === 'marketplace')
@@ -97,7 +97,18 @@ function Header(props): React.ReactElement {
       } else if(searchBy === 'author'){
         searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/users')
         if (router.pathname === '/fineart'){
-          searchDat = searchDat.data.filter((item) => item.location === 'FineArt')
+          searchDat = searchDat.data.filter((item) => item.location === 'fineart')
+          return setSearchData(searchDat)
+        } else if(router.pathname === '/marketplace'){
+          searchDat = searchDat.data.filter((item) => item.location === 'marketplace')
+          return setSearchData(searchDat)
+        }
+        setSearchData(searchDat.data)
+      } else if(searchBy === 'collection'){
+        searchDat = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/collection')
+        console.log(searchDat.data)
+        if (router.pathname === '/fineart'){
+          searchDat = searchDat.data.filter((item) => item.location === 'fineart')
           return setSearchData(searchDat)
         } else if(router.pathname === '/marketplace'){
           searchDat = searchDat.data.filter((item) => item.location === 'marketplace')
@@ -599,9 +610,12 @@ mfpClose.removeEventListener('click', closeConnectDialog);
             if (value?.title){
                           return (
               <div className='dataItem'>
-                <Link href={`/product/${value._id}`}>
+                <Link href={value?.nfts ? `/collection/${value._id}` : `/product/${value._id}`}>
                 <a style={{display: 'flex', alignItems: 'center', color: 'black', marginBottom: '10px'}}>
-                  {value.nftType === 'video' ? <video style={{ width: '50px', maxHeight: '50px'}} width='50' height='50' src={value.img} autoPlay muted playsInline/> : <img src={value.img} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />}
+                  {
+                    value?.nfts ? <img src={value.img} alt="" style={{width: '100px', height: '40px', borderRadius: '3px', marginRight: '10px', objectFit: 'cover'}} /> : [value.nftType === 'video' ? <video style={{ width: '50px', maxHeight: '50px'}} width='50' height='50' src={value.img} autoPlay muted playsInline/> : <img src={value.img} style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}} alt="" />]
+                  }
+                  
                 
                 <div>
                   <p>{value.title} </p>

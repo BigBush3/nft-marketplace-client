@@ -480,9 +480,13 @@ const getUpdatedBidByToken = async(userAddress)=>{
             <a href="#" onClick={addOwner} className="btn btn_black fill">
               <span>{lang.cabinet.returnBalance}</span>
             </a>
-            {data.verified &&             <a href="/create" className="btn btn_black fill">
-              <span>+ Create NFT</span>
-            </a>}
+            {data.verified &&             <><a href="/create" className="btn btn_black fill">
+              <span>{lang.userMenu.addNft}</span>
+            </a><a href="/create-collection" className="btn btn_black fill">
+              <span>{lang.userMenu.addCollection}</span>
+            </a>
+              </>}
+            
           </div>): [ sub ? [progress ? <CircularProgress style={{display: 'flex', margin: 'auto'}}/> : <div className="cabinet_top_btns button">
             <button className="btn btn_black fill" onClick={unSubscribeHandler}>
               <span>{lang.unsubscribe}</span>
@@ -524,6 +528,16 @@ const getUpdatedBidByToken = async(userAddress)=>{
             className={clsx('cabinet_nav_li', active === 2 && 'active')}
             htmlFor="slick-slide-control02">
             {cookie.get('id') === data._id ? lang.cabinet.myCollection : lang.cabinet.Collection}
+          </label>
+          <label
+            role="button"
+            onClick={() => {
+              setShow(false);
+              setActive(6);
+            }}
+            className={clsx('cabinet_nav_li', active === 6 && 'active')}
+            htmlFor="slick-slide-control02">
+            {cookie.get('id') === data._id ? lang.cabinet.myCollections : lang.cabinet.Collection}
           </label>
           <label
             role="button"
@@ -602,6 +616,24 @@ const getUpdatedBidByToken = async(userAddress)=>{
           <div className="marketplace__items">
                       {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item) => {
             return <CollectionItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+          })}
+          </div>
+
+        </div>
+        <div className="cabinet_block" hidden={active !== 6}>
+          <div className="marketplace__items">
+                      {data.collections && data?.collections?.map((item) => {
+            return (
+              <div className="marketplace__item products__item" onClick={() => router.push(`/collection/${item._id}`)} >
+              <div className="products__item-img">
+                <div >
+<img src={item.img} alt="img" style={{objectFit: 'cover', borderRadius: '5px'}}/>
+                </div>
+              </div>
+              <div className="products__item-name">{item.title}</div>
+              <div style={{textAlign: 'center', color: 'gray', marginTop: '5px'}}>{item.location}</div>
+            </div>
+            )
           })}
           </div>
 

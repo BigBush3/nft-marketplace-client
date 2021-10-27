@@ -22,6 +22,8 @@ import type * as Types from '../../types/index.d';
 import TextField from '@material-ui/core/TextField';
 import { WithContext as ReactTags } from 'react-tag-input';
 import fs from 'fs'
+import StyledSelect from '../UI/StyledSelect';
+
 
 import {
 	NFT_ABI, 
@@ -40,6 +42,7 @@ import {
 	ULR_INFURA_WEBSOCKET, 
 	EVENTS_TOPICS
 } from '../../config/default.json'
+import { Title } from '@material-ui/icons';
 
 
 interface CreateFormProps {
@@ -80,6 +83,7 @@ const {register, handleSubmit} = useForm()
   const [royalty, setRoyalty] = useState(25)
   const [open, setOpen] = React.useState(false);
   const fixPayCheckInfoRef = useRef();
+  const [collection, setCollection] = useState(undefined)
   const endDateCheckInfoRef = useRef();
   const video = useRef(false)
   const type = useRef('')
@@ -91,6 +95,7 @@ const {register, handleSubmit} = useForm()
   const [pdfCopy, setPdfCopy] = useState(null)
   const [pdf, setPdf] = useState(null)
   const [auctionChecked, setAuctionChecked] = useState<boolean>(true);
+  const [collections, setCollections] = useState([])
   const [endDateChecked, setEndDateChecked] = useState<boolean>(false);
   const [fixPayChecked, setFixPayChecked] = useState<boolean>(false);
   const [tokenId, setTokenId] = useState(0)
@@ -155,6 +160,13 @@ function handleDrag(tag, currPos, newPos) {
       $(auctionCheckInfoRef.current).slideUp();
     }
   }, [auctionChecked])
+  useEffect(() => {
+    ( async () => {
+      const respCollections = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/user/${cookie.get('id')}`)
+      console.log(respCollections)
+      setCollections(respCollections.data.collections)
+    })()
+  }, [])
   const isOwner = async (address) => {
     NFTSTORE.methods.admins(address).call({}, (err, res)=>{
       console.log(`it's owners address ${address} - ${res}`)
@@ -282,9 +294,9 @@ function handleDrag(tag, currPos, newPos) {
     async function(error, res){
       if (res) {
               if (createMany){
-        resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price})
+        resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: data.price ? 'orderSell' : 'timedAuction', tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price, collection: collection._id, location: collection.location})
       } else {
-        resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: "timedAuction", tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price})
+        resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: data.price ? 'orderSell' : 'timedAuction', tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price, collection: collection._id, location: collection.location})
         console.log(response.data)
         subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
       }
@@ -494,6 +506,20 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
       <div className="create_input">
         <span>{lang.description}:</span>
         <textarea name='description' {...register("description")} required/>
+      </div>
+      <div style={{marginTop: '15px'}}>
+        <span className='create_span'>{lang.chooseCollection}</span>
+        <StyledSelect
+                variant="outlined"
+                value={collection}
+                app={lang}
+                onChange={(e: any) => {
+                  setCollection(e.target.value);
+                }}
+                options={[{value: undefined, text: 'none'}, ...collections.map((item) => {
+                  return {value: item, text: item.title}
+                })]}
+              />
       </div>
       <label htmlFor="pdf" className="create_download btn btn_gray icon icon-download-black">
         <input type="file" id="pdf" accept=".pdf" onChange={handlePdfChange}/>

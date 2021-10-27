@@ -474,8 +474,8 @@ const el = []
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
-                   [new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{endSpinner ? <CircularProgress/> : <p>{lang.auction.endAuction}</p>}</span></button>]] 
-                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
+                   [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{endSpinner ? <CircularProgress/> : <p>{lang.auction.endAuction}</p>}</span></button>]] 
+                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
               </div>
@@ -502,10 +502,12 @@ const el = []
               <div>{data.hashtags.map((item) => {
                 return (<span>#{item.text} </span>)
               })}</div>
-              <span style={{display: 'flex'}}>Collection name: {data.collect}</span>
+              <span style={{display: 'flex'}}>Collection name: <Link href={`/collection/${data.collect._id}`}>
+              <a>{data.collect.title}</a>
+              </Link></span>
               <hr />
               <div></div>
-              {data.type === 'orderSell' ? null : new Date(data.startDate).getTime() > new Date().getTime() ? null : [new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>{lang.auction.auctionEnded}</h1>: [timeLeft.days === 0 ? <div className='timer_fill' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
+              {data.type === 'orderSell' ? null : data.endDate !== null && new Date(data.startDate).getTime() > new Date().getTime() ? null : [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() ? <h1 className='auction_end'>{lang.auction.auctionEnded}</h1>: [timeLeft.days === 0 ? <div className='timer_fill' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>: 
         <div className='timer_fill' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}><p style={{color: 'white', fontSize: '10px'}}>Auction ends in</p><h1>{`${timeLeft.days < 10? '0' + String(timeLeft.days): timeLeft.days} : ${timeLeft.hours < 10? '0' + String(timeLeft.hours): timeLeft.hours} : ${timeLeft.minutes < 10? '0' + String(timeLeft.minutes): timeLeft.minutes} : ${timeLeft.seconds < 10? '0' + String(timeLeft.seconds) :timeLeft.seconds}`}</h1></div>]]}
               
               <p>

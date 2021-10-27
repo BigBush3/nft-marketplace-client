@@ -1412,7 +1412,6 @@ textarea {
   font-family: 'OpenSans';
   font-weight: 200;
   line-height: 1.625;
-  color: #fff;
   width: calc(42.5% - 31px);
   margin-top: 27px;
 }
@@ -1618,6 +1617,7 @@ textarea {
   justify-content: center;
   font-weight: 900;
   font-size: 12px;
+  align-items: baseline;
   color: #fff;
   background-image: -webkit-gradient(linear, left top, right top, from(#309ff9), to(#03f8a0));
   background-image: -o-linear-gradient(left, #309ff9 0%, #03f8a0 100%);
@@ -1634,7 +1634,6 @@ textarea {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
-  flex-direction: column;
   -webkit-box-align: end;
   -ms-flex-align: end;
   align-items: flex-end;

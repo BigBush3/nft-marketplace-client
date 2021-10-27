@@ -104,6 +104,7 @@ export default interface Language {
     created: string;
     inMarket: string;
     myCollection: string;
+    myCollections: string;
     favorites: string;
     followers: string;
     following: string;
@@ -121,6 +122,7 @@ export default interface Language {
     title: string;
     myProfile: string;
     addNft: string;
+    addCollection: string;
     settings: string;
     disconnect: string;
   };
@@ -138,4 +140,5 @@ export default interface Language {
   theme: string;
   message: string;
   videoInstruction: string;
+  chooseCollection: string;
 }

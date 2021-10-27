@@ -9,7 +9,7 @@ import type * as Types from '../../types/index.d';
  * @returns
  */
 export default function ArtistItem(props): React.ReactElement {
-  const { name, nfts } = props;
+  const { name, collections, location } = props;
   const lR = useRef<any>();
   const [active, setActive] = useState<boolean>(false);
   return (
@@ -24,10 +24,12 @@ export default function ArtistItem(props): React.ReactElement {
       }}>
       <h4 className="artist__item-title">{name}</h4>
       <ul className="artist__sublist" ref={lR}>
-        {nfts.map((child, key) => {
-          return (
+        {collections.map((child, key) => {
+          if (location){
+                      if (child.location === location){
+                                  return (
             <li key={`ArtistChild-${key}`} className="artist__subitem">
-              <Link href={`/product/${child._id}`}>
+              <Link href={`/collection/${child._id}`}>
                 <a
                   onClick={() => {
                     // Закрытие мобильного меню артистов
@@ -41,6 +43,10 @@ export default function ArtistItem(props): React.ReactElement {
               </Link>
             </li>
           );
+                      }
+
+          }
+
         })}
       </ul>
     </li>

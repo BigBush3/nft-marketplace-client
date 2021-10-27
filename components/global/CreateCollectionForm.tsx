@@ -232,7 +232,9 @@ function handleDrag(tag, currPos, newPos) {
     method: 'POST',
     body: formData
   }
-  const imgResponse = await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/upload', requestOptionsFile)
+  const imgResponse = await (await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/upload', requestOptionsFile)).json()
+  const collCreate = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/create', {img: imgResponse.result[0].location, location: filterBy, title: data.collection, description: data.description, user: cookie.get('id')})
+  console.log(collCreate)
   
   }
   const getGasFee = async(gasLimit)=>{
@@ -248,7 +250,7 @@ function handleDrag(tag, currPos, newPos) {
     <>
     <form className="create_form" onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="download" className="fill create_download btn btn_sea icon icon-download">
-        <input type="file" id="download" onChange={handleChange} required/>
+        <input type="file" id="download" onChange={handleChange}/>
         <span>{lang.uploadFile}</span>
       </label>
       {file ? <img src={file} alt="" style={{marginTop: '10px', borderRadius: '10px'}} /> :
@@ -289,37 +291,6 @@ function handleDrag(tag, currPos, newPos) {
         <span>{lang.pageNames.createCollection}</span>
       </button>
     </form>
-    <Dialog
-        open={open}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Create NFT</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <div>
-              <h2>Creating NFT</h2>
-            </div>
-            <div>
-              {createLoader ? <CircularProgress /> : <DoneIcon/>}
-            </div>
-            <div>
-              <h2>Approving NFT</h2>
-            </div>
-            <div>
-              {approveLoader ? <CircularProgress /> : <DoneIcon/>}
-            </div>
-            <div>
-              <h2>Publicating NFT.</h2>
-            </div>
-            <div>
-              {sellLoader ? <CircularProgress/> : <DoneIcon/>}
-            </div>
-            
-
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
       <Modal
     open={openFile}
     onClose={handleCloseHeader}

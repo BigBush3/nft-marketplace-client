@@ -97,6 +97,7 @@ const lang: Language = {
     manyDesc: 'If you want to sell the NFT token <br /> multiple times',
   },
   cabinet: {
+    myCollections: 'My collections',
     bidHistory: 'History of bids',
     returnBalance: 'Return balance',
     auctionBallance: 'Auction Balance',
@@ -118,12 +119,14 @@ const lang: Language = {
     subscribe: 'Subscribe to the newsletter ',
   },
   userMenu: {
+    addCollection: 'Create Collection',
     title: 'Personal account',
     myProfile: 'My Profile',
     addNft: 'Add NFT',
     settings: 'Edit profile',
     disconnect: 'Disconnect',
   },
+  chooseCollection: 'Choose collection',
   modal: {
     connectToAWalet: 'Connect wallet',
     connectToAWalletDesc: '<p>Long description for connecting wallet</p>',

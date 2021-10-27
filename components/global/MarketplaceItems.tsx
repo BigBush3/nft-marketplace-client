@@ -22,7 +22,7 @@ let _count = 0;
  * @returns
  */
 export default function MarketplaceItems(props): React.ReactElement {
-  const { app, search, searchBy, filterBy, priceRange, userData} = props;
+  const { app, search, searchBy, filterBy, priceRange, userData, nfts} = props;
   const lastItemRef = useRef<any>();
   const [marketplaceItems, setMarketplaceItems] = useState([]);
   const allMarketplaceItems = useRef([])
@@ -122,7 +122,11 @@ export default function MarketplaceItems(props): React.ReactElement {
   }, [state])
   //@ts-ignore
   useEffect(() => {
-          (async () => {
+    if (Array.isArray(nfts)){
+      allMarketplaceItems.current = nfts
+      setMarketplaceItems(nfts)
+    } else {
+                (async () => {
       const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft');
       let auction = result.data
       auction = auction.filter((item) => item.location === 'marketplace' && item.status !== 'created')
@@ -130,6 +134,8 @@ export default function MarketplaceItems(props): React.ReactElement {
       allMarketplaceItems.current = auction
       setMarketplaceItems(auction);
     })()
+    }
+
   }, []);
   return (
     
@@ -137,7 +143,7 @@ export default function MarketplaceItems(props): React.ReactElement {
       {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
         console.log('collectiong..')
-        if (new Date(item.endDate).getTime() < new Date().getTime()){
+        if (item.endDate !== null && new Date(item.endDate).getTime() < new Date().getTime()){
           return (
             <SoldOutItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
           )

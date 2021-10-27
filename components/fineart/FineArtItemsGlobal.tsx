@@ -3,16 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import Router from 'next/router';
 import Slider from 'react-slick';
 import axios from 'axios';
-import type * as Types from '../../types/index.d';
+import type * as Types from '../../types';
 import * as utils from '../../utils';
-import FineArtItem from './FineArtItem';
+import FineArtItem from './FineArtItemGlobal';
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
 
 interface FineArtItemsProps {
   app?: Types.AppProps;
   ind: any;
-  nfts: any;
 }
 
 let firstLoad = true;
@@ -23,7 +22,7 @@ let firstLoad = true;
  * @returns
  */
 export default function FineArtItems(props: FineArtItemsProps): React.ReactElement {
-  const { app, ind, nfts } = props;
+  const { app, ind } = props;
   const { lang } = app;
   const mainRef = useRef<any>();
   const sliderRef = useRef<any>()
@@ -49,12 +48,9 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     }
   };
   useEffect(() => {
-    sliderRef.current.slickGoTo(ind)
+    /* sliderRef.current.slickGoTo(ind) */
   }, [ind])
   useEffect(() => {
-    if (Array.isArray(nfts)){
-      setFineArtItems(nfts)
-    } else {
           (async () => {
       if (fineArtItems.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
@@ -63,7 +59,6 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
         getDataPart(fineartItems)();
       }
     })();
-    }
 
     if (!firstLoad) {
       $(document).ready(() => {
@@ -83,12 +78,12 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
     <main ref={mainRef} className="main fineart">
       <div className="fineart__overview">
         {/** элемент работы/коллекции */}
-        <Slider ref={sliderRef} {...settings} className="fineart__overview-items overview__slider active">
+{/*         <Slider ref={sliderRef} {...settings} className="fineart__overview-items overview__slider active"> */}
           {/** элемент работы */}
           {fineArtItems.map((item, key) => {
             return <FineArtItem item={item} key={`ItemOfCollection-${key}`} app={app} />;
           })}
-        </Slider>
+{/*         </Slider> */}
       </div>
 
       {/* <div className="fineart__overview-pagination pagination">

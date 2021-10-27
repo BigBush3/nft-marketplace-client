@@ -98,6 +98,7 @@ const lang: Language = {
     manyDesc: 'Если вы хотите продать NFT-токен <br />несколько раз',
   },
   cabinet: {
+    myCollections: 'Мои коллекции',
     returnBalance: 'Вернуть ставку',
     bidHistory: 'История ставок',
     auctionBallance: 'Баланс аукциона',
@@ -119,12 +120,14 @@ const lang: Language = {
     subscribe: 'Подписаться на рассылку',
   },
   userMenu: {
+    addCollection: 'Создать коллекцию',
     title: 'Личный кабинет',
     myProfile: 'Профиль',
     addNft: 'Создать NFT',
     settings: 'Настройки',
     disconnect: 'Выйти',
   },
+  chooseCollection: 'Выбор коллекции',
   modal: {
     connectToAWalet: 'Подключить кошелек',
     connectToAWalletDesc: '<p>Длинное описание по подключению кошелька</p>',

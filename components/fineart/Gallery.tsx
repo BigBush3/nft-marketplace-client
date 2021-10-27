@@ -8,6 +8,7 @@ import type * as Types from '../../types/index.d';
 interface GalleryProps {
   app: Types.AppProps;
   onClickGallery: any;
+  nfts: any;
 }
 
 const settings = utils.$.galerySliderSettings;
@@ -18,7 +19,7 @@ const settings = utils.$.galerySliderSettings;
  * @returns
  */
 export default function Gallery(props: GalleryProps): React.ReactElement {
-  const { app, onClickGallery } = props;
+  const { app, onClickGallery, nfts } = props;
   const { lang } = app;
   const sliderRef = useRef<any>();
   const [artistList, setArtistList] = useState([]);
@@ -26,13 +27,18 @@ export default function Gallery(props: GalleryProps): React.ReactElement {
      setTimeout(() => {
       sliderRef?.current.slickGoTo(0);
     }, 1000);
-    (async () => {
+    if (Array.isArray(nfts)){
+      setArtistList(nfts)
+    } else {
+          (async () => {
       if (artistList.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
-        const fineartItems = resFineart.data.filter((item) => item.location === 'FineArt')
+        const fineartItems = resFineart.data.filter((item) => item.location === 'fineart')
         setArtistList(fineartItems);
       }
     })();
+    }
+
   }, []);
   return (
     <div className="gallery">
