@@ -386,7 +386,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
 		        console.log(res);
             console.log(resp.data.resClient._id)
             if (res){
-                          const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
+                          const result = await axios.post('http://localhost:8000/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
             console.log(result.data)
             router.push(`/product/${result.data.resClient._id}`)
             } else {
@@ -498,10 +498,6 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
       <div className="create_input">
         <span>{lang.auction.nftName}:</span>
         <input type="text" name='name' {...register("title")} required/>
-      </div>
-      <div className="create_input">
-        <span>{lang.auction.collectionName}:</span>
-        <input type="text" name='collection' {...register("collection")} required/>
       </div>
       <div className="create_input">
         <span>{lang.description}:</span>

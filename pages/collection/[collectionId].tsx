@@ -138,7 +138,7 @@ function Collection(props): React.ReactElement {
           <ArtistsList app={app} user={data.user}/>
           <FineArtItems app={app} ind={ind} nfts={data.nfts}/>
         </div></> :           <div className="content marketplace">
-          <ArtistsList app={app} user={data.user} />
+          <ArtistsList app={app} user={data.user}/>
         <main className="main marketplace">
             {size.width > 400 ?  <div className="main__top">
               <div className="heading__sort main__sort">

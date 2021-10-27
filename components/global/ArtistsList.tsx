@@ -58,6 +58,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
           </div>
         </div>
         {artistList.map((artist, key) => {
+          console.log(artist)
           return <ArtistItem key={`ArtistParent-${key}`} {...artist} location={location} />;
         })}
       </ul>
