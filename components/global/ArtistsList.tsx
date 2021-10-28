@@ -30,7 +30,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
         } else if (location === 'fineart'){
         } 
         else {
-          setArtistList(result.data);
+          setArtistList(result.data.filter((item) => item.collections.length > 0));
         }
         
       }

@@ -624,13 +624,20 @@ const getUpdatedBidByToken = async(userAddress)=>{
           <div className="marketplace__items">
                       {data.collections && data?.collections?.map((item) => {
             return (
-              <div className="marketplace__item products__item" onClick={() => router.push(`/collection/${item._id}`)} >
-              <div className="products__item-img">
+              <div className="marketplace__item products__item"  >
+                <div className="products__item-info">
+                <img src="/img/4115230_cancel_close_delete_icon.svg" onClick={async () => {
+                  await confirm('Are you sure that you want to delete this collection?')
+                  await axios.delete(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${item._id}`)
+                  window.location.reload()
+                }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
+      </div>
+              <div className="products__item-img" onClick={() => router.push(`/collection/${item._id}`)}>
                 <div >
 <img src={item.img} alt="img" style={{objectFit: 'cover', borderRadius: '5px'}}/>
                 </div>
               </div>
-              <div className="products__item-name">{item.title}</div>
+              <div className="products__item-name" >{item.title}</div>
               <div style={{textAlign: 'center', color: 'gray', marginTop: '5px'}}>{item.location}</div>
             </div>
             )

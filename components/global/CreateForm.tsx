@@ -518,7 +518,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                   return {value: item, text: item.title}
                 })]}
               />
-              <Link href='/create-collection'><p style={{cursor: 'pointer', color: 'gray', fontWeight: 'lighter', fontSize: '12px'}}>{lang.pageNames.createCollection}</p></Link>
+              <a href='/create-collection' target="_blank"><p style={{cursor: 'pointer', color: 'gray', fontWeight: 'lighter', fontSize: '14px'}} className='create-collection'>{lang.pageNames.createCollection}</p></a>
       </div>
       <label htmlFor="pdf" className="create_download btn btn_gray icon icon-download-black">
         <input type="file" id="pdf" accept=".pdf" onChange={handlePdfChange}/>

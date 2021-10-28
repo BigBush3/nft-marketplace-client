@@ -5138,6 +5138,9 @@ input::-webkit-inner-spin-button {
   margin: 60px -12px 0;
   border-bottom: 1px solid #ddd;
 }
+.create-collection:hover{
+  text-decoration: underline;
+}
 
 .cabinet_nav_li {
   position: relative;
