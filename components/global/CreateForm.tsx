@@ -43,6 +43,7 @@ import {
 	EVENTS_TOPICS
 } from '../../config/default.json'
 import { Title } from '@material-ui/icons';
+import Link from 'next/link';
 
 
 interface CreateFormProps {
@@ -358,7 +359,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 console.log(error);
                 console.log(res);
               if (res){
-                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something, type: 'timedAuction', status: 'active' })
+                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something, type: 'timedAuction', status: 'active' })
                 router.push(`/product/${result.data.resClient._id}`)
               } else {
                 console.log(error)
@@ -512,10 +513,11 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 onChange={(e: any) => {
                   setCollection(e.target.value);
                 }}
-                options={[{value: undefined, text: 'none'}, ...collections.map((item) => {
+                options={[{value: undefined, text: '<b>No collections</b>'}, ...collections.map((item) => {
                   return {value: item, text: item.title}
                 })]}
               />
+              <Link href='/create-collection'><p style={{cursor: 'pointer', color: 'gray', fontWeight: 'lighter', fontSize: '12px'}}>{lang.pageNames.createCollection}</p></Link>
       </div>
       <label htmlFor="pdf" className="create_download btn btn_gray icon icon-download-black">
         <input type="file" id="pdf" accept=".pdf" onChange={handlePdfChange}/>

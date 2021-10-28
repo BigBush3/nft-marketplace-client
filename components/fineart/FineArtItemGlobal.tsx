@@ -8,6 +8,7 @@ import Favorite from '../global/Favorite';
 import Link from 'next/link';
 import axios from 'axios'
 import { getTokenOwnHistory } from '../../utils/blockchain';
+import router from 'next/router';
 
 interface FineArtItemProps {
   item?: Types.ItemProps;
@@ -23,7 +24,7 @@ export default function FineArtItem(props): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const { item, app } = props;
   const { lang } = app;
-  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type } = item;
+  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type, initialBid } = item;
   const [historyItem, setHistoryItem] = useState([])
   const ownerHandler = async () => {
     if (!open){
@@ -54,8 +55,8 @@ setHistoryItem(finalHistory.data.result)
             <div className="products__item-info">
               <img src={item.owner.imgUrl} style={{width: '75px', height: '75px', borderRadius: '50%', float: 'left'}} alt="" />
               <div style={{marginBottom: '10px', marginLeft: '5px'}}>
-                                    <div style={{fontSize: '20px'}} className="products__item-title">{item.owner.name}</div>
-      <div style={{fontSize: '20px'}} className="products__item-name">{title}</div>
+                                    <div style={{fontSize: '20px', cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${item.owner._id}`)} className="products__item-title">{item.owner.name}</div>
+      <div style={{fontSize: '20px', textAlign: 'initial'}} className="products__item-name">{title}</div>
               </div>
 
 {/*         <div
@@ -91,7 +92,7 @@ setHistoryItem(finalHistory.data.result)
         <Likes data={item} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">ETH {price}</div>
+      <div className="products__item-price">ETH {price ? price : initialBid}</div>
       <div className="products__item-buy button">
 
         { type === 'timedAuction' ? <a href={`/product/${_id}`} className="buy fill btn_fill">
