@@ -631,6 +631,12 @@ const getUpdatedBidByToken = async(userAddress)=>{
                   await axios.delete(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${item._id}`)
                   window.location.reload()
                 }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
+                <img src="/img/352547_edit_mode_icon.svg" onClick={() => {
+                  router.push({
+                    pathname:'/update-collection/[id]',
+                    query: {id: item._id}
+                  })
+                }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
       </div>
               <div className="products__item-img" onClick={() => router.push(`/collection/${item._id}`)}>
                 <div >
