@@ -5,6 +5,7 @@ import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import ArtistItem from './ArtistItem';
+import { getItems } from '../../utils/data';
 
 interface ArtistListProps {
   app?: Types.AppProps;
@@ -28,8 +29,16 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
         if (user){
           setArtistList(result.data.filter((item) => item._id === user))
         } else if (location === 'fineart'){
+
+          
+          setArtistList(result.data.filter((item) => item.collections.filter((collection) => collection.location === 'fineart').length > 0 ? true : false))
+        }
+        else if(location === 'marketplace'){
+          setArtistList(result.data.filter((item) => item.collections.filter((collection) => collection.location === 'marketplace').length > 0 ? true : false))
+
         } 
-        else {
+        else
+         {
           setArtistList(result.data.filter((item) => item.collections.length > 0));
         }
         

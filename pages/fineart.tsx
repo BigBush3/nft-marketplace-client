@@ -51,7 +51,7 @@ function FineArt(props): React.ReactElement {
         </div>
         <Banner {...app} banners={banners} />
         <div className="content">
-          <ArtistsList app={app}/>
+          <ArtistsList app={app} location='fineart'/>
           <FineArtItems app={app} ind={ind}/>
         </div>
         <Footer {...app} />

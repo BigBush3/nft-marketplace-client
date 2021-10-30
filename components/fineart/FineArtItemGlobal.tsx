@@ -55,7 +55,7 @@ setHistoryItem(finalHistory.data.result)
             <div className="products__item-info">
               <img src={item.owner.imgUrl} style={{width: '75px', height: '75px', borderRadius: '50%', float: 'left'}} alt="" />
               <div style={{marginBottom: '10px', marginLeft: '5px'}}>
-                                    <div style={{fontSize: '20px', cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${item.owner._id}`)} className="products__item-title">{item.owner.name}</div>
+                                    <div style={{fontSize: '20px', cursor: 'pointer', 'textAlign': 'start'}} onClick={() => router.push(`/cabinet/${item.owner._id}`)} className="products__item-title">{item.owner.name}</div>
       <div style={{fontSize: '20px', textAlign: 'initial'}} className="products__item-name">{title}</div>
               </div>
 
@@ -73,8 +73,8 @@ setHistoryItem(finalHistory.data.result)
                         })}
         </div> */}
       </div>
-      <a href={`/product/${_id}`} className="products__item-img">
-        <div >
+      <div onClick={() => router.push(`/product/${_id}`)}  className="products__item-img" style={{cursor: 'pointer'}}>
+        <div>
           <img style={{width: '60vh', height: '60vh', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
         </div>
         {mark && (
@@ -82,7 +82,7 @@ setHistoryItem(finalHistory.data.result)
             <img src="/img/mark.png" alt="mark" />
           </div>
         )}
-      </a>
+      </div>
 
       <div className="products__item-stats">
         <div className="item-stats__views">

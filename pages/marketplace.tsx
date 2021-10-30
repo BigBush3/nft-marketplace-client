@@ -122,7 +122,7 @@ function Marketplace(props): React.ReactElement {
         </div>
         <Banner {...app} banners={banners} />
         <div className="content marketplace">
-          <ArtistsList app={app} />
+          <ArtistsList app={app} location='marketplace'/>
           <main className="main marketplace">
             {size.width > 400 ?  <div className="main__top">
               <div className="heading__sort main__sort">

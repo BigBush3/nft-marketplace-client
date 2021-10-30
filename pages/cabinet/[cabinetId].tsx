@@ -92,6 +92,7 @@ function Cabinet(props): React.ReactElement {
   const [sub, setSub] = useState(checkAvailability(followers, cookie.get('id')))
   const [openSnack, setOpenSnack] = React.useState(false);
   const [bidHistory, setBidHistory] = useState([])
+  const [hoverCollection, setHoverCollection] = useState(false)
   const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)
@@ -623,10 +624,11 @@ const getUpdatedBidByToken = async(userAddress)=>{
         <div className="cabinet_block" hidden={active !== 6}>
           <div className="marketplace__items">
                       {data.collections && data?.collections?.map((item) => {
+                        console.log(item)
             return (
-              <div className="marketplace__item products__item"  >
+              <div className="marketplace__item products__item"  onMouseOver={() => setHoverCollection(item._id)}>
                 <div className="products__item-info">
-                <img src="/img/4115230_cancel_close_delete_icon.svg" onClick={async () => {
+                {hoverCollection === item._id && item.user === cookie.get('id') ?                 <><img src="/img/4115230_cancel_close_delete_icon.svg" onClick={async () => {
                   await confirm('Are you sure that you want to delete this collection?')
                   await axios.delete(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${item._id}`)
                   window.location.reload()
@@ -636,7 +638,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
                     pathname:'/update-collection/[id]',
                     query: {id: item._id}
                   })
-                }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
+                }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" /></> : <div style={{height: '30px'}}></div>}
+
       </div>
               <div className="products__item-img" onClick={() => router.push(`/collection/${item._id}`)}>
                 <div >

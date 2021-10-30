@@ -8,6 +8,7 @@ import Favorite from '../global/Favorite';
 import Link from 'next/link';
 import axios from 'axios'
 import { getTokenOwnHistory } from '../../utils/blockchain';
+import router from 'next/router';
 
 interface FineArtItemProps {
   item: Types.ItemProps;
@@ -66,8 +67,8 @@ setHistoryItem(finalHistory.data.result)
                         })}
         </div>
       </div>
-      <a href={`/product/${_id}`} className="products__item-img">
-        <div >
+      <div onClick={() => router.push(`/product/${_id}`)}  className="products__item-img" style={{cursor: 'pointer'}}>
+        <div>
           <img style={{width: '60vh', height: '60vh', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
         </div>
         {mark && (
@@ -75,7 +76,7 @@ setHistoryItem(finalHistory.data.result)
             <img src="/img/mark.png" alt="mark" />
           </div>
         )}
-      </a>
+      </div>
       <div className="products__item-title">{item.owner.name}</div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
@@ -89,12 +90,12 @@ setHistoryItem(finalHistory.data.result)
       <div className="products__item-price">ETH {price}</div>
       <div className="products__item-buy button">
 
-        { type === 'timedAuction' ? <a href={`/product/${_id}`} className="buy fill btn_fill">
+        { type === 'timedAuction' ? <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
           <span>{lang.placeBid}</span>
-        </a>:
-        <a href={`/product/${_id}`} className="buy fill btn_fill">
-          <span>{lang.buy}</span>
-        </a>
+        </a></Link>:
+        <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
+        <span>{lang.buy}</span>
+      </a></Link>
 }
       </div>
     </div>

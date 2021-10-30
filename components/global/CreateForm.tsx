@@ -360,7 +360,13 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 console.log(res);
               if (res){
                 console.log(resp)
-                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, tokenId: something, type: 'timedAuction', status: 'active', startDate: data.startDate, endDate: data.endDate, firstBid: data.firstBid })
+                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription',
+                                 {id: resp.data.resClient._id,
+                                   userId: cookie.get('id'),
+                                    contractAddress: TIMEDAUCTION_ADDRESS,
+                                     topic: EVENTS_TOPICS.Time_Auction_Created,
+                                      tokenId: something, type: 'timedAuction',
+                                       status: 'active', startDate: data.startDate, endDate: data.endDate, firstBid: data.firstBid })
                 router.push(`/product/${result.data.resClient._id}`)
               } else {
                 console.log(error)
@@ -388,7 +394,10 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
 		        console.log(res);
             console.log(resp.data.resClient._id)
             if (res){
-                          const result = await axios.post('http://localhost:8000/nft/subscription', {id: resp.data.resClient._id, userId: cookie.get('id'), contractAddress: SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
+                          const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription',
+                           {id: resp.data.resClient._id, userId: cookie.get('id'),
+                            contractAddress: SIMPLEAUCTION_ADDRESS,
+                             topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
             console.log(result.data)
             router.push(`/product/${result.data.resClient._id}`)
             } else {

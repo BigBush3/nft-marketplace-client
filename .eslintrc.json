@@ -89,7 +89,8 @@
       "no-inner-declarations": 0,
       "jsx-a11y/no-noninteractive-element-interactions": 0,
       "no-var": 0,
-      "array-callback-return": 0
+      "array-callback-return": 0,
+      "jsx-a11y/mouse-events-have-key-events": 0
     },
     "settings": {
       "import/resolver": {
