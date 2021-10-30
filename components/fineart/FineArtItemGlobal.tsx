@@ -55,7 +55,7 @@ setHistoryItem(finalHistory.data.result)
             <div className="products__item-info">
               <img src={item.owner.imgUrl} style={{width: '75px', height: '75px', borderRadius: '50%', float: 'left'}} alt="" />
               <div style={{marginBottom: '10px', marginLeft: '5px'}}>
-                                    <div style={{fontSize: '20px', cursor: 'pointer', 'textAlign': 'start'}} onClick={() => router.push(`/cabinet/${item.owner._id}`)} className="products__item-title">{item.owner.name}</div>
+                                    <div style={{fontSize: '20px', cursor: 'pointer', textAlign: 'start'}} onClick={() => router.push(`/cabinet/${item.owner._id}`)} className="products__item-title">{item.owner.name}</div>
       <div style={{fontSize: '20px', textAlign: 'initial'}} className="products__item-name">{title}</div>
               </div>
 
