@@ -25,7 +25,8 @@ export default function ArtistItem(props): React.ReactElement {
       <h4 className="artist__item-title">{name}</h4>
       <ul className="artist__sublist" ref={lR}>
         {collections.map((child, key) => {
-                                  return (
+          if (location === child.location){
+                                              return (
             <li key={`ArtistChild-${key}`} className="artist__subitem">
               <Link href={`/collection/${child._id}`}>
                 <a
@@ -41,6 +42,10 @@ export default function ArtistItem(props): React.ReactElement {
               </Link>
             </li>
           );
+          } else {
+            return null
+          }
+
 
 
         })}
