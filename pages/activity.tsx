@@ -100,7 +100,9 @@ function Activity(props): React.ReactElement {
               </div> */}
 Activity.getInitialProps = async ({req, res, query}) => {
     const response = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/actions')
-    return {actions: response.data}
+    return {actions: response.data.sort((a, b) => {
+      return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+    })}
   }
   
 

@@ -10,6 +10,7 @@ import type * as Types from '../../types/index.d';
  */
 function OwnerDropdownItem(props): React.ReactElement {
   const { author, imgUrl, name, _id, ind } = props;
+  console.log(props)
   return (
     <div className={clsx('info__dropdown-item', ind === 0 ? 'artist' : 'owner')}>
       <div className="dropdown-item__img">

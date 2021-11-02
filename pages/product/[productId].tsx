@@ -502,7 +502,7 @@ const el = []
               <div>{data.hashtags.map((item) => {
                 return (<span>#{item.text} </span>)
               })}</div>
-              { data.collect?._id ? <span style={{display: 'flex'}}>Collection name: <Link href={`/collection/${data.collect._id}`}>
+              { data.collect?._id ? <span style={{display: 'flex'}}>Collection name:&nbsp; <Link href={`/collection/${data.collect._id}`}>
               <a>{data.collect.title}</a>
               </Link></span> : null}
               <hr />

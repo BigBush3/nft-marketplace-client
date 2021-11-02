@@ -24,7 +24,7 @@ const ActivityItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactE
     <div className='action_item' ref={ref}>
                         <Link href={`/product/${item.nft._id}`}><div className='img_crop' style={{marginRight: '20px'}}>
                         
-                            <img className='picture_square' src={item.nft ? item.nft.img: null} alt="" />
+                            <img className='picture_square' style={{height: '350px', objectFit: 'cover'}} src={item.nft ? item.nft.img: null} alt="" />
                         </div>
                         </Link>
                         

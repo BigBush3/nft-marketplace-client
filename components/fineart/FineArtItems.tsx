@@ -86,6 +86,7 @@ export default function FineArtItems(props: FineArtItemsProps): React.ReactEleme
         <Slider ref={sliderRef} {...settings} className="fineart__overview-items overview__slider active">
           {/** элемент работы */}
           {fineArtItems.map((item, key) => {
+            console.log(item)
             return <FineArtItem item={item} key={`ItemOfCollection-${key}`} app={app} />;
           })}
         </Slider>

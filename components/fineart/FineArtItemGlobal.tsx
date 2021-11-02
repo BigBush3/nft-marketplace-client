@@ -95,12 +95,12 @@ setHistoryItem(finalHistory.data.result)
       <div className="products__item-price">ETH {price ? price : initialBid}</div>
       <div className="products__item-buy button">
 
-        { type === 'timedAuction' ? <a href={`/product/${_id}`} className="buy fill btn_fill">
+      { type === 'timedAuction' ? <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
           <span>{lang.placeBid}</span>
-        </a>:
-        <a href={`/product/${_id}`} className="buy fill btn_fill">
-          <span>{lang.buy}</span>
-        </a>
+        </a></Link>:
+        <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
+        <span>{lang.buy}</span>
+      </a></Link>
 }
       </div>
     </div>

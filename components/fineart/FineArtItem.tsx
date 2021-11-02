@@ -28,27 +28,24 @@ export default function FineArtItem(props): React.ReactElement {
   const [historyItem, setHistoryItem] = useState([])
   const ownerHandler = async () => {
     if (!open){
-      try {
-            const el = []
-    const resHistory = await getTokenOwnHistory(item.tokenId)
-    if (resHistory[0]){
-      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
-for (let i = 0; i < resHistory.length; i++) {
-  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
-  
-}
-const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
-setHistoryItem(finalHistory.data.result)
-} else {
-  el.push(item.owner)
-  setHistoryItem(el)
-}
-      } catch (err) {
-        console.log(err.message)
-      }
-
+      const el = []
+      const resHistory = await getTokenOwnHistory(item.tokenId)
+      if (resHistory[0]){
+        el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+    for (let i = 0; i < resHistory.length; i++) {
+    el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+    
     }
-    setOpen(!open)
+    const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+    setHistoryItem(finalHistory.data.result)
+    } else {
+      console.log(item.owner)
+    el.push(item.owner)
+    console.log(el)
+    setHistoryItem(el)
+    }
+      }
+      setOpen(!open)
   }
   return (
     <div className="fineart__item products__item">
@@ -63,6 +60,7 @@ setHistoryItem(finalHistory.data.result)
 
         <div className={clsx('item-info__dropdown', open && 'active')}>
         {historyItem.map((item, index, array) => {
+        
                           return <OwnerDropdownItem {...item} ind={index}/>
                         })}
         </div>
