@@ -629,13 +629,16 @@ const getUpdatedBidByToken = async(userAddress)=>{
               <div className="marketplace__item products__item"  onMouseOver={() => setHoverCollection(item._id)}>
                 <div className="products__item-info">
                 {hoverCollection === item._id && item.user === cookie.get('id') ?                 <><img src="/img/4115230_cancel_close_delete_icon.svg" onClick={async () => {
-                  await confirm('Are you sure that you want to delete this collection?')
+                  let status = await confirm('Are you sure that you want to delete this collection?')
+                  if (status){
                   await axios.delete(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${item._id}`)
                   window.location.reload()
+                  }
+
                 }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
                 <img src="/img/352547_edit_mode_icon.svg" onClick={() => {
                   router.push({
-                    pathname:'/update-collection/[id]',
+                    pathname:'/update-collection',
                     query: {id: item._id}
                   })
                 }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" /></> : <div style={{height: '30px'}}></div>}

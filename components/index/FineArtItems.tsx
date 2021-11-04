@@ -32,7 +32,9 @@ export default function FineArtItems(props): React.ReactElement {
       if (fineArtItems.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
         const _fineartItems = resFineart.data.filter((item) => item.location === 'fineart')
-        setFineArtItems(_fineartItems);
+        setFineArtItems(_fineartItems.sort((a, b) => {
+          return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
+        }));
       }
     })();
   }, [fineArtItems]);

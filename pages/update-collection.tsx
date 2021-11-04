@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import type * as Types from '../types';
 import Theme from '../components/Theme';
 import Header from '../components/global/Header';
+import UpdateForm from '../components/global/updateCollection';
 import axios from 'axios'
 
 interface CreateOneProps {
@@ -18,6 +19,7 @@ interface CreateOneProps {
 function UpdateCollection(props: CreateOneProps): React.ReactElement {
   const { app, data } = props;
   const { lang } = app;
+  console.log(data)
 
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../components/global/Footer').then((mod) => mod.default));
@@ -30,6 +32,7 @@ function UpdateCollection(props: CreateOneProps): React.ReactElement {
         <div className="heading center">
           <h1>Update collection</h1>
         </div>
+        <UpdateForm app={app} createMany={false} item={data} />
         <Footer {...app} />
       </div>
     </Theme>
