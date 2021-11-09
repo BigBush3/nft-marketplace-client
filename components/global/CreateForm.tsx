@@ -297,6 +297,7 @@ function handleDrag(tag, currPos, newPos) {
               if (createMany){
         resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/createMany', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: data.price ? 'orderSell' : 'timedAuction', tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, amount: data.amount, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price, collection: collection?._id, location: collection?.location})
       } else {
+        console.log(data.price)
         resp = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/create', {userId: cookie.get('id'), hashtags: tags, img: `https://inifty.mypinata.cloud/ipfs/${ipfsHash}`, title: data.title, collect: data.collection, royalty: royalty, description: data.description, pdf: `https://inifty.mypinata.cloud/ipfs/${ipfsPdfHash}`, currentBid: data.firstBid, type: data.price ? 'orderSell' : 'timedAuction', tokenId: something, orderIndex: 0, startDate: data.startDate, endDate: data.endDate, action: `${cookie.get('name')} created nft and sell it for ${data.firstBid} ETH`, nftType: type.current, status: 'created', price: data.price, collection: collection?._id, location: collection?.location})
         console.log(response.data)
         subscription(NFT_ADDRESS, EVENTS_TOPICS.CREATE)
@@ -360,7 +361,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 console.log(res);
               if (res){
                 console.log(resp)
-                                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription',
+                const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription',
                                  {id: resp.data.resClient._id,
                                    userId: cookie.get('id'),
                                     contractAddress: TIMEDAUCTION_ADDRESS,
@@ -397,7 +398,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                           const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription',
                            {id: resp.data.resClient._id, userId: cookie.get('id'),
                             contractAddress: SIMPLEAUCTION_ADDRESS,
-                             topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell'})
+                             topic: EVENTS_TOPICS.FIX_ORDER_CREATED, tokenId: something, status: 'active', type: 'orderSell', price: data.price})
             console.log(result.data)
             router.push(`/product/${result.data.resClient._id}`)
             } else {
