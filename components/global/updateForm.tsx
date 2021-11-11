@@ -264,7 +264,7 @@ function handleDrag(tag, currPos, newPos) {
 		        console.log(error);
 		        console.log(res);
             if (res){
-              let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
+              let subEvent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               
               subEvent.on('data', async event => {
                 console.log(event)
