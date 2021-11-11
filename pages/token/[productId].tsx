@@ -29,7 +29,8 @@ interface ProductProps {
  * @param props
  * @returns
  */
-function Token({app, data}): React.ReactElement {
+function NftToken({app, nft}): React.ReactElement {
+  const data = JSON.parse(nft)
   const { lang } = app;
   const [item, setItem] = useState();
   const [open, setOpen] = useState<boolean>(false);
@@ -152,9 +153,9 @@ function Token({app, data}): React.ReactElement {
   );
 }
 
-Token.getInitialProps = async ({req, res, query}) => {
+NftToken.getInitialProps = async ({req, res, query}) => {
   const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
-  return {data: response.data}
+  return {nft: JSON.stringify(response.data)}
 }
 
-export default Token;
+export default NftToken;

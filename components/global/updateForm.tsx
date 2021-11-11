@@ -228,8 +228,15 @@ function handleDrag(tag, currPos, newPos) {
                 console.log(error);
                 console.log(res);
                 if (res){
-                                  const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'), contractAddress: TIMEDAUCTION_ADDRESS, topic: EVENTS_TOPICS.Time_Auction_Created, currentBid: data.firstBid, type: "timedAuction",startDate: data.startDate, endDate: data.endDate })
+                  let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
+              
+              subEvent.on('data', async event => {
+                console.log(event)
+                const pure = event.data.slice(2)
+                const sth = event.data.slice(0, 66)
+                const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {currentBid: data.firstBid, type: "timedAuction", tokenId: item._id, orderIndex: parseInt(sth), startDate: data.startDate, endDate: data.endDate, location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`})
                 router.push(`/cabinet/${cookie.get('id')}`)
+              })
                 } else {
                   alert('Reload the page, you canceled the transaction')
                 }
@@ -257,8 +264,15 @@ function handleDrag(tag, currPos, newPos) {
 		        console.log(error);
 		        console.log(res);
             if (res){
-                          const result = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/subscription', {id: item._id, userId: cookie.get('id'),contractAddress:SIMPLEAUCTION_ADDRESS, topic: EVENTS_TOPICS.FIX_ORDER_CREATED,price: data.price, type: "orderSell"})
-            router.push(`/cabinet/${cookie.get('id')}`)
+              let subEvent = await subscription(TIMEDAUCTION_ADDRESS, EVENTS_TOPICS.Time_Auction_Created)
+              
+              subEvent.on('data', async event => {
+                console.log(event)
+                const pure = event.data.slice(2)
+                const sth = event.data.slice(0, 66)
+                const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {type: "orderSell", tokenId: item._id, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`, price: data.price})
+                router.push(`/cabinet/${cookie.get('id')}`)
+              })
             } else {
               alert('Reload the page, you canceled the transaction')
             }
