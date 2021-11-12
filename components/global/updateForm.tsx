@@ -267,9 +267,11 @@ function handleDrag(tag, currPos, newPos) {
               let subEvent = await subscription(SIMPLEAUCTION_ADDRESS, EVENTS_TOPICS.FIX_ORDER_CREATED)
               
               subEvent.on('data', async event => {
-                console.log(event)
+                console.log(item)
+                console.log(data)
                 const pure = event.data.slice(2)
                 const sth = event.data.slice(0, 66)
+                console.log(parseInt(sth))
                 const res = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/update', {type: "orderSell", tokenId: item._id, orderIndex: parseInt(sth), location: 'marketplace', status: 'active', userId: cookie.get('id'), action: `${cookie.get('name')} place an order and sell it for ${data.firstBid} ETH`, price: data.price})
                 router.push(`/cabinet/${cookie.get('id')}`)
               })
