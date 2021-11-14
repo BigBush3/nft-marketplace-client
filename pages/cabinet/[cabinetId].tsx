@@ -573,50 +573,22 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>
         {data.verified === true && <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
-       {data?.nfts?.filter((item) => item.location !== 'collection' || item.status === 'created').map((item) => {
-              
-              if (item.status === 'created'){
-                return (
-                  <div className="marketplace__item products__item">
-                  <div className="products__item-info">
-                  <div
-          role="button"
-          className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
-          <i className="flaticon-information" />
-          <i className="flaticon-letter-x cross" />
-        </div>
-                  </div>
-                  <div className="products__item-img">
-                    <div className="item-img__cover">
-                      {item.nftType === 'video' ? <video src={item.img} width="250" height="250" autoPlay  muted loop playsInline style={{width: '250px', borderRadius: '20px', height: '250px', objectFit: 'cover'}}>
-                 </video> : <img src={item.img} alt="img" style={{borderRadius: '20px', width: '250px', height: '250px', objectFit: 'cover'}}/>}
-                    </div>
-                  </div>
-                  <div className="products__item-name">{item.title}</div>
-                  <div style={{display: 'flex', justifyContent: 'center', marginTop: '15px'}} className='button'>
-                    <button className='fill' onClick={() => endCreatingHandler(item)}><span>End Creating</span></button>
-                  </div>
-                </div>
-                )
-              }
-              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+       {data?.nfts?.filter((item) => item.location !== 'collection' || item.status === 'created').map((item, index) => {
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
             })}
           </div>
         </div>}
         <div className="cabinet_block" hidden={active !== 1}>
         <div className="marketplace__items">
-       {data?.nfts?.filter((item) => item.location !== 'collection' && item.status !== 'created').map((item) => {
-              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+       {data?.nfts?.filter((item) => item.location !== 'collection' && item.status !== 'created').map((item, index) => {
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
             })}
           </div>
         </div>
         <div className="cabinet_block" hidden={active !== 2}>
           <div className="marketplace__items">
-                      {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item) => {
-            return <CollectionItem app={app} key={`MarketplaceItem-${item._id}`} data={item} />;
+                      {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item, index) => {
+            return <CollectionItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
           })}
           </div>
 
@@ -626,7 +598,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
                       {data.collections && data?.collections?.map((item) => {
                         console.log(item)
             return (
-              <div className="marketplace__item products__item"  onMouseOver={() => setHoverCollection(item._id)}>
+              <div className="marketplace__item products__item" key={`marketplace${item._id}${Math.random()}`}  onMouseOver={() => setHoverCollection(item._id)}>
                 <div className="products__item-info">
                 {hoverCollection === item._id && item.user === cookie.get('id') ?                 <><img src="/img/4115230_cancel_close_delete_icon.svg" onClick={async () => {
                   let status = await confirm('Are you sure that you want to delete this collection?')
@@ -659,8 +631,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>
         <div className="cabinet_block" hidden={active !== 3}>
         <div className="marketplace__items">
-       {data?.favouriteNfts ? [data.favouriteNfts.map((item) => {
-              return <MarketplaceItem app={app} key={`MarketplaceItem-${item?._id}`} data={item} />;
+       {data?.favouriteNfts ? [data.favouriteNfts.map((item, index) => {
+              return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
             })] : <div>you dont have any favourite nft tokens</div>}
           </div>
         </div>
