@@ -76,7 +76,7 @@ const ownerHandler = async () => {
     console.log(err.message)
   }
   
-  if (resHistory[0]){
+  if (resHistory){
     el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
 for (let i = 0; i < resHistory.length; i++) {
 el.push(resHistory[i].returnValues.addressTo.toLowerCase())
