@@ -1626,7 +1626,7 @@ textarea {
 
 .products__item-info {
   text-align: right;
-  margin-right: 15px;
+  margin-right: 35px;
   margin-bottom: 6px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1642,6 +1642,7 @@ textarea {
 .products__item-info .item-info__icon {
   cursor: pointer;
   position: relative;
+  right: -100%;
   z-index: 100;
   -webkit-transition: 0.25s ease all;
   -o-transition: 0.25s ease all;
