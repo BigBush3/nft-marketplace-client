@@ -124,7 +124,7 @@ function Collection(props): React.ReactElement {
       <Header app={app} {...app} onChange={onChangeSome}/>
       <div className="wrapper ">
       <div className="bunner">
-              <div className="bunner__item" style={{ backgroundImage: `url(${data.img})`, backgroundSize: 'cover', minHeight: "460px"}}>
+              <div className="bunner__item" style={{ backgroundImage: `url(${data.img})`, backgroundSize: 'cover', height: "70vh"}}>
                 <div className="bunner__item-title heading">
                   <h2 >{data.title}</h2>
                 </div>
@@ -133,9 +133,9 @@ function Collection(props): React.ReactElement {
                 </div>
               </div>
     </div>
-    {data.location === 'fineart' ?         <><Gallery app={app} onClickGallery={onClickGallery} nfts={data.nfts}/>
+    {data.location === 'fineart' ?         <><ArtistsList app={app} user={data.user}/><Gallery app={app} onClickGallery={onClickGallery} nfts={data.nfts}/>
         <div className="content">
-          <ArtistsList app={app} user={data.user}/>
+          
           <FineArtItems app={app} ind={ind} nfts={data.nfts}/>
         </div></> :           <div className="content marketplace">
           <ArtistsList app={app} user={data.user}/>

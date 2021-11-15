@@ -67,7 +67,7 @@ export default function FineArtItem(props): React.ReactElement {
       </div>
       <div onClick={() => router.push(`/product/${_id}`)}  className="products__item-img" style={{cursor: 'pointer'}}>
         <div>
-          <img style={{width: '60vh', height: '60vh', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
+          <img style={{width: '55vh', height: '55vh', objectFit: 'cover', borderRadius: '20px'}} src={item?.img} alt="img" />
         </div>
         {mark && (
           <div className="products__item-mark">

@@ -6,6 +6,7 @@ import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import ArtistItem from './ArtistItem';
 import { getItems } from '../../utils/data';
+import router from 'next/router';
 
 interface ArtistListProps {
   app?: Types.AppProps;
@@ -49,7 +50,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
     <aside className="aside artist">
       {size.width > 400 ?<div className="aside__heading heading">
         <h3>
-           {lang.authors}
+           {router.pathname.includes('/collection') ? null  : lang.authors}
         </h3>
       </div>:        <div className="aside__heading heading" style={{border: '1px solid lightgray', fontWeight: 'lighter', borderRadius: '4px', fontSize: '16px'}}>
         <h3 style={{fontWeight: 'lighter', color: '#00BCD4', fontSize: '16px'}}>
@@ -67,7 +68,6 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
           </div>
         </div>
         {artistList.map((artist, key) => {
-          console.log(artist)
           return <ArtistItem key={`ArtistParent-${key}`} {...artist} location={location} />;
         })}
       </ul>
