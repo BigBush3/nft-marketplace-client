@@ -24,7 +24,7 @@ export default function FineArtItem(props): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const { item, app } = props;
   const { lang } = app;
-  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type } = item;
+  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type, currentBid } = item;
   const [historyItem, setHistoryItem] = useState([])
   const ownerHandler = async () => {
     if (!open){
@@ -85,7 +85,7 @@ export default function FineArtItem(props): React.ReactElement {
         <Likes data={item} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">ETH {price}</div>
+      <div className="products__item-price">ETH {price ? price : currentBid}</div>
       <div className="products__item-buy button">
 
         { type === 'timedAuction' ? <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
