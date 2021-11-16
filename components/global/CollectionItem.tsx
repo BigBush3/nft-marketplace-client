@@ -29,14 +29,8 @@ const CollectionItem = forwardRef((props: MarketplaceItem, ref: any): React.Reac
   const ownerHandler = async () => {
     if (!open){
     const el = []
-    let resHistory
-    try {
-      let resHistory = await getTokenOwnHistory(data.tokenId)
-    } catch (err) {
-      console.log(err.message)
-    }
-    
-    if (resHistory){
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    if (resHistory[0]){
       el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
   for (let i = 0; i < resHistory.length; i++) {
   el.push(resHistory[i].returnValues.addressTo.toLowerCase())
