@@ -133,12 +133,12 @@ function Collection(props): React.ReactElement {
                 </div>
               </div>
     </div>
-    {data.location === 'fineart' ?         <><ArtistsList app={app} user={data.user}/><Gallery app={app} onClickGallery={onClickGallery} nfts={data.nfts}/>
+    {data.location === 'fineart' ?         <>{size.width < 400 ? <ArtistsList app={app} user={data.user} location='fineart'/> : null}<Gallery app={app} onClickGallery={onClickGallery} nfts={data.nfts}/>
         <div className="content" style={{'justifyContent': 'center'}}>
-          
+          {size.width > 400 ? <ArtistsList app={app} user={data.user} location='fineart'/> : null}
           <FineArtItems app={app} ind={ind} nfts={data.nfts}/>
         </div></> :           <div className="content marketplace">
-          <ArtistsList app={app} user={data.user}/>
+          <ArtistsList app={app} user={data.user} location='marketplace'/>
         <main className="main marketplace">
             {size.width > 400 ?  <div className="main__top">
               <div className="heading__sort main__sort">

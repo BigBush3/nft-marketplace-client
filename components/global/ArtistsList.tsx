@@ -28,7 +28,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
       if (artistList.length === 0) {
         const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/artists')
         if (user){
-          setArtistList(result.data.filter((item) => item._id === user))
+          setArtistList(result.data.filter((item) => item._id === user._id))
         } else if (location === 'fineart'){
 
           
@@ -68,6 +68,7 @@ export default function ArtistsList(props: ArtistListProps): React.ReactElement 
           </div>
         </div>
         {artistList.map((artist, key) => {
+          console.log(artist)
           return <ArtistItem key={`ArtistParent-${key}`} {...artist} location={location} />;
         })}
       </ul>
