@@ -49,7 +49,7 @@ function NftToken({app, nft}): React.ReactElement {
   }, []);
   
   const historyHandler = async () => {
-    const responseHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history/${router.query.productId}`)
+    const responseHistory = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history/${router.query.productid}`)
     console.log(responseHistory)
     console.log('something')
     if (openHistory){
@@ -154,7 +154,7 @@ function NftToken({app, nft}): React.ReactElement {
 }
 
 NftToken.getInitialProps = async ({req, res, query}) => {
-  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/${query.productId}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/token/${query.productid}`)
   return {nft: JSON.stringify(response.data)}
 }
 

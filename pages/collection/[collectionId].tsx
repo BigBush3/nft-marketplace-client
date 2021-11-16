@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import MarketplaceItems from '../../components/global/MarketplaceItems';
 
-import type * as Types from '../../types/index.d';
+import type * as Types from '../../types';
 import Gallery from '../../components/fineart/Gallery';
 import FineArtItems from '../../components/fineart/FineArtItems';
 import * as utils from '../../utils';
@@ -330,7 +330,7 @@ function useWindowSize() {
 }
 
 Collection.getInitialProps = async ({query}) => {
-  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${query.collectionId}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${query.collectionid}`)
   return {data: response.data}
 };
 
