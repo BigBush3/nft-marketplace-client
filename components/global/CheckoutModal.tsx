@@ -96,7 +96,7 @@ export default function CheckoutModal(props): React.ReactElement {
             axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
           } else {
  console.log(error);
- alert('you canceled transaction, reload the page')
+ alert('Error! You canceled the transaction, go back to the main page.')
           }
 		       
 		    }

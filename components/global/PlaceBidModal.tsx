@@ -138,7 +138,7 @@ useEffect(() => {
               console.log(error);
               console.log(res);
               if (!res){
-                alert('Reload the page, you canceled the transaction')
+                alert('Error! You canceled the transaction, go back to the main page.')
               }
           }
       )		

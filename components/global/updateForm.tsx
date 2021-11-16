@@ -238,7 +238,7 @@ function handleDrag(tag, currPos, newPos) {
                 router.push(`/cabinet/${cookie.get('id')}`)
               })
                 } else {
-                  alert('Reload the page, you canceled the transaction')
+                  alert('Error! You canceled the transaction, go back to the main page.')
                 }
 
             }
@@ -276,7 +276,7 @@ function handleDrag(tag, currPos, newPos) {
                 router.push(`/cabinet/${cookie.get('id')}`)
               })
             } else {
-              alert('Reload the page, you canceled the transaction')
+              alert('Error! You canceled the transaction, go back to the main page.')
             }
 
 

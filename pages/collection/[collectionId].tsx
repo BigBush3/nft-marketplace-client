@@ -134,7 +134,7 @@ function Collection(props): React.ReactElement {
               </div>
     </div>
     {data.location === 'fineart' ?         <><ArtistsList app={app} user={data.user}/><Gallery app={app} onClickGallery={onClickGallery} nfts={data.nfts}/>
-        <div className="content">
+        <div className="content" style={{'justifyContent': 'center'}}>
           
           <FineArtItems app={app} ind={ind} nfts={data.nfts}/>
         </div></> :           <div className="content marketplace">

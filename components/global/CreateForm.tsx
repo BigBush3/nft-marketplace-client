@@ -371,7 +371,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 router.push(`/product/${result.data.resClient._id}`)
               } else {
                 console.log(error)
-                alert('Reload the page, you canceled the transaction')
+                alert('Error! You canceled the transaction, go back to the main page.')
               }
 
             }
@@ -402,7 +402,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
             console.log(result.data)
             router.push(`/product/${result.data.resClient._id}`)
             } else {
-              alert('Reload the page, the canceled the transaction')
+              alert('Error! You canceled the transaction, go back to the main page.')
             }
 
 		    }
