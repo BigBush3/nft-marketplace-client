@@ -330,7 +330,7 @@ function useWindowSize() {
 }
 
 Collection.getInitialProps = async ({query}) => {
-  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${query.collectionid}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${query.collectionId}`)
   return {data: response.data}
 };
 

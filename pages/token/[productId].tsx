@@ -154,7 +154,7 @@ function NftToken({app, nft}): React.ReactElement {
 }
 
 NftToken.getInitialProps = async ({req, res, query}) => {
-  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/token/${query.productid}`)
+  const response = await axios.get(`https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/token/${query.productId}`)
   return {nft: JSON.stringify(response.data)}
 }
 
