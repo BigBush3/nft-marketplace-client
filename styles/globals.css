@@ -1508,10 +1508,6 @@ textarea {
   color: #1cc9cf;
 }
 
-.slider__products {
-  margin-right: -10px;
-  margin-left: -10px;
-}
 
 .slider__products .products__item {
   margin: 0 10px;
@@ -1584,9 +1580,6 @@ textarea {
   -o-transition: 0.25s ease all;
   transition: 0.25s ease all;
 
-}
-.popular__item{
-  padding-right: 25px;
 }
 
 
