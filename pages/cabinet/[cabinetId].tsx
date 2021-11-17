@@ -530,7 +530,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             htmlFor="slick-slide-control02">
             {cookie.get('id') === data._id ? lang.cabinet.myCollection : lang.cabinet.Collection}
           </label>
-          <label
+          {data.verified && <label
             role="button"
             onClick={() => {
               setShow(false);
@@ -539,7 +539,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
             className={clsx('cabinet_nav_li', active === 6 && 'active')}
             htmlFor="slick-slide-control02">
             {cookie.get('id') === data._id ? lang.cabinet.myCollections : lang.cabinet.Collection}
-          </label>
+          </label>}
+          
           <label
             role="button"
             onClick={() => {
@@ -645,7 +646,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
               <div className="cabinet_sub_img">
                 <picture>
                   <img
-                    src={item.imgUrl}
+                    src={item.imgUrl !== '' ? item.imgUrl : '/img/avatar_0.png'}
                     alt="img"
                   />
                 </picture>
@@ -664,7 +665,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
               <div className="cabinet_sub_img">
                 <picture>
                   <img
-                    src={item.imgUrl}
+                    src={item.imgUrl !== '' ? item.imgUrl : '/img/avatar_0.png'}
                     alt="img"
                   />
                 </picture>
