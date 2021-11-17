@@ -1587,6 +1587,7 @@ textarea {
   box-shadow: 0px 20px 21px 0px rgba(0, 0, 0, 0.16);
 }
 
+
 .products__item:hover .products__item-buy {
   opacity: 1;
 }
@@ -2790,6 +2791,15 @@ video{
   transition: all ease-in .3s;
 }
 @media screen and (max-width: 400px) {
+  .popular__item .products__item:hover {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  
+  }
+  .popular__item{
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  }
   .MuiOutlinedInput-root{
     margin-left: 115px !important;
     min-width: 100px !important;
