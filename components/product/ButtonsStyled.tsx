@@ -23,7 +23,7 @@ export default function ButtonsStyled(props): React.ReactElement {
   const [secondFill, setSecondFill] = useState<boolean>(fill2);
 
   useEffect(() => {
-    /**
+    /**л
      * Для обеспечения переключения цветов как в верстке
      */
 /*     firstRef.current.addEventListener('mouseenter', () => {
