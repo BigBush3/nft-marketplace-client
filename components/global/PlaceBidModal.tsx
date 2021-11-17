@@ -197,10 +197,10 @@ useEffect(() => {
       if (myBid.user){
         console.log('update')
         //@ts-ignore
-        await updateBidAuction(data.tokenId, data.timedIndex, myBid.bidIndex, bid)
+        await updateBidAuction(data.tokenId, data.orderIndex, myBid.bidIndex, bid)
       } else {
-        console.log('create', data.tokenId, data.timedIndex, bid)
-        await createBidAuction(data.tokenId, data.timedIndex, bid)
+        console.log('create', data.tokenId, data.orderIndex, bid)
+        await createBidAuction(data.tokenId, data.orderIndex, bid)
       }
       
     }

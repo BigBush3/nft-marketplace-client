@@ -280,7 +280,7 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
     const wallet = await new Web3(window.ethereum);
     if (maxBid?.user){
     let fee = await getGasFee(gasFee.finishAuction)
-    let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, data.tokenId, data.timedIndex).encodeABI()
+    let txData = TIMEDAUCTION.methods.finishAuction(NFT_ADDRESS, data.tokenId, data.orderIndex).encodeABI()
     if(!wallet){
       alert('you have to connect cryptowallet')
     } else {
