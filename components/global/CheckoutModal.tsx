@@ -79,7 +79,8 @@ export default function CheckoutModal(props): React.ReactElement {
   const wallet = await new Web3(window.ethereum);
     let fee = await getGasFee(136400)
     console.log(data)
-	let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, data.orderIndex, 1).encodeABI()
+  if (data.type === 'timedAuction'){
+    	let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, data.timedIndex, 1).encodeABI()
 	let order = await getOrder(data.tokenId, data.orderIndex)
   console.log(fee)
 	if(!wallet){
@@ -102,6 +103,32 @@ export default function CheckoutModal(props): React.ReactElement {
 		    }
 		)
 	}
+  } else {
+    let txData = SIMPLEAUCTION.methods.buyOrder(NFT_ADDRESS, data.tokenId, data.sellIndex, 1).encodeABI()
+    let order = await getOrder(data.tokenId, data.orderIndex)
+    console.log(fee)
+    if(!wallet){
+      alert('you have to connect cryptowallet')
+    } else {
+      await wallet.eth.sendTransaction({
+              to: SIMPLEAUCTION_ADDRESS,
+              from: walletAddress,
+              value: web3.utils.toWei(String(parseInt(order.price)/1e18*1+(fee/1e18) )),
+              data: txData
+          },
+          function(error, res){
+            if (res){
+              axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
+            } else {
+   console.log(error);
+   alert('Error! You canceled the transaction, go back to the main page.')
+            }
+             
+          }
+      )
+    }
+  }
+
   try{
       
 
