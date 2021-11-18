@@ -39,7 +39,7 @@ MyDocument.getInitialProps = async (ctx) => {
   // 3. document.getInitialProps
   // 4. app.render
   // 5. page.render
-  // 6. document.render
+  // 6. document.renderо
   //
   // On the server with error:
   // 1. document.getInitialProps
