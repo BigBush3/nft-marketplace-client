@@ -28,6 +28,8 @@ export default function Likes(props): React.ReactElement {
       }
 
       
+    } else {
+      setNewLikes(data.likes)
     }
 
   }, [])

@@ -73,11 +73,9 @@ setHistoryItem(finalHistory.data.result)
     if (cookie.get('id')){
      handler() 
     }
-    
-    
   }, [])
   return (
-    <div className="popular__item products__item">
+    <div className="popular__item products__item" style={{cursor: 'pointer'}}>
       <div className="products__item-info" style={{position: 'relative'}}>
         <div
           role="button"

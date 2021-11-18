@@ -14,7 +14,7 @@ function OwnerDropdownItem(props): React.ReactElement {
   return (
     <div className={clsx('info__dropdown-item', ind === 0 ? 'artist' : 'owner')}>
       <div className="dropdown-item__img">
-        <img style={{width: '50px', height: '50px'}} src={imgUrl || '/img/artist.png'} alt="img" />
+        <img style={{width: '50px', height: '50px'}} src={imgUrl || '/img/avatar_0.png'} alt="img" />
       </div>
       <div className="dropdown-item__cover">
         <div className="dropdown-item__status">{ind === 0 ? 'Артист' : 'Владелец'}</div>

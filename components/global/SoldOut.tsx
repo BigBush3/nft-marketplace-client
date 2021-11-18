@@ -6,6 +6,8 @@ import type * as Types from '../../types';
 import OwnerDropdownItem from './OwnerDropdownItem';
 import Likes from './Likes';
 import Favorite from './Favorite';
+import { getTokenOwnHistory } from '../../utils/blockchain';
+import axios from 'axios'
 
 interface MarketplaceItem {
   app?: Types.AppProps;
@@ -21,25 +23,43 @@ const SoldOutItem = forwardRef((props: MarketplaceItem, ref: any): React.ReactEl
   const { app, data } = props;
   const { owner, _id, title, likes, price, views, img, verified, currentBid, endDate, amount, initialAmount } = data;
   const { lang } = app;
-  const [open, setOpen] = useState<boolean>(false);
+  const [historyItem, setHistoryItem] = useState([])
 
+  const [open, setOpen] = useState<boolean>(false);
+  const ownerHandler = async () => {
+    if (!open){
+    const el = []
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    if (resHistory[0]){
+      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+for (let i = 0; i < resHistory.length; i++) {
+  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+  
+}
+const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+setHistoryItem(finalHistory.data.result)
+} else {
+  el.push(data.owner)
+  setHistoryItem(el)
+}
+    }
+    setOpen(!open)
+  }
   return (
     <div ref={ref} className="marketplace__item products__item">
       <div className="products__item-info">
         <div
           role="button"
           className={clsx('item-info__icon', open && 'close')}
-          onClick={() => {
-            setOpen(!open);
-          }}>
+          onClick={ownerHandler}>
           <i className="flaticon-information" />
           <i className="flaticon-letter-x cross" />
         </div>
         {/** Всплывающий список владельцев */}
         <div className={clsx('item-info__dropdown', open && 'active')}>
-{/*           {owner.map((owner, index) => {
-            return <OwnerDropdownItem key={`Owner-${index}`} {...owner} />;
-          })} */}
+        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
         </div>
       </div>
       <div className="products__item-img">

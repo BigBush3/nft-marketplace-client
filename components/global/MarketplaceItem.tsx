@@ -69,14 +69,8 @@ favNfts.splice( removeIndex, 1 );
 const ownerHandler = async () => {
   if (!open){
   const el = []
-  let resHistory
-  try {
-    let resHistory = await getTokenOwnHistory(data.tokenId)
-  } catch (err) {
-    console.log(err.message)
-  }
-  
-  if (resHistory){
+  const resHistory = await getTokenOwnHistory(data.tokenId)
+  if (resHistory[0]){
     el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
 for (let i = 0; i < resHistory.length; i++) {
 el.push(resHistory[i].returnValues.addressTo.toLowerCase())
@@ -85,7 +79,6 @@ el.push(resHistory[i].returnValues.addressTo.toLowerCase())
 const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
 setHistoryItem(finalHistory.data.result)
 } else {
-console.log(data.owner)
 el.push(data.owner)
 setHistoryItem(el)
 }
@@ -116,7 +109,7 @@ setHistoryItem(el)
       return null
     } else {
       return (
-        <div ref={ref} className="marketplace__item products__item">
+        <div ref={ref} className="marketplace__item products__item" style={{cursor: 'pointer'}}>
             <div className="products__item-info">
         <div
           role="button"
@@ -165,7 +158,7 @@ setHistoryItem(el)
     }
   }
   return (
-    <div ref={ref} className="marketplace__item products__item">
+    <div ref={ref} className="marketplace__item products__item" style={{cursor: 'pointer'}}>
             <div className="products__item-info">
         <div
           role="button"

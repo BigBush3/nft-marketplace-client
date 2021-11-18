@@ -103,7 +103,7 @@ function NftToken({app, nft}): React.ReactElement {
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
               <div className="author__img" onClick={() => router.push(`/cabinet/${data.owner._id}`)}>
-                <img src={data.owner.imgUrl} alt="img" />
+                <img src={data.owner.imgUrl ? data.owner.imgUrl : "/img/avatar_0.png"} alt="img" />
               </div>
               <div className="author__cover">
                 <div className="author__status">
