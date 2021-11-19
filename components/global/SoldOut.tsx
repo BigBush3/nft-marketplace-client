@@ -46,7 +46,7 @@ setHistoryItem(finalHistory.data.result)
     setOpen(!open)
   }
   return (
-    <div ref={ref} className="marketplace__item products__item">
+    <div ref={ref} className="marketplace__item products__item" style={{cursor: 'pointer'}}>
       <div className="products__item-info">
         <div
           role="button"
@@ -77,6 +77,7 @@ setHistoryItem(finalHistory.data.result)
       </div>
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
+        
         <h1 style={{fontWeight: 'bold', color: 'red'}}>Sold out</h1>
         {/* <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>

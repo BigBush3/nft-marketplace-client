@@ -92,8 +92,7 @@ function NftToken({app, nft}): React.ReactElement {
                 </div>
 
                 <div className="product__buy button">
-                {data.status === 'soldOut' ? [data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>: <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>Sold out</h1>  ] :
-                  <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>}
+                {data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>: <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>Sold out</h1>}
                 </div>
               </div>
             </div>

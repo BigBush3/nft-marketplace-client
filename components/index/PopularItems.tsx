@@ -5,6 +5,7 @@ import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import moment from 'moment'
+import { InsertCommentTwoTone } from '@material-ui/icons';
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
 
@@ -41,15 +42,17 @@ export default function PopularItems(props): React.ReactElement {
     }, 1000);
     (async () => {
         let popular = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
-        popular = popular.data.filter((item) => item.location !== 'collection')
+        popular = popular.data.filter((item) => item.location !== 'collection' || item.status !== 'soldOut')
         // @ts-ignore
         // @ts-ignore
         const sortedPopular = popular.sort(function (a, b) {
           return b.likes - a.likes || b.views - a.views;
       });
       const _popularItems = sortedPopular.slice(0, 10);
-      allPopularItems.current = _popularItems
-        setPopularItems(_popularItems);
+      allPopularItems.current = _popularItems.map((item) => {
+        console.log(new Date(item.endDate).getTime() < new Date().getTime())
+      })
+        setPopularItems(_popularItems)
     })();
   }, []);
     //@ts-ignore
@@ -78,7 +81,7 @@ export default function PopularItems(props): React.ReactElement {
     }, [state])
   return (
     <Slider ref={sliderRef} {...settings} className="popular__items slider__products">
-      {popularItems.filter((item) => item.startDate ? new Date(item.startDate).getTime() > new Date().getTime() || new Date(item.endDate).getTime() < new Date().getTime() : true).map((item) => {
+      {popularItems.filter((item) => item.startDate ? new Date(item.startDate).getTime() > new Date().getTime() || new Date(item.endDate).getTime() < new Date().getTime() : true).filter((item) => item.type !== 'timedAuction').map((item) => {
         return (
           <PopularItem userData={userData} key={`PopularItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );
