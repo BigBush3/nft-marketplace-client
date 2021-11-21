@@ -1759,10 +1759,11 @@ textarea {
 }
 
 .products__item-img .item-img__cover img {
-  width: 250px !important;
-  height: 250px !important;
+  width: 200px !important;
+  height: 200px !important;
   -o-object-fit: cover;
   object-fit: cover;
+  max-width: none !important;
 }
 .products__item-type img{
   z-index: 100;
