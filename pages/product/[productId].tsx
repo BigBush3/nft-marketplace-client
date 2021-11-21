@@ -577,7 +577,7 @@ setHistoryItem(finalHistory.data.result)
             </div>
 {    maxBid ?          <div className="author__bid">
               <div className="author__bid-img">
-                <Link href={`/cabinet/${maxBid.user._id}`}><img style={{width: '75px', height:'75px', borderRadius: '50%', cursor: 'pointer'}} src={maxBid.user.imgUrl || 'unknown'} alt="img" /></Link>
+                <Link href={`/cabinet/${maxBid.user._id}`}><img style={{width: '75px', height:'75px', borderRadius: '50%', cursor: 'pointer'}} src={maxBid.user.imgUrl || '/img/avatar_0.png'} alt="img" /></Link>
               </div>
               <div className="author__bid-cover">
                 <div className="author__bid-title">
