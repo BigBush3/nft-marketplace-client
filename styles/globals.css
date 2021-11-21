@@ -1757,13 +1757,18 @@ textarea {
   overflow: hidden;
   height: 250px;
 }
-
-.products__item-img .item-img__cover img {
-  width: 200px !important;
-  height: 200px !important;
+.fineart__item .products__item-img .item-img__cover img {
+  width: 230px !important;
+  height: 230px !important;
   -o-object-fit: cover;
   object-fit: cover;
-  max-width: none !important;
+  max-width: none;
+}
+.products__item-img .item-img__cover img {
+  width: 250px !important;
+  height: 250px !important;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 .products__item-type img{
   z-index: 100;
