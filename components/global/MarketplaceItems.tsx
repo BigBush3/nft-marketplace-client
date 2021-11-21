@@ -145,7 +145,7 @@ export default function MarketplaceItems(props): React.ReactElement {
         console.log('collectiong..')
         if (item.endDate !== null && new Date(item.endDate).getTime() < new Date().getTime()){
           return (
-            <SoldOutItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
+            <MarketplaceItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
           )
         }
         if (item.location === 'marketplace'){

@@ -78,7 +78,7 @@ setHistoryItem(finalHistory.data.result)
       <div className="products__item-name">{title}</div>
       <div className="products__item-stats">
 
-        <h1 style={{fontWeight: 'bold', color: 'red'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold Out'}</h1>
+        <h1 style={{fontWeight: 'bold', color: 'red'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold out'}</h1>
         {/* <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>
         </div> */}
