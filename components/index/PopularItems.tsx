@@ -49,9 +49,7 @@ export default function PopularItems(props): React.ReactElement {
           return b.likes - a.likes || b.views - a.views;
       });
       const _popularItems = sortedPopular.slice(0, 10);
-      allPopularItems.current = _popularItems.map((item) => {
-        console.log(new Date(item.endDate).getTime() < new Date().getTime())
-      })
+      allPopularItems.current = _popularItems
         setPopularItems(_popularItems)
     })();
   }, []);
