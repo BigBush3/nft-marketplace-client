@@ -88,7 +88,7 @@ export default function PopularItems(props): React.ReactElement {
     }, [state])
   return (
     <Slider ref={sliderRef} {...settings} className="popular__items slider__products">
-      {popularItems.filter((item) => item.startDate ? new Date(item.startDate).getTime() > new Date().getTime() || new Date(item.endDate).getTime() < new Date().getTime() : true).filter((item) => item.type !== 'timedAuction').map((item) => {
+      {popularItems.filter((item) => item.startDate ? (new Date(item.startDate).getTime() < new Date().getTime() && new Date(item.endDate).getTime() > new Date().getTime()) : true).map((item) => {
         return (
           <PopularItem userData={userData} key={`PopularItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );
