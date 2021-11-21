@@ -697,8 +697,8 @@ const getUpdatedBidByToken = async(userAddress)=>{
   ><div className='popup' style={{maxWidth: '720px', padding: '57px 68px 47px 16px'}}>
     <div>
       {console.warn(bidHistory)}
-      {bidHistory !== [] ? bidHistory.map((item) => {
-        console.log(item, 'sldfjsdflksjfslkdfjsdlkfsklj')
+      {bidHistory.length !== 0 ? bidHistory.map((item) => {
+          console.log(bidHistory)
            return (
           <div style={{display: 'flex', justifyContent: 'flex-start'}}>
             
