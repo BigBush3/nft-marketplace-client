@@ -92,7 +92,7 @@ function NftToken({app, nft}): React.ReactElement {
                 </div>
 
                 <div className="product__buy button">
-                {data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>: <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>Sold out</h1>}
+                {data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>: <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>{data.type === 'timedAuction' ? 'Auction ended': 'Sold out'}</h1>}
                 </div>
               </div>
             </div>
@@ -101,14 +101,14 @@ function NftToken({app, nft}): React.ReactElement {
           <aside className="aside author">
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
-              <div className="author__img" onClick={() => router.push(`/cabinet/${data.owner._id}`)}>
-                <img src={data.owner.imgUrl ? data.owner.imgUrl : "/img/avatar_0.png"} alt="img" />
+              <div className="author__img" onClick={() => router.push(`/cabinet/${data.author._id}`)}>
+                <img src={data.author.imgUrl ? data.author.imgUrl : '/img/avatar_0.png'} alt="img" />
               </div>
               <div className="author__cover">
                 <div className="author__status">
                   {lang.author}
                 </div>
-                <div className="author__name">{data.owner.name}</div>
+                <div className="author__name">{data.author.name}</div>
                 <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
               </div>
             </div>

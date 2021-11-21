@@ -134,11 +134,12 @@ useEffect(() => {
               value: web3.utils.toWei(String(Number(value)+ (fee/1e18) )),
               data: txData
           },
-          function(error, res){
+          async function(error, res){
               console.log(error);
               console.log(res);
               if (!res){
-                alert('Error! You canceled the transaction, go back to the main page.')
+                await alert('Error! You canceled the transaction, go back to the main page.')
+                window.location.reload()
               }
           }
       )		
@@ -171,7 +172,8 @@ useEffect(() => {
                 bidIndex = parseInt(event.data)
               })
               } else {
-                alert('Reload the page, you canceled the transaction')
+                await alert('Reload the page, you canceled the transaction')
+                window.location.reload()
               }
 
           }

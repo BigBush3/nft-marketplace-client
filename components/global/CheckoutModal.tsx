@@ -90,12 +90,13 @@ export default function CheckoutModal(props): React.ReactElement {
 		        value: web3.utils.toWei(String(parseInt(order.price)/1e18*1+(fee/1e18) )),
 		        data: txData
 		    },
-		    function(error, res){
+		    async function(error, res){
           if (res){
             axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: data.owner._id, buyerId: cookie.get('id'), tokenId: data._id, action: `${cookie.get('name')} bought it for ${data.price} ETH`})
           } else {
  console.log(error);
- alert('Error! You canceled the transaction, go back to the main page.')
+ await alert('Error! You canceled the transaction, go back to the main page.')
+window.location.reload()
           }
 		       
 		    }

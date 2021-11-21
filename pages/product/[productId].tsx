@@ -401,26 +401,20 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   }
   const ownerHandler = async () => {
     if (!open){
-const el = []
-    try {
-          const resHistory = await getTokenOwnHistory(data.tokenId)
+    const el = []
+    const resHistory = await getTokenOwnHistory(data.tokenId)
     if (resHistory[0]){
-          el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
-    for (let i = 0; i < resHistory.length; i++) {
-      el.push(resHistory[i].returnValues.addressTo.toLowerCase())
-      
-    }
-    const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
-    setHistoryItem(finalHistory.data.result)
-    } else {
-      console.log(data.owner)
-      el.push(data.owner)
-      setHistoryItem(el)
-    }
-    } catch (err) {
-      console.log(err.message)
-    }
-
+      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+for (let i = 0; i < resHistory.length; i++) {
+  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+  
+}
+const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+setHistoryItem(finalHistory.data.result)
+} else {
+  el.push(data.owner)
+  setHistoryItem(el)
+}
     }
     setOpen(!open)
   }
@@ -473,7 +467,7 @@ const el = []
 
                 <div className="product__buy button">
                   {data.owner._id === cookie.get('id') ? 
-                  [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : 
+                  [data.type === 'orderSell' ? [data.owner._id !== cookie.get('id') ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : null] : 
                    [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{endSpinner ? <CircularProgress/> : <p>{lang.auction.endAuction}</p>}</span></button>]] 
                    : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
@@ -485,14 +479,30 @@ const el = []
           <aside className="aside author">
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
-              <div className="author__img" onClick={() => router.push(`/cabinet/${user ? user._id : data.owner._id}`)}>
-                <img src={data.owner.imgUrl ? data.owner.imgUrl : '/img/avatar_0.png'} alt="img" />
+              <div className="author__img" onClick={() => router.push(`/cabinet/${data.author.id}`)}>
+                <img src={data.author.imgUrl ? data.author.imgUrl : '/img/avatar_0.png'} alt="img" />
               </div>
               <div className="author__cover">
                 <div className="author__status">
                   {lang.author}
+                  <div className="products__item-info info">
+                    <div
+                      role="button"
+                      className={clsx('item-info__icon', open && 'close')}
+                      onClick={ownerHandler}>
+                      <i className="flaticon-information" />
+                      <i className="flaticon-letter-x cross" />
+                    </div>
+                    <div className={clsx('item-info__dropdown', open && 'active')}>
+                        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+                        
+                      
+                    </div>
+                  </div>
                 </div>
-                {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${user._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
+                {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.author._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
                 }
                 
                 <div className="author__count">{data.amount ? `${data.amount}/${data.amount}` : '1/1'}</div>

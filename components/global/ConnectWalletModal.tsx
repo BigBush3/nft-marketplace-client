@@ -31,23 +31,19 @@ function ConnectWalletModal(props: Types.AppProps): React.ReactElement {
       <div className="popup__heading heading">
         <h3>{lang.modal.connectToAWalet}</h3>
       </div>
-      <div
-        className="popup__text"
-        dangerouslySetInnerHTML={{ __html: lang.modal.connectToAWalletDesc }}
-      />
       <div className="popup__connect-items">
-        <div className="popup__connect-item" id="metamask">
+        <div className="popup__connect-item" style={{cursor: 'pointer'}} id="metamask">
           <div className="connect-item__title">{WALLETS.metamask}</div>
           <div className="connect-item__logo">
             <Image src={Metamask} alt="img" />
           </div>
         </div>
-        {size.width > 400 ?         <><div className="popup__connect-item" id="mew">
+        {size.width > 400 ?         <><div className="popup__connect-item" style={{cursor: 'pointer'}} id="mew">
           <div className="connect-item__title">{WALLETS.mew}</div>
           <div className="connect-item__logo">
             <Image src={MEW} alt="img" />
           </div>
-        </div>        <div className="popup__connect-item" id="coinbase">
+        </div>        <div className="popup__connect-item" style={{cursor: 'pointer'}} id="coinbase">
           <div className="connect-item__title">{WALLETS.coinBase}</div>
           <div className="connect-item__logo">
             <Image src={Coinbase} alt="img" />

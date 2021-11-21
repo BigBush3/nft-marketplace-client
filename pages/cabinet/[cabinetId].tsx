@@ -574,7 +574,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
         </div>
         {data.verified === true && <div className="cabinet_block" hidden={active !== 0}>
           <div className="marketplace__items">
-       {data?.nfts?.filter((item) => item.location !== 'collection' || item.status === 'created').map((item, index) => {
+       {data?.nfts?.filter((item) => item.location !== 'collection' || item.status === 'created'&& item.author === cookie.get('id')).map((item, index) => {
               return <MarketplaceItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
             })}
           </div>
@@ -642,7 +642,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             {//@ts-ignore
             followers ? [followers?.map((item) => {
               return (
-                            <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
+                            <div className="cabinet_sub" onClick={() => router.push(`/cabinet/${item._id}`)}>
               <div className="cabinet_sub_img">
                 <picture>
                   <img
@@ -652,7 +652,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
                 </picture>
               </div>
               <span className="cabinet_sub_name">{item.name}</span>
-            </a>
+            </div>
               )
             })] : <span>You don't have followers yet</span>}
           </div>
@@ -661,7 +661,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
           <div className="cabinet_subs">
           {followings ? [followings.map((item) => {
               return (
-                            <a className="cabinet_sub" href={`/cabinet/${item._id}`}>
+                            <div className="cabinet_sub" onClick={() => router.push(`/cabinet/${item._id}`)}>
               <div className="cabinet_sub_img">
                 <picture>
                   <img
@@ -671,7 +671,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
                 </picture>
               </div>
               <span className="cabinet_sub_name">{item.name}</span>
-            </a>
+            </div>
               )
             })] : <span>You don't have followings yet</span>}
           </div>
