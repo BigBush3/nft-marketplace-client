@@ -502,7 +502,7 @@ setHistoryItem(finalHistory.data.result)
                     </div>
                   </div>
                 </div>
-                {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.author._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.owner._id}`)} className="author__name">{data.owner.name}</div>
+                {user ?<div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.author._id}`)} className="author__name">{user.name}</div> : <div style={{cursor: 'pointer'}} onClick={() => router.push(`/cabinet/${data.author._id}`)} className="author__name">{data.author.name}</div>
                 }
                 
                 <div className="author__count">{data.amount ? `${data.amount}/${data.amount}` : '1/1'}</div>
