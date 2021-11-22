@@ -18,6 +18,8 @@ import {FacebookShareButton, TelegramShareButton, TwitterShareButton} from 'reac
 import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types';
+import { getTokenOwnHistory, getAllTokenHistory, getAllBidHistory } from '../../utils/blockchain';
+
 
 
 interface ProductProps {
@@ -36,9 +38,30 @@ function NftToken({app, nft}): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false)
   const [openBid, setOpenBid] = useState(false)
+  const [historyItem, setHistoryItem] = useState([])
+
   const [openHistory, setOpenHistory] = useState(false)
   const [openShare, setOpenShare] = useState(false)
 
+  const ownerHandler = async () => {
+    if (!open){
+    const el = []
+    const resHistory = await getTokenOwnHistory(data.tokenId)
+    if (resHistory[0]){
+      el.push(resHistory[0].returnValues.addressFrom.toLowerCase())
+for (let i = 0; i < resHistory.length; i++) {
+  el.push(resHistory[i].returnValues.addressTo.toLowerCase())
+  
+}
+const finalHistory = await axios.post('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/history', {history: el})
+setHistoryItem(finalHistory.data.result)
+} else {
+  el.push(data.owner)
+  setHistoryItem(el)
+}
+    }
+    setOpen(!open)
+  }
   const Footer = useMemo(() => {
     return dynamic<any>(() => import('../../components/global/Footer').then((mod) => mod.default));
   }, []);
@@ -105,6 +128,25 @@ function NftToken({app, nft}): React.ReactElement {
                 <img src={data.author.imgUrl ? data.author.imgUrl : '/img/avatar_0.png'} alt="img" />
               </div>
               <div className="author__cover">
+              <div className="author__status">
+                  {lang.author}
+                  <div className="products__item-info info">
+                    <div
+                      role="button"
+                      className={clsx('item-info__icon', open && 'close')}
+                      onClick={ownerHandler}>
+                      <i className="flaticon-information" />
+                      <i className="flaticon-letter-x cross" />
+                    </div>
+                    <div className={clsx('item-info__dropdown', open && 'active')}>
+                        {historyItem.map((item, index, array) => {
+                          return <OwnerDropdownItem {...item} ind={index}/>
+                        })}
+                        
+                      
+                    </div>
+                  </div>
+                </div>
                 <div className="author__name">{data.author.name}</div>
                 <div className="author__count">{data.amount ? `${data.amount}/${data.initialAmount}` : '1/1'}</div>
               </div>
