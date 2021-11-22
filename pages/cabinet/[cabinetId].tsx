@@ -478,7 +478,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             <a href="#" onClick={asHandler} className="btn btn_black fill">
               <span>{lang.cabinet.bidHistory}</span>
             </a>
-            <a href="#" onClick={addOwner} className="btn btn_black fill">
+            <a href="#" onClick={returnFreeBalance} className="btn btn_black fill">
               <span>{lang.cabinet.returnBalance}</span>
             </a>
             {data.verified &&             <><a href="/create" className="btn btn_black fill">
