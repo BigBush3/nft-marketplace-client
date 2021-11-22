@@ -477,7 +477,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
           </div>
         </div>
       </div>}
-      <div className={clsx('create_check', fixPayChecked ? 'active' : 'inactive')}>
+      {createMany ?  <input type="number" step="any"  {...register("price")}/> :     <div className={clsx('create_check', fixPayChecked ? 'active' : 'inactive')}>
         <label htmlFor="check-31">
           <input
             type="radio"
@@ -497,7 +497,8 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
             <span className="icon icon-eth" />
           </div>
         </div>
-      </div>
+      </div>}
+  
 {/*        <div className="create_input" style={{position: 'static'}}> */}
         <span>{lang.auction.createHashTag}:</span>
         <ReactTags  className="create_input" tags={tags}

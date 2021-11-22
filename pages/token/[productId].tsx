@@ -19,6 +19,7 @@ import cookie from 'js-cookie'
 import * as utils from '../../utils';
 import type * as Types from '../../types';
 import { getTokenOwnHistory, getAllTokenHistory, getAllBidHistory } from '../../utils/blockchain';
+import { Link } from '@material-ui/core';
 
 
 
@@ -155,7 +156,9 @@ setHistoryItem(finalHistory.data.result)
               <div>{data.hashtags.map((item) => {
                 return (<span>#{item.text} </span>)
               })}</div>
-              <span style={{display: 'flex'}}>Collection name: {data.collect}</span>
+                            { data.collect?._id ? <span style={{display: 'flex'}}>Collection name:&nbsp; <Link href={`/collection/${data.collect._id}`}>
+              <a>{data.collect.title}</a>
+              </Link></span> : null}
               <hr />
               <div></div>
               

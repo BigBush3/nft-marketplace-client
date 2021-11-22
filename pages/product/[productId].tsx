@@ -292,8 +292,10 @@ const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
               data: txData
           },
           async function(error, res){
-            await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
+            if (res){
+              await axios.post("https://nft-marketplace-api-plzqa.ondigitalocean.app/nft/buy", {ownerId: cookie.get("id"), buyerId: maxBid.user._id, tokenId: router.query.productId, action: `${maxBid.user.name} won this auction!`})
             router.push(`/cabinet/${maxBid.user._id}`)
+            }
             console.log(error);
             console.log(res);
           }
