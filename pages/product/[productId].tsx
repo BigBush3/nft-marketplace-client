@@ -90,7 +90,21 @@ function Product({app, data, user, userData}): React.ReactElement {
   const handleCloseSnack = () => {
     setOpenSnackbar(false)
   }
-  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  const getProvider = () => {
+    const provider = new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET)
+    provider.on('connect', () => console.log('WS Connected'))
+    provider.on('error', () => {
+      console.error('WS Error')
+      web3.setProvider(getProvider())
+    })
+    provider.on('end', () => {
+      console.error('WS End')
+      web3.setProvider(getProvider())
+    })
+
+    return provider
+  }
+  const web3 = new Web3(getProvider())
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
   let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)

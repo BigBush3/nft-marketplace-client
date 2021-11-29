@@ -93,7 +93,21 @@ function Cabinet(props): React.ReactElement {
   const [openSnack, setOpenSnack] = React.useState(false);
   const [bidHistory, setBidHistory] = useState([])
   const [hoverCollection, setHoverCollection] = useState(false)
-  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  const getProvider = () => {
+    const provider = new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET)
+    provider.on('connect', () => console.log('WS Connected'))
+    provider.on('error', () => {
+      console.error('WS Error')
+      web3.setProvider(getProvider())
+    })
+    provider.on('end', () => {
+      console.error('WS End')
+      web3.setProvider(getProvider())
+    })
+
+    return provider
+  }
+  const web3 = new Web3(getProvider())
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)
   //@ts-ignore

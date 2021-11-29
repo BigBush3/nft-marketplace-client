@@ -42,7 +42,21 @@ export default function CheckoutModal(props): React.ReactElement {
   const [openm ,setOpenm] = useState(open)
   const { lang } = app;
   const [proceed, setProceed] = useState(false)
-  const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
+  const getProvider = () => {
+    const provider = new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET)
+    provider.on('connect', () => console.log('WS Connected'))
+    provider.on('error', () => {
+      console.error('WS Error')
+      web3.setProvider(getProvider())
+    })
+    provider.on('end', () => {
+      console.error('WS End')
+      web3.setProvider(getProvider())
+    })
+
+    return provider
+  }
+  const web3 = new Web3(getProvider())
 // @ts-ignore
   const NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
   // @ts-ignore
