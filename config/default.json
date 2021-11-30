@@ -1,6 +1,6 @@
 {
 	"CHAIN_ID": 1,
-	"ULR_INFURA_WEBSOCKET": "wss://mainnet.infura.io/ws/v3/62b7d9f5f9844b8582f51e4b5c906c09",
+	"ULR_INFURA_WEBSOCKET": "wss://rinkeby.infura.io/ws/v3/62b7d9f5f9844b8582f51e4b5c906c09",
 	
 	"ROPSTEN_RPC_URL" : "https://ropsten.infura.io/v3/62b7d9f5f9844b8582f51e4b5c906c09",
 	"KOVAN_RPC_URL" : "https://ropsten.infura.io/v3/62b7d9f5f9844b8582f51e4b5c906c09",
