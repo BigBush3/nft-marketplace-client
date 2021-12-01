@@ -302,21 +302,34 @@ function Header(props): React.ReactElement {
      */
     function closeConnectDialog() {
       if (mfpClose){
-mfpClose.removeEventListener('click', closeConnectDialog);
+        mfpClose.removeEventListener('click', closeConnectDialog);
       }
       
       metamask.removeEventListener('click', connectToMetamask);
-      mew.removeEventListener('click', connectToMew);
-      coinbase.removeEventListener('click', connectToCoinBase);
+      if (mew){
+        mew.removeEventListener('click', connectToMew);
+      }
+      if (coinbase){
+        coinbase.removeEventListener('click', connectToCoinBase);
+      }
+      
     }
-    // Навешивает прослушиватель закрытия для очистки остальных прослушивателей
+    if (mfpClose){
+      // Навешивает прослушиватель закрытия для очистки остальных прослушивателей
     mfpClose.addEventListener('click', closeConnectDialog);
+    }
+    
     // прослушивает нажатие кнопки metamask
     metamask.addEventListener('click', connectToMetamask);
+    if (mew){
     // прослушивает нажатие кнопки mew
     mew.addEventListener('click', connectToMew);
+    }
+    if (coinbase){
+      coinbase.addEventListener('click', connectToCoinBase);
+    }
     // прослушивает нажатие кнопки coinbase
-    coinbase.addEventListener('click', connectToCoinBase);
+    
   }
   function handleClickOutside(event) {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {

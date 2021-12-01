@@ -108,7 +108,8 @@ favNfts.splice( removeIndex, 1 );
       </div>
       <div className="products__item-title">{title}</div>
       <div className="products__item-name">{owner.name}</div>
-      <div className="products__item-stats">
+      {
+        data.endDate ? [new Date(data.endDate).getTime() < new Date().getTime() ? <p style={{textAlign: 'center', color: 'red'}}>{lang.auction.auctionEnded}</p> :       <>      <div className="products__item-stats">
         <div className="item-stats__views">
           <i className="flaticon-eye" /> <span>{views}</span>
         </div>
@@ -119,7 +120,21 @@ favNfts.splice( removeIndex, 1 );
       <div className="products__item-price">ETH {price ? price: currentBid}</div>
       <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
+      </div></>] :       <>      <div className="products__item-stats">
+        <div className="item-stats__views">
+          <i className="flaticon-eye" /> <span>{views}</span>
+        </div>
+        <Favorite data={data} />
+        <Likes data={data} />
+        <div className="item-stats__count">1/1</div>
       </div>
+      <div className="products__item-price">ETH {price ? price: currentBid}</div>
+      <div className="products__item-buy">
+        <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
+      </div></>
+      }
+
+
     </div>
   );
 }
