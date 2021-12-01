@@ -104,7 +104,7 @@ function Product({app, data, user, userData}): React.ReactElement {
 
     return provider
   }
-  const web3 = new Web3(getProvider())
+  const web3 = new Web3(Web3.givenProvider || getProvider())
   //@ts-ignore
   let TIMEDAUCTION = new web3.eth.Contract(TIMEDAUCTION_ABI, TIMEDAUCTION_ADDRESS)//@ts-ignore
   let NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)

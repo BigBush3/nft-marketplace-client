@@ -87,7 +87,7 @@ export default function CreateForm(props: CreateFormProps): React.ReactElement {
 
     return provider
   }
-  const web3 = new Web3(getProvider())
+  const web3 = new Web3(Web3.givenProvider || getProvider())
   // @ts-ignore
 const NFT = new web3.eth.Contract(NFT_ABI, NFT_ADDRESS) // @ts-ignore
 const NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)

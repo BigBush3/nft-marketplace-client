@@ -32,7 +32,7 @@ const getProvider = () => {
 
     return provider
   }
-  const web3 = new Web3(getProvider())
+  const web3 = new Web3(Web3.givenProvider || getProvider())
 // const web3 = new Web3(new Web3.providers.WebsocketProvider(ULR_INFURA_WEBSOCKET));
 
 

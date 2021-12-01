@@ -56,7 +56,7 @@ export default function CheckoutModal(props): React.ReactElement {
 
     return provider
   }
-  const web3 = new Web3(getProvider())
+  const web3 = new Web3(Web3.givenProvider || getProvider())
 // @ts-ignore
   const NFTSTORE = new web3.eth.Contract(NFTSTORE_ABI, NFTSTORE_ADDRESS)
   // @ts-ignore

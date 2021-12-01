@@ -64,7 +64,7 @@ export default function PlaceBidModal(props): React.ReactElement {
 
     return provider
   }
-  const web3 = new Web3(getProvider())
+  const web3 = new Web3(Web3.givenProvider || getProvider())
   let bidIndex
   let subevent
   const [myBid, setMyBid] = useState({})
