@@ -1526,7 +1526,7 @@ textarea {
 }
 
 .fineart .slick-arrow {
-  top: calc(50% - 118px);
+  top: 50%;
 }
 
 .popular {

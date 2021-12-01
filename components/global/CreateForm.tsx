@@ -450,7 +450,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
 {/*       <label htmlFor="download_2" className="create_download_canvas icon icon-file">
         <input type="file" id="download_2" />
       </label> */}
-      {!createMany && <div className={clsx('create_check', auctionChecked ? 'active' : 'inactive')}>
+      {!createMany ? <div className={clsx('create_check', auctionChecked ? 'active' : 'inactive')}>
         <label htmlFor="check-23">
           <input
             type="radio"
@@ -490,8 +490,12 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
             </div>
           </div>
         </div>
-      </div>}
-      {createMany ?  <input type="number" step="any"  {...register("price")}/> :     <div className={clsx('create_check', fixPayChecked ? 'active' : 'inactive')}>
+      </div> : null}
+      {createMany ? <div className="create_input">
+            <span>{lang.auction.setPrice}:</span>
+            <input type="number" step="any"  {...register("price")}/>
+            <span className="icon icon-eth" />
+          </div> :     <div className={clsx('create_check', fixPayChecked ? 'active' : 'inactive')}>
         <label htmlFor="check-31">
           <input
             type="radio"
