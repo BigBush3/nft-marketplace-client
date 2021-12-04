@@ -8,7 +8,7 @@ module.exports = withBundleAnalyzer({
   // Подключение языковых локалей
   i18n: {
     locales: ['en', 'ru'],
-    defaultLocale: 'ru',
+    defaultLocale: 'en',
     localeDetection: false,
   },
   reactStrictMode: true,
