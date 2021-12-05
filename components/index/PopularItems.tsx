@@ -55,32 +55,7 @@ export default function PopularItems(props): React.ReactElement {
   }, []);
     //@ts-ignore
     useEffect(() => {
-      if (Number(filterBy) === 1){
-        setPopularItems(allPopularItems.current.filter((a) => {
-          if (a){
-             return moment(a.creationDate).isAfter(moment().subtract(1, 'day'))
-          }
-           return false
-            
-          
-        }))
-      } else if (Number(filterBy) === 2){
-        setPopularItems(allPopularItems.current.filter((a) => {
-          if (a){
-                      return moment(a.creationDate).isAfter(moment().subtract(1, 'week'))
-
-          }
-          return false
-        }))
-      }else if (Number(filterBy) === 3){
-        setPopularItems(allPopularItems.current.filter((a) => {
-          if (a){
-           return moment(a.creationDate).isAfter(moment().subtract(1, 'month')) 
-          }
-          return false
-
-        }))
-      }
+      setPopularItems(allPopularItems.current)
       setState(!state)
     }, [filterBy])
     useEffect(() => {

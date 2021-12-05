@@ -137,7 +137,7 @@ export default function MarketplaceItems(props): React.ReactElement {
                 (async () => {
       const result = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft');
       let auction = result.data
-      auction = auction.filter((item) => item.location === 'marketplace' && item.status !== 'created')
+      auction = auction.filter((item) => item.location !== "fineart" && item.status !== 'created')
 
       allMarketplaceItems.current = auction
       setMarketplaceItems(auction);
@@ -154,8 +154,7 @@ export default function MarketplaceItems(props): React.ReactElement {
           return (
             <MarketplaceItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
           )
-        }
-        if (item.location === 'marketplace'){
+        } else if (item.location === 'marketplace'){
                   return (
           <MarketplaceItem
             userData={userData}

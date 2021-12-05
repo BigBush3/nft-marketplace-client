@@ -17,6 +17,7 @@ import Some from '@material-ui/icons/Clear'
 import * as utils from '../../utils';
 import type * as Types from '../../types/index.d';
 import router from 'next/router';
+import Link from 'next/link';
 
 
 
@@ -47,9 +48,9 @@ function Footer(props: Types.AppProps): React.ReactElement {
   return (
     <div className="footer">
       <div className="footer__logo">
-        <a href="index.html">
+        <Link href="/">
           <Image src={LogoImage} alt="logo" />
-        </a>
+        </Link>
       </div>
       <div className="footer__socials">
         <span>{lang.footer.weInSocial}</span>
