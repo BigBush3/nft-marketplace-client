@@ -127,7 +127,14 @@ favNfts.splice( removeIndex, 1 );
       <div className="products__item-price">ETH {price ? price: currentBid}</div>
       <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
-      </div></>] :       <>      <div className="products__item-stats">
+      </div></>] :      [ data.status === 'soldOut' ?  <><p style={{textAlign: 'center', color: 'red', fontWeight: 'bold'}}>{lang.auction.auctionEnded}</p><div className="products__item-stats">
+        <div className="item-stats__views">
+          <i className="flaticon-eye" /> <span>{views}</span>
+        </div>
+        <Favorite data={data} />
+        <Likes data={data} />
+        <div className="item-stats__count">1/1</div>
+      </div></> : <>      <div className="products__item-stats">
         <div className="item-stats__views">
           <i className="flaticon-eye" /> <span>{views}</span>
         </div>
@@ -138,7 +145,7 @@ favNfts.splice( removeIndex, 1 );
       <div className="products__item-price">ETH {price ? price: currentBid}</div>
       <div className="products__item-buy">
         <Link href={`/product/${_id}`}>{currentBid ? lang.placeBid: lang.buy}</Link>
-      </div></>
+      </div></>]
       }
 
 

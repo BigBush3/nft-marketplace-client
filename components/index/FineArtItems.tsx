@@ -42,10 +42,6 @@ export default function FineArtItems(props): React.ReactElement {
   return (
     <Slider ref={sliderRef} className="fineart__items slider__products" {...settings}>
       {fineArtItems.map((item) => {
-        if (item.status === 'soldOut'){
-          return <SoldOutItem app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
-
-        }
         return (
           <FineArtItem userData={userData} key={`FineArtItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );
