@@ -255,6 +255,10 @@ const getUpdatedBidByToken = async(userAddress)=>{
       }, 1000);
     });
   }, [active]);
+  useEffect(() => {
+    setFollowers(data.followers)
+    setFollowings(data.followings)
+  }, [])
   async function subscribeHandler(){
     setProgress(true)
     if (cookie.get('id')){
@@ -301,9 +305,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
       return Number(a.time) - Number(b.time)
     })
     setBidHistory(clearHistory)
-  }
-  const returnBalance = async() => {
-
   }
   const isFollowed = (element, index, array) => {
     if (element._id === cookie.get('id')){

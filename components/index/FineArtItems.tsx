@@ -4,6 +4,7 @@ import axios from 'axios'
 import type * as Types from '../../types/index.d';
 import * as utils from '../../utils';
 import FineArtItem from './FineArtItem';
+import SoldOutItem from '../global/SoldOut'
 
 const { SLIDER_PRODUCTS_PART } = utils.c;
 
@@ -19,7 +20,7 @@ interface FineArtItemsProps {
 export default function FineArtItems(props): React.ReactElement {
   const { app, userData} = props;
   const sliderRef = useRef<any>();
-  const [fineArtItems, setFineArtItems] = useState<Types.ItemProps[]>([]);
+  const [fineArtItems, setFineArtItems] = useState([]);
   const settings = utils.$.sliderSettings;
   useEffect(() => {
     setTimeout(() => {
@@ -31,7 +32,7 @@ export default function FineArtItems(props): React.ReactElement {
     (async () => {
       if (fineArtItems.length === 0) {
         let resFineart = await axios.get('https://nft-marketplace-api-plzqa.ondigitalocean.app/nft')
-        const _fineartItems = resFineart.data.filter((item) => item.location === 'fineart')
+        const _fineartItems = resFineart.data.filter((item) => item.initialLocation === 'fineart' || item.location === 'fineart')
         setFineArtItems(_fineartItems.sort((a, b) => {
           return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime()
         }));
@@ -41,6 +42,10 @@ export default function FineArtItems(props): React.ReactElement {
   return (
     <Slider ref={sliderRef} className="fineart__items slider__products" {...settings}>
       {fineArtItems.map((item) => {
+        if (item.status === 'soldOut'){
+          return <SoldOutItem app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
+
+        }
         return (
           <FineArtItem userData={userData} key={`FineArtItem-${item.id}`} mark={item.mark} data={item} app={app} />
         );

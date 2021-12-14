@@ -24,7 +24,7 @@ export default function FineArtItem(props): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
   const { item, app } = props;
   const { lang } = app;
-  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type, currentBid } = item;
+  const { owners, author, title, views, likes, likeMe, favoriteMe, price, mark, _id, type, currentBid, status } = item;
   console.log(item)
   const [historyItem, setHistoryItem] = useState([])
   const ownerHandler = async () => {
@@ -93,8 +93,9 @@ setHistoryItem(finalHistory.data.result)
         <Likes data={item} />
         <div className="item-stats__count">1/1</div>
       </div>
-      <div className="products__item-price">ETH {price ? price : currentBid}</div>
+      {status === 'soldOut' ? <h1 style={{textAlign: 'center', marginTop: '10px', fontSize: '20px', color: 'red'}}>Sold out</h1> : [item.endDate ? [new Date(item.endDate).getTime() < new Date().getTime() ? <h1 style={{textAlign: 'center', marginTop: '10px', fontSize: '20px', color: 'red'}}>{lang.auction.auctionEnded}</h1> :       <div><div className="products__item-price">ETH {price ? price : currentBid}</div>
       <div className="products__item-buy button">
+
 
       { type === 'timedAuction' ? <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
           <span>{lang.placeBid}</span>
@@ -103,7 +104,18 @@ setHistoryItem(finalHistory.data.result)
         <span>{lang.buy}</span>
       </a></Link>
 }
-      </div>
+      </div></div>] :       <div><div className="products__item-price">ETH {price ? price : currentBid}</div>
+      <div className="products__item-buy button">
+
+
+      { type === 'timedAuction' ? <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
+          <span>{lang.placeBid}</span>
+        </a></Link>:
+        <Link href={`/product/${_id}`}><a className="buy fill btn_fill">
+        <span>{lang.buy}</span>
+      </a></Link>
+}
+      </div></div>]}
     </div>
   );
 }

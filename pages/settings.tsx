@@ -178,14 +178,21 @@ function Settings({app,}): React.ReactElement {
     }
     await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/register', requestOptions)
     .then(response => response.json())
+
     .then(data => {
     console.log(data)
+    if (data.name){
     cookie.set('name', data.name)
     cookie.set('email', data.email)
     cookie.set('id', data._id)
     cookie.set('wallet', data.wallet)
     router.push(`/cabinet/${data._id}`)
+    } else {
+      confirm(data.status)
+    }
+
     })
+
 
     
     }

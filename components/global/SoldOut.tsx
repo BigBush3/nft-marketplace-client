@@ -76,15 +76,16 @@ setHistoryItem(finalHistory.data.result)
         )}
       </div>
       <div className="products__item-name">{title}</div>
+      <h1 style={{fontWeight: 'bold', color: 'red', textAlign: 'center', marginTop: '5px'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold out'}</h1>
       <div className="products__item-stats">
 
-        <h1 style={{fontWeight: 'bold', color: 'red'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold out'}</h1>
-        {/* <div className="item-stats__views">
+        
+         <div className="item-stats__views">
          <i className="flaticon-eye" /> <span>{views}</span>
-        </div> */}
-{/*         <Favorite favoriteMe={favoriteMe} app={app} />
-        <Likes likeMe={likeMe} likes={likes} app={app} /> */}
-       {/*  <div className="item-stats__count">1/1</div> */}
+        </div>
+         <Favorite data={data} />
+        <Likes data={data} />
+         <div className="item-stats__count">1/1</div> 
       </div>
      {/*  <div className="products__item-price">ETH {price}</div> */}
     </div>

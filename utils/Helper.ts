@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
+import router from 'next/router';
 import type * as Types from '../types/index.d';
 /**
  * Класс реализующий вспомогательные методы

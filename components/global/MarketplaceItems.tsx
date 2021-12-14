@@ -36,6 +36,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     _load = true;
   } */
   useEffect(() => {
+    console.log('search and search by...')
     if (searchBy === 'collection'){
       setMarketplaceItems(allMarketplaceItems.current.filter((item) => item.collect.toLowerCase().includes(search.toLowerCase())))
     } else if (searchBy === 'author'){
@@ -45,6 +46,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     }
   }, [search, searchBy])
   useEffect(() => {
+    console.log('price ranging...')
     if (router.asPath === '/marketplace'){
               if (priceRange[0] === 0 && priceRange[1] === 0){
       setMarketplaceItems(allMarketplaceItems.current)
@@ -57,6 +59,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     
   }, [priceRange])
   useEffect(() => {
+    console.log('initial compose')
     if (Number(filterBy) === 4){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
         if (b.type === 'timedAuction' && new Date(b.endDate).getTime() < new Date().getTime()){
@@ -69,13 +72,15 @@ export default function MarketplaceItems(props): React.ReactElement {
   }, [])
   //@ts-ignore
   useEffect(() => {
+    console.log('filtering...')
     if (Number(filterBy) === 2){
       setMarketplaceItems(allMarketplaceItems.current.sort((a, b) => {
-          if (b.type === 'timedAuction' && new Date(b.endDate).getTime() < new Date().getTime()){
+          if (a.type === 'timedAuction' && new Date(a.endDate).getTime() < new Date().getTime()){
             return -1
           } else if (b.status === 'soldOut'){
             return -1
-          } else if (a.type === 'orderSell' && b.type === 'orderSell'){
+          }
+           else if (a.type === 'orderSell' && b.type === 'orderSell'){
             return Number(a.price) - Number(b.price)
           } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
             return Number(a.currentBid) - Number(b.price)
@@ -109,6 +114,9 @@ export default function MarketplaceItems(props): React.ReactElement {
         if (b.type === 'timedAuction' && new Date(b.endDate).getTime() < new Date().getTime()){
           return -1
         }
+        else if (b.status === 'soldOut'){
+          return -1
+        }
          else if (a.type === 'orderSell' && b.type === 'orderSell'){
           return new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime() ? -1: 1
         } else if (a.type === 'timedAuction' && b.type === 'orderSell'){
@@ -127,6 +135,7 @@ export default function MarketplaceItems(props): React.ReactElement {
     setState(!state)
   }, [filterBy])
   useEffect(() => {
+    console.log('what the fuck i do not know why i need this')
   }, [state])
   //@ts-ignore
   useEffect(() => {
@@ -150,6 +159,10 @@ export default function MarketplaceItems(props): React.ReactElement {
     <div className="marketplace__items">
       {marketplaceItems.filter((item) => item.location === 'marketplace' || item.status === 'soldOut').map((item, index, array) => {
         const lastRef = !array[index + 1] ? lastItemRef : undefined;
+        if (item.status === 'soldOut'){
+          return <SoldOutItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
+
+        }
         if (item.endDate !== null && new Date(item.endDate).getTime() < new Date().getTime()){
           return (
             <MarketplaceItem ref={lastRef} app={app} key={`MarketplaceItem-${item.id}-${Math.random()}`} data={item}/>
