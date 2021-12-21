@@ -19,10 +19,10 @@ import axios from 'axios';
 const { WALLET_LOCAL_STORAGE_NAME } = utils.c;
 
 interface ErrorMessage { 
-  status: String;
-  field: String;
-  previousEmail: String;
-  previousNickname: String;
+  status: string;
+  field: string;
+  previousEmail: string;
+  previousNickname: string;
 }
 /**
  * Страница Настройки профиля
