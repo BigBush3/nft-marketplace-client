@@ -53,7 +53,6 @@ function Footer(props: Types.AppProps): React.ReactElement {
         </Link>
       </div>
       <div className="footer__socials">
-        <span>{lang.footer.weInSocial}</span>
         <div className="footer__socials-list">
           <div className="footer__socials-item">
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

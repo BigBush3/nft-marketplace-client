@@ -19,8 +19,8 @@ const lang: Language = {
   description: 'Description',
   uploadDescription: 'Upload Description',
   roalty: 'Royalty',
-  authors: 'Authors',
-  author: 'Author',
+  authors: 'Artists',
+  author: 'Artist',
   buyBid: 'Buy / Bid',
   share: 'Share',
   documents: 'Documents',
@@ -37,7 +37,7 @@ const lang: Language = {
     historyOfBids: 'History of bids',
     endAuction: 'End auction',
     makeBid: 'Make bid',
-    purchase: 'Purchase',
+    purchase: 'Buy',
     auctionEnded: 'Auction ended',
     title: 'Auction',
     firstBid: 'Initial bid',
@@ -82,7 +82,7 @@ const lang: Language = {
   searchBy: {
     name: 'Search by',
     title: 'title',
-    author: 'author',
+    author: 'artist',
     collection: 'collections',
   },
   filterBy: {
@@ -99,7 +99,7 @@ const lang: Language = {
   cabinet: {
     myCollections: 'My collections',
     bidHistory: 'History of bids',
-    returnBalance: 'Return balance',
+    returnBalance: 'Cancel bid',
     auctionBallance: 'Auction Balance',
     walletBallance: 'Wallet Balance',
     created: 'Created',
@@ -115,7 +115,7 @@ const lang: Language = {
     privacyPolicy: 'Privacy Policy',
     termsOfUse: 'User Agreement',
     reportAnError: 'Report an error',
-    allRightsReserved: 'Nftstore All Rights Reserved',
+    allRightsReserved: 'iNifty All Rights Reserved',
     subscribe: 'Subscribe to the newsletter ',
   },
   userMenu: {

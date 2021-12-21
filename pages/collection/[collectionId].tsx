@@ -122,7 +122,7 @@ function Collection(props): React.ReactElement {
   return (
     <Theme>
       <Header app={app} {...app} onChange={onChangeSome}/>
-      <div className="wrapper ">
+      <div className="wrapper">
       <div className="bunner">
               <div className="bunner__item" style={{ backgroundImage: `url(${data.img})`, backgroundSize: 'cover'}}>
                 <div className="bunner__item-title heading">

@@ -18,6 +18,12 @@ import axios from 'axios';
 
 const { WALLET_LOCAL_STORAGE_NAME } = utils.c;
 
+interface ErrorMessage { 
+  status: String;
+  field: String;
+  previousEmail: String;
+  previousNickname: String;
+}
 /**
  * Страница Настройки профиля
  * @param props
@@ -39,6 +45,7 @@ function Settings({app,}): React.ReactElement {
   const [fileCopy, setFileCopy] = useState(null)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>()
   const handleCloseHeader = () => {
     setOpenHeader(false)
   }
@@ -174,8 +181,8 @@ function Settings({app,}): React.ReactElement {
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl'), headerUrl: cookie.get('headerUrl')})
-    }
+      body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl'), headerUrl: cookie.get('headerUrl'), previousNickname: cookie.get('name'), previousEmail: cookie.get('email')})
+    };
     await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/register', requestOptions)
     .then(response => response.json())
 
@@ -188,7 +195,8 @@ function Settings({app,}): React.ReactElement {
     cookie.set('wallet', data.wallet)
     router.push(`/cabinet/${data._id}`)
     } else {
-      confirm(data.status)
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      setErrorMessage(data)
     }
 
     })
@@ -215,10 +223,12 @@ function Settings({app,}): React.ReactElement {
               <div className="settings__form-item">
                 <label>{lang.form.yourName}:</label>
                 <input value={name} type="text" name="name" onChange={handleNameChange} required/>
+                <p style={{color: 'red'}}>{errorMessage?.field === 'nickname' && errorMessage?.status}</p>
               </div>
               <div className="settings__form-item">
                 <label>{lang.form.yourEmail}:</label>
                 <input value={email} type="email" name="email" onChange={handleEmailChange} required/>
+                <p style={{color: 'red'}}>{errorMessage?.field === 'email' && errorMessage?.status}</p>
               </div>
 
               <div className="settings__form-item settings__form-photo">

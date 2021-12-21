@@ -14,8 +14,11 @@
     "get": "screen -x nft"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@mui/material": "^5.2.4",
     "@myetherwallet/mewconnect-web-client": "^2.1.23-beta.9",
     "@pinata/sdk": "^1.1.23",
     "@types/jquery": "^3.5.5",

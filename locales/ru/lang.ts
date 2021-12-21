@@ -70,8 +70,8 @@ const lang: Language = {
     createCollection: 'Создать коллекцию',
     home: 'Главная',
     activity: 'Активность',
-    fineArt: 'Fine Art',
-    marketPlace: 'Marketplace',
+    fineArt: 'Искусство',
+    marketPlace: 'Маркетплейс',
     support: 'Поддержка',
     about: 'О нас',
     settings: 'Настройки профиля',
@@ -82,9 +82,9 @@ const lang: Language = {
   },
   searchBy: {
     name: 'Поиск по',
-    title: 'названию',
-    author: 'автору',
-    collection: 'коллекции',
+    title: 'Название',
+    author: 'автор',
+    collection: 'коллекция',
   },
   filterBy: {
     day: 'За день',
@@ -116,7 +116,7 @@ const lang: Language = {
     privacyPolicy: 'Политика конфидециальности',
     termsOfUse: 'Пользовательское соглашение',
     reportAnError: 'Сообщить про ошибку',
-    allRightsReserved: 'Nftstore Все права защищены',
+    allRightsReserved: 'iNifty Все права защищены',
     subscribe: 'Подписаться на рассылку',
   },
   userMenu: {

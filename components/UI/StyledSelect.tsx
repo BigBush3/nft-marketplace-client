@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     minWidth: '150px',
     marginRight: '1em',
+    overflow: 'hidden',
     fontFamily: 'OpenSans',
     [theme.breakpoints.down('sm')]: {
       minWidth: '20px',
@@ -74,17 +75,13 @@ export default function StyledSelect(props): React.ReactElement {
             disableUnderline={typeof variant !== 'string'}
             autoWidth={true}
             value={typeof variant === 'string' ? value : body?.clientWidth < 600 ? 1 : value}
-            variant={variant}
-            className={clsx(classes.select)}
+            className={classes.select}
             onChange={onChange}
             >
-            <MenuItem style={{ display: 'none' }} value={1}>
-              <Image className={classes.svg} alt="search filter" src={SearchFilterIcon} />
-            </MenuItem>
             {options.map((item) => {
               return (
                 <MenuItem key={`Select-${item.value}`} className={classes.option} value={item.value}>
-                  <p dangerouslySetInnerHTML={{__html: item.text}} />
+                  <p>{item.text}</p>
                 </MenuItem>
               );
             })}
@@ -93,21 +90,15 @@ export default function StyledSelect(props): React.ReactElement {
       <Select
         title={title}
         labelId="search-filter"
-        IconComponent={variant ? ExpandMoreRoundedIcon : ExpandMoreRoundedIconStyled}
-        disableUnderline={typeof variant !== 'string'}
-        autoWidth={true}
         value={typeof variant === 'string' ? value : body?.clientWidth < 600 ? 1 : value}
         variant={variant}
-        className={clsx(classes.select)}
+        className={classes.select}
         onChange={onChange}
         >
-        <MenuItem style={{ display: 'none' }} value={1}>
-          <Image className={classes.svg} alt="search filter" src={SearchFilterIcon} />
-        </MenuItem>
         {options.map((item) => {
           return (
             <MenuItem key={`Select-${item.value}`} className={classes.option} value={item.value}>
-              <p dangerouslySetInnerHTML={{__html: item.text}} />
+              <p>{item.text}</p>
             </MenuItem>
           );
         })}
