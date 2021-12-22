@@ -206,6 +206,7 @@ function handleDrag(tag, currPos, newPos) {
     console.log("fuck")
     console.log(event)
     setPdf(event.target.files[0])
+    setPdfCopy(event.target.files[0])
   }
 
   const isApprovedForAll = (userAddress) => {
@@ -545,7 +546,7 @@ const approved = await NFT.methods.isApprovedForAll(walletAddress, NFTSTORE_ADDR
                 onChange={(e: any) => {
                   setCollection(e.target.value);
                 }}
-                options={[{value: undefined, text: '<b>No collections</b>'}, ...collections.map((item) => {
+                options={[{value: undefined, text: 'No collections'}, ...collections.map((item) => {
                   return {value: item, text: item.title}
                 })]}
               />
