@@ -288,7 +288,7 @@ function handleDrag(tag, currPos, newPos) {
     });
     pdfData.append('pinataOptions', pinataOptions);
     const resPdf =  await axios
-    .post(url, sheesh, {
+    .post(url, pdfData, {
       //@ts-ignore
         maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
         headers: {
