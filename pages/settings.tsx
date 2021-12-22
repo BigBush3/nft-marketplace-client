@@ -120,7 +120,6 @@ function Settings({app,}): React.ReactElement {
     if (cookie.get('imgUrl')){
       setFile(cookie.get('imgUrl'))
     }
-    console.log(cookie.get('headerUrl'))
     if (cookie.get('headerUrl')){
       setHeader(cookie.get('headerUrl'))
     }
@@ -178,12 +177,13 @@ function Settings({app,}): React.ReactElement {
       .then(response => response.json())
       .then(headerImageUrl => cookie.set('headerUrl', headerImageUrl.result[0].location))
     }
+    console.log(cookie.get('headerUrl'), cookie.get('imgUrl'))
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, email, wallet: cookie.get('wallet'), imgUrl: cookie.get('imgUrl'), headerUrl: cookie.get('headerUrl'), previousNickname: cookie.get('name'), previousEmail: cookie.get('email')})
     };
-    await fetch('https://nft-marketplace-api-plzqa.ondigitalocean.app/user/register', requestOptions)
+    await fetch('http://localhost:8000/user/register', requestOptions)
     .then(response => response.json())
 
     .then(data => {

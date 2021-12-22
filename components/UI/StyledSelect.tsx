@@ -92,6 +92,7 @@ export default function StyledSelect(props): React.ReactElement {
         labelId="search-filter"
         value={typeof variant === 'string' ? value : body?.clientWidth < 600 ? 1 : value}
         variant={variant}
+        disableUnderline={typeof variant !== 'string'}
         className={classes.select}
         onChange={onChange}
         >

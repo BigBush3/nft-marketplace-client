@@ -81,9 +81,9 @@ const lang: Language = {
   },
   searchBy: {
     name: 'Search by',
-    title: 'title',
-    author: 'artist',
-    collection: 'collections',
+    title: 'Name',
+    author: 'Artist',
+    collection: 'Collections',
   },
   filterBy: {
     day: 'For a day',
