@@ -495,7 +495,8 @@ setHistoryItem(finalHistory.data.result)
           <aside className="aside author">
 {/*             <div className="author__rate">{lang.highestBid} 0.02 ETH</div> */}
             <div className="author__block">
-              <div className="author__img" onClick={() => router.push(`/cabinet/${data.author.id}`)}>
+              <div className="author__img" onClick={() => {
+                return router.push(`/cabinet/${data.author._id}`)}}>
                 <img src={data.author.imgUrl ? data.author.imgUrl : '/img/avatar_0.png'} alt="img" />
               </div>
               <div className="author__cover">
