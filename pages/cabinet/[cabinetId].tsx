@@ -80,7 +80,6 @@ function Cabinet(props): React.ReactElement {
   const { lang } = app;
   const [active, setActive] = useState<number>(1);
   const [show, setShow] = useState<boolean>(false);
-  
   const [open, setOpen] = useState(false)
   const [openBids, setOpenBids] = useState(false)
   const [progress, setProgress] = useState(false)
@@ -256,8 +255,6 @@ const getUpdatedBidByToken = async(userAddress)=>{
     });
   }, [active]);
   useEffect(() => {
-    setFollowers(data.followers)
-    setFollowings(data.followings)
   }, [])
   async function subscribeHandler(){
     setProgress(true)
@@ -657,7 +654,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
             {//@ts-ignore
             followers ? [followers?.map((item) => {
               return (
-                            <div className="cabinet_sub" onClick={() => router.push(`/cabinet/${item._id}`)}>
+                            <div className="cabinet_sub" onClick={() => window.location.href = `https://nft-marketplace-client-fmc53.ondigitalocean.app/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
                 <picture>
                   <img
@@ -676,7 +673,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
           <div className="cabinet_subs">
           {followings ? [followings.map((item) => {
               return (
-                            <div className="cabinet_sub" onClick={() => router.push(`/cabinet/${item._id}`)}>
+                            <div className="cabinet_sub" onClick={() => window.location.href = `https://nft-marketplace-client-fmc53.ondigitalocean.app/cabinet/${item._id}`}>
               <div className="cabinet_sub_img">
                 <picture>
                   <img

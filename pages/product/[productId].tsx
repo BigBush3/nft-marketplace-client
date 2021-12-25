@@ -485,7 +485,7 @@ setHistoryItem(finalHistory.data.result)
                   {data.owner._id === cookie.get('id') ? 
                   [data.type === 'orderSell' ? [data.owner._id !== cookie.get('id') ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : null] : 
                    [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() && <button className='fill buy' onClick={endHandler}><span>{endSpinner ? <CircularProgress/> : <p>{lang.auction.endAuction}</p>}</span></button>]] 
-                   : [data.type === 'orderSell' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> :  [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
+                   : [data.type === 'orderSell' ? [data.status !== 'soldOut' ? <button className='fill buy' onClick={() => setOpenModal(true)}><span>{lang.auction.purchase}</span></button> : <h1 style={{color: 'red', fontSize: '20px'}}>Sold out</h1>] :  [data.endDate !== null && new Date(data.endDate).getTime() < new Date().getTime() ? null : <button className='fill buy' onClick={async () => {await getBids;setOpenBid(true)}}><span>{lang.auction.makeBid}</span></button>]]}
                   
                 </div>
               </div>

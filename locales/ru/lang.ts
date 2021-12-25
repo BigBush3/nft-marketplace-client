@@ -83,7 +83,7 @@ const lang: Language = {
   searchBy: {
     name: 'Поиск по',
     title: 'Название',
-    author: 'автор',
+    author: 'Пользователи',
     collection: 'коллекция',
   },
   filterBy: {

@@ -434,13 +434,11 @@ function Header(props): React.ReactElement {
                     <div className="header__user-toolbar">
                       <ul className="user-toolbar__list">
                         <li className="user-toolbar__item">
-                          <Link href={`/cabinet/${cookie.get('id')}`}>
                           {/* tslint:disable-next-line */}
-                            <a role="button" onClick={unHiddenHtml}>
+                            <a href={`/cabinet/${cookie.get('id')}`} role="button" onClick={unHiddenHtml}>
                               <i className="flaticon-businessman" />
                               {lang.userMenu.myProfile}
                             </a>
-                          </Link>
                         </li>
 
                         <li className="user-toolbar__item">
