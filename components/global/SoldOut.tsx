@@ -75,9 +75,7 @@ setHistoryItem(finalHistory.data.result)
           </div>
         )}
       </div>
-      <div className="products__item-name">{title}</div>
-      <h1 style={{fontWeight: 'bold', color: 'red', textAlign: 'center', marginTop: '5px'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold out'}</h1>
-      <div className="products__item-stats">
+      <div className="products__item-name">{title}</div>      <div className="products__item-stats">
 
         
          <div className="item-stats__views">
@@ -87,6 +85,8 @@ setHistoryItem(finalHistory.data.result)
         <Likes data={data} />
          <div className="item-stats__count">1/1</div> 
       </div>
+      <h1 style={{fontWeight: 'bold', color: 'red', textAlign: 'center', marginTop: '15px'}}>{data.type === 'timedAuction' ? 'Auction ended' : 'Sold out'}</h1>
+
      {/*  <div className="products__item-price">ETH {price}</div> */}
     </div>
   );

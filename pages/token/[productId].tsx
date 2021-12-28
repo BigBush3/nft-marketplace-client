@@ -246,7 +246,7 @@ setHistoryItem(finalHistory.data.result)
                 </div>}
 
                 <div className="product__buy button">
-                {data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button>: <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>{data.type === 'timedAuction' ? 'Auction ended': 'Sold out'}</h1>}
+                {data.owner._id === cookie.get('id') ? <button className='fill buy' onClick={() => router.push({pathname: '/update-one', query: {id: data._id}})}><span>{lang.pageNames.resell}</span></button> : <h1 style={{fontWeight: 'bold', color: 'red', fontSize: '25px'}}>{data.type === 'timedAuction' ? 'Auction ended': 'Sold out'}</h1>}
                 </div>
               </div>
             </div>
