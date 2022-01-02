@@ -603,7 +603,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
                       {data.nfts && data?.nfts?.filter((item) => item.location === 'collection').map((item, index) => {
             return <CollectionItem app={app} key={`MarketplaceItem-${item._id}${index}${Math.random()}`} data={item} />;
           })}
-          </div>
+          </div> 
 
         </div>
         <div className="cabinet_block" hidden={active !== 6}>
@@ -618,7 +618,7 @@ const getUpdatedBidByToken = async(userAddress)=>{
                   if (status){
                   await axios.delete(`https://nft-marketplace-api-plzqa.ondigitalocean.app/collection/${item._id}`)
                   window.location.reload()
-                  }
+                  } 
 
                 }} style={{width: '20px', height: '20px', cursor: 'pointer'}} alt="" />
                 <img src="/img/352547_edit_mode_icon.svg" onClick={() => {

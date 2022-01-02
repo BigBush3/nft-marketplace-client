@@ -8,6 +8,7 @@ import Likes from './Likes';
 import Favorite from './Favorite';
 import { getTokenOwnHistory } from '../../utils/blockchain';
 import axios from 'axios'
+import cookie from 'js-cookie'
 
 interface MarketplaceItem {
   app?: Types.AppProps;
@@ -87,7 +88,8 @@ const CollectionItem = forwardRef((props: MarketplaceItem, ref: any): React.Reac
       </div>
      {/*  <div className="products__item-price">ETH {price}</div> */}
       <div className="products__item-buy">
-        <Link href={`/token/${_id}`}>{lang.pageNames.resell}</Link>
+        {data._id === cookie.get('id') && <Link href={`/token/${_id}`}>{lang.pageNames.resell}</Link>}
+        
       </div>
     </div>
   );
